@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @since 0.3.0
  */
 @Entity
-public class QQMayActivityHistory {
+public class QQActivityHistory {
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")

@@ -31,5 +31,11 @@
 		 -->
 		<class>com.chinarewards.qq.meishi.domain.QQMeishiXaction</class>
 		
+		<!-- 
+			QQ Adidas domain
+		 -->
+		 <class>com.chinarewards.qq.adidas.domain.QQActivityMember</class>
+		 <class>com.chinarewards.qq.adidas.domain.QQActivityHistory</class>
+		 <class>com.chinarewards.qq.adidas.domain.QQWeixinSignIn</class>
 	</persistence-unit>
 </persistence>

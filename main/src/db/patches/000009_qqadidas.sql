@@ -10,7 +10,7 @@ CREATE TABLE QQActivityMember (
 	primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE QQMayActivityHistory (
+CREATE TABLE QQActivityHistory (
 	id VARCHAR(255) NOT NULL,
 	cdKey VARCHAR(255),
 	aType VARCHAR(255),

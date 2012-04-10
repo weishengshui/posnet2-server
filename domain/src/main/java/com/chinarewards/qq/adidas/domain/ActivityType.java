@@ -1,5 +1,12 @@
 package com.chinarewards.qq.adidas.domain;
 
 public enum ActivityType {
-	GIFT/* 礼品 */, PRIVILEGE/* 优惠 */
+	/**
+	 * 礼品
+	 */
+	GIFT,
+	/**
+	 * 优惠
+	 */
+	PRIVILEGE
 }
