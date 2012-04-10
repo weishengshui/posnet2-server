@@ -47,7 +47,11 @@ public class QQActivityMember {
 	private String importGroupNo;
 
 	/**
-	 * Importing time.
+	 * Importing time. The different between {@link QQActivityMember#importTime}
+	 * and {@link QQActivityMember#createdAt} is that one is import time and the
+	 * other is the record time. eg.. You import some data at 12:00:00, the
+	 * first record's importTime is 12:00:00 and createdAt is 12:00:01 , maybe
+	 * the second record's importTime is 12:00:00 and createdAt is 12:00:02.
 	 */
 	private Date importTime;
 

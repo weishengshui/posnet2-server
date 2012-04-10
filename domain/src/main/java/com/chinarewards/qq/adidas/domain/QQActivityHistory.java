@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @since 0.3.0
  */
 @Entity
-public class QQMayActivityHistory {
+public class QQActivityHistory {
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -51,7 +51,7 @@ public class QQMayActivityHistory {
 	 */
 	private String posId;
 
-	private Date createdAt;
+	private Date createAt;
 
 	private Date lastModifiedAt;
 
@@ -103,12 +103,12 @@ public class QQMayActivityHistory {
 		this.posId = posId;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
+	public Date getCreateAt() {
+		return createAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	public void setCreateAt(Date createdAt) {
+		this.createAt = createdAt;
 	}
 
 	public Date getLastModifiedAt() {

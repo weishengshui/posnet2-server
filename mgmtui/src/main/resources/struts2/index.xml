@@ -9,6 +9,10 @@
 		<action name="show_login" class="com.chinarewards.qqgbvpn.mgmtui.struts.login.LoginAction" method="execute">
 			<result name="success" type="tiles">login</result>
 		</action>
+		<action name="search" class="com.chinarewards.qqgbvpn.mgmtui.search.SearchAction" method="search">
+			<result name="success">/search.jsp</result>
+			<result name="input">/search.jsp</result>
+		</action>
 		<action name="login" class="com.chinarewards.qqgbvpn.mgmtui.struts.login.LoginAction" method="login">
 			<result name="success" type="redirectAction">home</result>
 			<result name="input" type="tiles">login</result>

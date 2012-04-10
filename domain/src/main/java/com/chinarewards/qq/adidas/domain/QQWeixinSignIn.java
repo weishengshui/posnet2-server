@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author yanxin
  * @since 0.3.0
  */
-public class QQWeixinSingIn {
+public class QQWeixinSignIn {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
