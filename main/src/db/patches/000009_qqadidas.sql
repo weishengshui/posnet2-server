@@ -1,10 +1,9 @@
 CREATE TABLE QQActivityMember (
 	id VARCHAR(255) NOT NULL,
-	cdKey VARCHAR(255),
+	memberKey VARCHAR(255),
 	giftStatus VARCHAR(255),
 	privilegeStatus VARCHAR(255),
-	importGroupNo VARCHAR(255),
-	importTime datetime,
+	sendTime datetime,
 	createdAt datetime,
 	lastModifiedAt datetime,
 	primary key (id)
@@ -12,7 +11,7 @@ CREATE TABLE QQActivityMember (
 
 CREATE TABLE QQActivityHistory (
 	id VARCHAR(255) NOT NULL,
-	cdKey VARCHAR(255),
+	memberKey VARCHAR(255),
 	aType VARCHAR(255),
 	consumeAmt double precision NOT NULL,
 	rebateAmt double precision NOT NULL,

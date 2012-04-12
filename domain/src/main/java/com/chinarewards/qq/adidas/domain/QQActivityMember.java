@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * Defines a QQ member due to <code>CKDEY</code>. Every member has two kinds of
- * status: gift status and privilege status.
+ * Defines a QQ member due to <code>MEMBERKEY</code>. Every member has two kinds
+ * of status: gift status and privilege status.
  * 
  * @author yanxin
  * @since 0.3.0
@@ -27,7 +27,7 @@ public class QQActivityMember {
 	/**
 	 * It flag a member.
 	 */
-	private String cdKey;
+	private String memberKey;
 
 	/**
 	 * Whether a member has got a gift.
@@ -42,18 +42,12 @@ public class QQActivityMember {
 	private PrivilegeStatus privilegeStatus;
 
 	/**
-	 * Importing group number, eg..UUID
+	 * send time. The different between {@link QQActivityMember#sendTime} and
+	 * {@link QQActivityMember#createdAt} is that one is send message time and
+	 * the other is the record time. eg.. QQ send a synch member message at
+	 * 12:00:00, maybe the createdAt is 12:00:01
 	 */
-	private String importGroupNo;
-
-	/**
-	 * Importing time. The different between {@link QQActivityMember#importTime}
-	 * and {@link QQActivityMember#createdAt} is that one is import time and the
-	 * other is the record time. eg.. You import some data at 12:00:00, the
-	 * first record's importTime is 12:00:00 and createdAt is 12:00:01 , maybe
-	 * the second record's importTime is 12:00:00 and createdAt is 12:00:02.
-	 */
-	private Date importTime;
+	private Date sendTime;
 
 	/**
 	 * Record create time
@@ -73,12 +67,12 @@ public class QQActivityMember {
 		this.id = id;
 	}
 
-	public String getCdKey() {
-		return cdKey;
+	public String getMemberKey() {
+		return memberKey;
 	}
 
-	public void setCdKey(String cdKey) {
-		this.cdKey = cdKey;
+	public void setMemberKey(String memberKey) {
+		this.memberKey = memberKey;
 	}
 
 	public GiftStatus getGiftStatus() {
@@ -97,20 +91,12 @@ public class QQActivityMember {
 		this.privilegeStatus = privilegeStatus;
 	}
 
-	public String getImportGroupNo() {
-		return importGroupNo;
+	public Date getSendTime() {
+		return sendTime;
 	}
 
-	public void setImportGroupNo(String importGroupNo) {
-		this.importGroupNo = importGroupNo;
-	}
-
-	public Date getImportTime() {
-		return importTime;
-	}
-
-	public void setImportTime(Date importTime) {
-		this.importTime = importTime;
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
 	}
 
 	public Date getCreatedAt() {
