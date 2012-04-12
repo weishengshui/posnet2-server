@@ -67,7 +67,7 @@
 //	}
 //
 //	@Test
-//	public void testAchieveFreeGit() {
+//	public void testAchieveFreeGift() {
 //		// prepare data
 //		// 111111 - 合法QQVIP
 //		// 123456 - 无效
