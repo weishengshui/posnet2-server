@@ -12,45 +12,45 @@ import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
 public interface QQAdidasActivityManager {
 
 	/**
-	 * QQ member can achieve a gift for free provided by adidas.
+	 * QQ member can obtain a gift for free provided by adidas.
 	 * 
 	 * @memberKey flag a qq member.
 	 * 
 	 * @throws InvalidMemberKeyException
 	 *             If the specified memberkey was not invalid.
 	 * @throws DuplicateAchievingGiftException
-	 *             If have achieved the gift more than one times.
+	 *             If have obtaind the gift more than one times.
 	 * 
-	 * @return {@link QQActivityHistory} If achieve successful it would produce
+	 * @return {@link QQActivityHistory} If obtain successful it would produce
 	 *         a record of {@link QQActivityHistory}
 	 */
-	public QQActivityHistory achieveFreeGift(String memberKey)
+	public QQActivityHistory obtainFreeGift(String memberKey)
 			throws InvalidMemberKeyException, DuplicateAchievingGiftException;
 
 	/**
-	 * QQ member can achieve the privilege according to consume at adidas shop.
+	 * QQ member can obtain the privilege according to consume at adidas shop.
 	 * 
 	 * Rebate rule:
 	 * <ul>
-	 * <li>If consume amount is amt<300, nothing privilege will achieve.</li>
+	 * <li>If consume amount is amt<300, nothing privilege will obtain.</li>
 	 * <li>If consume amount is 300=<amt<600 ,and privilege status is
 	 * {@link PrivilegeStatus#NEW} will get rebate 50.</li>
 	 * <li>If consume amount is 300=<amt<600 ,and privilege status is
 	 * {@link PrivilegeStatus#HALF} will get rebate 50.</li>
 	 * <li>If consume amount is 300=<amt<600 ,and privilege status is
-	 * {@link PrivilegeStatus#DONE} nothing privilege will achieve.</li>
+	 * {@link PrivilegeStatus#DONE} nothing privilege will obtain.</li>
 	 * <li>If consume amount is amt>=600,and privilege status is
 	 * {@link PrivilegeStatus#NEW} will get rebate 100.</li>
 	 * <li>If consume amount is amt>=600,and privilege status is
 	 * {@link PrivilegeStatus#HALF} will get rebate 50.</li>
 	 * <li>If consume amount is amt>=600,and privilege status is
-	 * {@link PrivilegeStatus#DONE} nothing privilege will achieve.</li>
+	 * {@link PrivilegeStatus#DONE} nothing privilege will obtain.</li>
 	 * </ul>
 	 * 
-	 * @return {@link QQActivityHistory} If achieve successful it would produce
-	 *         a record of {@link QQActivityHistory}
+	 * @return {@link QQActivityHistory} If obtain successful it would produce a
+	 *         record of {@link QQActivityHistory}
 	 */
-	public QQActivityHistory achievePrivilege(String memberKey,
+	public QQActivityHistory obtainPrivilege(String memberKey,
 			double consumeAmt) throws InvalidMemberKeyException,
 			ConsumeAmountNotEnoughException, PrivilegeDoneException;
 

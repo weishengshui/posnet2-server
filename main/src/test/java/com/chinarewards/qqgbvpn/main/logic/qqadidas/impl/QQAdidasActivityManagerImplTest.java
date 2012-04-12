@@ -78,7 +78,7 @@
 //
 //		// case1: 123456 无效
 //		try {
-//			getManager().achieveFreeGift(invalidKey);
+//			getManager().obtainFreeGift(invalidKey);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			log.debug("Should run here!");
@@ -89,7 +89,7 @@
 //
 //		// case2: 111111 成功
 //		try {
-//			QQActivityHistory history = getManager().achieveFreeGift(validKey);
+//			QQActivityHistory history = getManager().obtainFreeGift(validKey);
 //			log.debug("Should run here!");
 //			assertNotNull(history);
 //			assertNotNull(history.getId());
@@ -101,7 +101,7 @@
 //
 //		// case3: 111111 已送
 //		try {
-//			getManager().achieveFreeGift(validKey);
+//			getManager().obtainFreeGift(validKey);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -127,7 +127,7 @@
 //		// key - consume amount - result
 //		// case1: 123456 - 0 - 无效
 //		try {
-//			getManager().achievePrivilege(invalidKey, 0);
+//			getManager().obtainPrivilege(invalidKey, 0);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			log.debug("Should run here!");
@@ -140,7 +140,7 @@
 //
 //		// case2: 111111 - 30 - 没有优惠
 //		try {
-//			getManager().achievePrivilege(validKey1, 30);
+//			getManager().obtainPrivilege(validKey1, 30);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -153,7 +153,7 @@
 //
 //		// case3: 111111 - 299 - 没有优惠
 //		try {
-//			getManager().achievePrivilege(validKey1, 299);
+//			getManager().obtainPrivilege(validKey1, 299);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -166,7 +166,7 @@
 //
 //		// case4: 111111 - 300 - 50元现金抵用劵
 //		try {
-//			QQActivityHistory history = getManager().achievePrivilege(
+//			QQActivityHistory history = getManager().obtainPrivilege(
 //					validKey1, 300);
 //			assertEquals(50d, history.getRebateAmt());
 //			log.debug("Should run here!");
@@ -180,7 +180,7 @@
 //
 //		// case5: 111111 - 599 - 50元现金抵用劵
 //		try {
-//			QQActivityHistory history = getManager().achievePrivilege(
+//			QQActivityHistory history = getManager().obtainPrivilege(
 //					validKey1, 599);
 //			assertEquals(50d, history.getRebateAmt());
 //			log.debug("Should run here!");
@@ -194,7 +194,7 @@
 //
 //		// case6: 111111 - 600 - 没有优惠
 //		try {
-//			getManager().achievePrivilege(validKey1, 600);
+//			getManager().obtainPrivilege(validKey1, 600);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -207,7 +207,7 @@
 //
 //		// case7: 222222 - 600 - 100元现金抵用劵
 //		try {
-//			QQActivityHistory history = getManager().achievePrivilege(
+//			QQActivityHistory history = getManager().obtainPrivilege(
 //					validKey2, 600);
 //			assertEquals(100d, history.getRebateAmt());
 //			log.debug("Should run here!");
@@ -221,7 +221,7 @@
 //
 //		// case8: 222222 - 352 - 没有优惠
 //		try {
-//			getManager().achievePrivilege(validKey2, 352);
+//			getManager().obtainPrivilege(validKey2, 352);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -234,7 +234,7 @@
 //
 //		// case9: 222222 - 625 - 没有优惠
 //		try {
-//			getManager().achievePrivilege(validKey2, 625);
+//			getManager().obtainPrivilege(validKey2, 625);
 //			fail("Can not go here!");
 //		} catch (InvalidMemberKeyException e) {
 //			fail("Can not go here!");
@@ -247,7 +247,7 @@
 //
 //		// case10: 333333 - 310 - 50元现金抵用劵
 //		try {
-//			QQActivityHistory history = getManager().achievePrivilege(
+//			QQActivityHistory history = getManager().obtainPrivilege(
 //					validKey3, 310);
 //			assertEquals(50d, history.getRebateAmt());
 //			log.debug("Should run here!");
@@ -261,7 +261,7 @@
 //
 //		// case10: 333333 - 600 - 50元现金抵用劵
 //		try {
-//			QQActivityHistory history = getManager().achievePrivilege(
+//			QQActivityHistory history = getManager().obtainPrivilege(
 //					validKey3, 600);
 //			assertEquals(50d, history.getRebateAmt());
 //			log.debug("Should run here!");

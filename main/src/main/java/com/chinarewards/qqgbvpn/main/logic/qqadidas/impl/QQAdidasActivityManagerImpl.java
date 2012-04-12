@@ -12,14 +12,14 @@ import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
 public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 
 	@Override
-	public QQActivityHistory achieveFreeGift(String memberKey)
+	public QQActivityHistory obtainFreeGift(String memberKey)
 			throws InvalidMemberKeyException, DuplicateAchievingGiftException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QQActivityHistory achievePrivilege(String memberKey,
+	public QQActivityHistory obtainPrivilege(String memberKey,
 			double consumeAmt) throws InvalidMemberKeyException,
 			ConsumeAmountNotEnoughException, PrivilegeDoneException {
 		// TODO Auto-generated method stub
