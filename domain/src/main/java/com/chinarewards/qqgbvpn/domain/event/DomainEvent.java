@@ -149,19 +149,18 @@ public enum DomainEvent {
 
 	USER_REMOVED_DNOTE_DTL, USER_REMOVED_DNOTE, //
 	USER_CONFIRMED_DNOTE, USER_PRINTED_DNOTE, //
-	
-	
-	USER_ADDED_RNOTE, 
-	
-	USER_ADDED_RNOTE_DTL, 
-	
+
+	USER_ADDED_RNOTE,
+
+	USER_ADDED_RNOTE_DTL,
+
 	/**
 	 * User confirmed a return note.
 	 * <p>
 	 * 
 	 */
 	USER_CONFIRMED_RNOTE,
-	
+
 	USER_ADDED_RNOTE_INVITATION,
 
 	// ---------- POS Server Related -------------
@@ -296,29 +295,27 @@ public enum DomainEvent {
 	GROUPON_CACHE_SEARCH,
 
 	GROUPON_CACHE_DELETE,
-	
+
 	HUAXIA_REDEEM_QUERY,
-	
+
 	HUAXIA_REDEEM_VALIDATE_OK,
-	
+
 	HUAXIA_REDEEM_VALIDATE_FAILED,
-	
+
 	HUAXIA_REDEEM_ACK_OK,
-	
+
 	HUAXIA_REDEEM_ACK_FAILED,
-	
+
 	/**
 	 * create FinanceReportHistory
 	 */
 	FINANCE_REPORT_HISTORY_CREATE,
-	
+
 	/**
 	 * modify FinanceReportHistory
 	 */
 	FINANCE_REPORT_HISTORY_MODIFY,
 
-	
-	
 	/**
 	 * Indicates a QQ Meishi Q-Mi transaction request is successfully handled by
 	 * the server. This <b>does not</b> mean that.
@@ -341,14 +338,36 @@ public enum DomainEvent {
 	 * @see QQMEISHI_QMI_XACTION_FAILED
 	 */
 	QQMEISHI_QMI_XACTION_OK,
-	
+
 	/**
-	 * Indicates a QQ Meishi Q-Mi transaction requested failed to be handled
-	 * by the server. The meaning of failure does <b>not</b> refer to the 
-	 * business meaning.
+	 * Indicates a QQ Meishi Q-Mi transaction requested failed to be handled by
+	 * the server. The meaning of failure does <b>not</b> refer to the business
+	 * meaning.
 	 * 
 	 * @see QQMEISHI_QMI_XACTION_FAILED
 	 */
-	QQMEISHI_QMI_XACTION_FAILED
-	
+	QQMEISHI_QMI_XACTION_FAILED,
+
+	/**
+	 * SYNC_QQ_MEMBER_KEY: now we provides a web service to QQ. When a qq member
+	 * join in the adidas activity, qq would send the member key to us,and we
+	 * would persist it for pos operation.
+	 * 
+	 * Expected domain: QQActivityMember
+	 * 
+	 * OK means this process is run successful.
+	 */
+	SYNC_QQ_MEMBER_KEY_OK,
+
+	/**
+	 * SYNC_QQ_MEMBER_KEY: now we provides a web service to QQ. When a qq member
+	 * join in the adidas activity, qq would send the member key to us,and we
+	 * would persist it for pos operation.
+	 * 
+	 * Expected domain: QQActivityMember
+	 * 
+	 * Failed means this process is run failed.
+	 */
+	SYNC_QQ_MEMBER_KEY_FAILED
+
 }

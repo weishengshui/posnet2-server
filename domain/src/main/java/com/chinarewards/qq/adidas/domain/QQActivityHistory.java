@@ -28,7 +28,7 @@ public class QQActivityHistory {
 	/**
 	 * It flag a member.
 	 */
-	private String cdKey;
+	private String memberKey;
 
 	/**
 	 * The type of this activity.
@@ -63,12 +63,12 @@ public class QQActivityHistory {
 		this.id = id;
 	}
 
-	public String getCdKey() {
-		return cdKey;
+	public String getMemberKey() {
+		return memberKey;
 	}
 
-	public void setCdKey(String cdKey) {
-		this.cdKey = cdKey;
+	public void setMemberKey(String memberKey) {
+		this.memberKey = memberKey;
 	}
 
 	public ActivityType getaType() {
