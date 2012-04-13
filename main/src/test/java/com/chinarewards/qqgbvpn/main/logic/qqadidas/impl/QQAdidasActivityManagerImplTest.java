@@ -1,9 +1,6 @@
 //package com.chinarewards.qqgbvpn.main.logic.qqadidas.impl;
 //
 //import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNotNull;
-//import static org.junit.Assert.assertTrue;
-//import static org.junit.Assert.fail;
 //
 //import java.util.Date;
 //
@@ -11,10 +8,7 @@
 //import org.apache.commons.configuration.Configuration;
 //import org.junit.Test;
 //
-//import com.chinarewards.qq.adidas.domain.GiftStatus;
-//import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 //import com.chinarewards.qq.adidas.domain.QQActivityHistory;
-//import com.chinarewards.qq.adidas.domain.QQActivityMember;
 //import com.chinarewards.qqgbpvn.main.CommonTestConfigModule;
 //import com.chinarewards.qqgbpvn.main.TestConfigModule;
 //import com.chinarewards.qqgbpvn.main.test.JpaGuiceTest;
@@ -25,6 +19,8 @@
 //import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
 //import com.chinarewards.qqgbvpn.main.guice.AppModule;
 //import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+//import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
+//import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 //import com.google.inject.Module;
 //import com.google.inject.persist.jpa.JpaPersistModule;
 //
@@ -45,7 +41,8 @@
 //		JpaPersistModuleBuilder builder = new JpaPersistModuleBuilder();
 //		builder.configModule(jpaModule, configuration, "db");
 //
-//		return new Module[] { new AppModule(), jpaModule, confModule };
+//		return new Module[] { new AppModule(), new QQAdidasApiModule(),
+//				jpaModule, confModule };
 //	}
 //
 //	protected Module buildTestConfigModule() {
@@ -77,41 +74,15 @@
 //		generateMember(validKey);
 //
 //		// case1: 123456 无效
-//		try {
-//			getManager().obtainFreeGift(invalidKey);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		} catch (DuplicateAchievingGiftException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(2, obtainGift(invalidKey));
 //
 //		// case2: 111111 成功
-//		try {
-//			QQActivityHistory history = getManager().obtainFreeGift(validKey);
-//			log.debug("Should run here!");
-//			assertNotNull(history);
-//			assertNotNull(history.getId());
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (DuplicateAchievingGiftException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(1, obtainGift(validKey));
 //
 //		// case3: 111111 已送
-//		try {
-//			getManager().obtainFreeGift(validKey);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (DuplicateAchievingGiftException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		}
+//		assertEquals(3, obtainGift(validKey));
 //	}
 //
-//	@SuppressWarnings("deprecation")
 //	@Test
 //	public void testAchievePrivilege() {
 //		// prepare data
@@ -126,164 +97,97 @@
 //		generateMember(validKey3);
 //		// key - consume amount - result
 //		// case1: 123456 - 0 - 无效
-//		try {
-//			getManager().obtainPrivilege(invalidKey, 0);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(3, redeemPrivilege(invalidKey, 0));
 //
 //		// case2: 111111 - 30 - 没有优惠
-//		try {
-//			getManager().obtainPrivilege(validKey1, 30);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(4, redeemPrivilege(validKey1, 30));
 //
 //		// case3: 111111 - 299 - 没有优惠
-//		try {
-//			getManager().obtainPrivilege(validKey1, 299);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(4, redeemPrivilege(validKey1, 299));
 //
 //		// case4: 111111 - 300 - 50元现金抵用劵
-//		try {
-//			QQActivityHistory history = getManager().obtainPrivilege(
-//					validKey1, 300);
-//			assertEquals(50d, history.getRebateAmt());
-//			log.debug("Should run here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(1, redeemPrivilege(validKey1, 300));
 //
 //		// case5: 111111 - 599 - 50元现金抵用劵
-//		try {
-//			QQActivityHistory history = getManager().obtainPrivilege(
-//					validKey1, 599);
-//			assertEquals(50d, history.getRebateAmt());
-//			log.debug("Should run here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(1, redeemPrivilege(validKey1, 599));
 //
 //		// case6: 111111 - 600 - 没有优惠
-//		try {
-//			getManager().obtainPrivilege(validKey1, 600);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		}
+//		assertEquals(5, redeemPrivilege(validKey1, 600));
 //
 //		// case7: 222222 - 600 - 100元现金抵用劵
-//		try {
-//			QQActivityHistory history = getManager().obtainPrivilege(
-//					validKey2, 600);
-//			assertEquals(100d, history.getRebateAmt());
-//			log.debug("Should run here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(2, redeemPrivilege(validKey2, 600));
 //
 //		// case8: 222222 - 352 - 没有优惠
-//		try {
-//			getManager().obtainPrivilege(validKey2, 352);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		}
+//		assertEquals(5, redeemPrivilege(validKey2, 600));
 //
 //		// case9: 222222 - 625 - 没有优惠
-//		try {
-//			getManager().obtainPrivilege(validKey2, 625);
-//			fail("Can not go here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			log.debug("Should run here!");
-//			assertTrue(true);
-//		}
+//		assertEquals(5, redeemPrivilege(validKey2, 625));
 //
 //		// case10: 333333 - 310 - 50元现金抵用劵
-//		try {
-//			QQActivityHistory history = getManager().obtainPrivilege(
-//					validKey3, 310);
-//			assertEquals(50d, history.getRebateAmt());
-//			log.debug("Should run here!");
-//		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
-//		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
-//		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
-//		}
+//		assertEquals(1, redeemPrivilege(validKey3, 310));
 //
-//		// case10: 333333 - 600 - 50元现金抵用劵
+//		// case11: 333333 - 600 - 50元现金抵用劵
+//		assertEquals(1, redeemPrivilege(validKey3, 600));
+//	}
+//
+//	/**
+//	 * 1 - 成功<br/>
+//	 * 2 - 会员Key无效<br/>
+//	 * 3 - 已经领取过<br/>
+//	 * 
+//	 * @param memberKey
+//	 * @return
+//	 */
+//	private int obtainGift(String memberKey) {
 //		try {
-//			QQActivityHistory history = getManager().obtainPrivilege(
-//					validKey3, 600);
-//			assertEquals(50d, history.getRebateAmt());
-//			log.debug("Should run here!");
+//			getManager().obtainFreeGift(memberKey);
+//			return 1;
 //		} catch (InvalidMemberKeyException e) {
-//			fail("Can not go here!");
+//			return 2;
+//		} catch (DuplicateAchievingGiftException e) {
+//			return 3;
+//		}
+//	}
+//
+//	/**
+//	 * 1 - 50元现金抵用劵<br/>
+//	 * 2 - 100元现金抵用劵<br/>
+//	 * 3 - 会员key无效 <br/>
+//	 * 4 - 没有优惠-消费金额不够 <br/>
+//	 * 5 - 没有优惠-优惠已经领完<br/>
+//	 * -1 - 未知<br/>
+//	 * 
+//	 * @param memberKey
+//	 * @param consumeAmount
+//	 * @return
+//	 */
+//	private int redeemPrivilege(String memberKey, double consumeAmount) {
+//		try {
+//			QQActivityHistory history = getManager().obtainPrivilege(memberKey,
+//					consumeAmount);
+//			if (50d == history.getConsumeAmt()) {
+//				return 1;
+//			} else if (100d == history.getConsumeAmt()) {
+//				return 2;
+//			} else {
+//				return -1;
+//			}
+//		} catch (InvalidMemberKeyException e) {
+//			return 3;
 //		} catch (ConsumeAmountNotEnoughException e) {
-//			fail("Can not go here!");
+//			return 4;
 //		} catch (PrivilegeDoneException e) {
-//			fail("Can not go here!");
+//			return 5;
 //		}
 //	}
 //
 //	private void generateMember(String memberKey) {
-//		Date now = new Date();
-//		QQActivityMember member = new QQActivityMember();
-//		member.setMemberKey(memberKey);
-//		member.setGiftStatus(GiftStatus.NEW);
-//		member.setPrivilegeStatus(PrivilegeStatus.NEW);
-//		member.setSendTime(now);
-//		member.setCreatedAt(now);
-//		member.setLastModifiedAt(now);
-//		getEm().persist(member);
+//		try {
+//			getInjector().getInstance(QQActivityMemberService.class)
+//					.generateQQActivityMember(memberKey, new Date());
+//		} catch (MemberKeyExistedException e) {
+//			e.printStackTrace();
+//		}
 //	}
 //
 //	private QQAdidasActivityManager getManager() {
