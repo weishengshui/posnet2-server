@@ -216,5 +216,6 @@
 		<module>main-packaging</module>
 		<module>mgmtui-packaging</module>
     	<module>qqmeishi-wsapi</module>
+    	<module>ws-ext-api</module>
   </modules>
 </project>

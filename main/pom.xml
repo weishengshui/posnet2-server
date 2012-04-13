@@ -135,6 +135,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- ws-ext-api -->
+		<dependency>
+			<groupId>com.chinarewards.qqgbvpn</groupId>
+			<artifactId>ws-ext-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.chinarewards</groupId>
 			<artifactId>utils</artifactId>
