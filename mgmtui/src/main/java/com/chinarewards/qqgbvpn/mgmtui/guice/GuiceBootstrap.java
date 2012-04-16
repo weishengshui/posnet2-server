@@ -101,6 +101,7 @@ public class GuiceBootstrap extends GuiceServletContextListener {
 				//finance
 				new FinanceModule(),
 				new SimpleDateTimeModule(),
+				new QqadidasServiceModule(),
 				// configuration
 				getConfigModule(),
 				// JPA

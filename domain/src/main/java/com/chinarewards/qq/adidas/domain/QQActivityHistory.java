@@ -2,6 +2,7 @@ package com.chinarewards.qq.adidas.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,6 +34,7 @@ public class QQActivityHistory {
 	/**
 	 * The type of this activity.
 	 */
+	@Column(name = "atype")
 	@Enumerated(EnumType.STRING)
 	private ActivityType aType;
 

@@ -32,6 +32,7 @@ public abstract class JPATestCase extends TestCase{
 
 	public JPATestCase() {
 		Module[] modules = getModules();
+		logger.debug("modules size:{}", modules.length);
 		injector = Guice.createInjector(modules);
 		PersistService persistService = injector.getInstance(PersistService.class);
 		persistService.start();
@@ -48,6 +49,28 @@ public abstract class JPATestCase extends TestCase{
 		};
 		return modules;
 	}
+	
+	/**
+	 *   mysql 
+	 * @return
+	 */
+//	protected Properties getJPAProperties(){
+//		Properties properties = new Properties();
+//		properties.put("javax.persistence.transactionType", "RESOURCE_LOCAL");
+//		
+//		properties.put("hibernate.hbm2ddl.auto", "update");
+//		properties.put("hibernate.connection.driver_class",
+//				"com.mysql.jdbc.Driver");
+//		properties.put("hibernate.connection.username",
+//				"root");
+//		properties.put("hibernate.connection.password", "167118");
+//		properties.put("hibernate.connection.url", "jdbc:mysql://localhost:3306/mock_test_1");
+//		properties.put("hibernate.dialect",
+//				"org.hibernate.dialect.MySQLDialect");
+//		properties.put("hibernate.show_sql",
+//		"true");
+//		return properties;
+//	}
 	
 	protected Properties getJPAProperties(){
 		Properties properties = new Properties();
@@ -66,6 +89,7 @@ public abstract class JPATestCase extends TestCase{
 		"true");
 		return properties;
 	}
+	
 	
 	public void testEm(){
 		assertNotNull(em);

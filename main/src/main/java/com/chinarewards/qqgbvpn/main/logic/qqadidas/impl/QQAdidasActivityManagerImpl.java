@@ -1,22 +1,16 @@
 package com.chinarewards.qqgbvpn.main.logic.qqadidas.impl;
 
-import java.util.Date;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qq.adidas.domain.ActivityType;
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
-import com.chinarewards.qq.adidas.domain.QQActivityMember;
 import com.chinarewards.qqgbvpn.domain.event.DomainEntity;
 import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.logic.journal.JournalLogic;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasSmallNoteGenerate;
