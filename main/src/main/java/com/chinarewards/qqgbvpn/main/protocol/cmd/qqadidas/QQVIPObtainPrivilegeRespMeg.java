@@ -1,13 +1,15 @@
-package com.chinarewards.qqgbvpn.main.protocol.cmd;
+package com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas;
 
 import java.util.Date;
+
+import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 
 /**
  * Defines the message of a POS client QQ vip adidas rebate response
  * 
  * @author Seek
  */
-public class QQVIPAddsRebateResponseMessage implements ICommand{
+public class QQVIPObtainPrivilegeRespMeg implements ICommand{
 	
 	private static final long CMD_ID = 204;
 	
@@ -26,7 +28,7 @@ public class QQVIPAddsRebateResponseMessage implements ICommand{
 	//小票上的打印内容
 	private final String tip;
 
-	public QQVIPAddsRebateResponseMessage(long result, Date xactTime,
+	public QQVIPObtainPrivilegeRespMeg(long result, Date xactTime,
 			String title, String tip) {
 		super();
 		this.result = result;

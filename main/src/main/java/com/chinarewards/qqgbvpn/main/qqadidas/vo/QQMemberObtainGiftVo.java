@@ -1,5 +1,7 @@
 package com.chinarewards.qqgbvpn.main.qqadidas.vo;
 
+import java.util.Date;
+
 public class QQMemberObtainGiftVo {
 
 	// input
@@ -8,6 +10,7 @@ public class QQMemberObtainGiftVo {
 
 	// output
 	private int returnCode = -1;
+	private Date operateTime;
 	private SmallNote smallNote;
 
 	public String getMemberKey() {
@@ -42,4 +45,11 @@ public class QQMemberObtainGiftVo {
 		this.smallNote = smallNote;
 	}
 
+	public Date getOperateTime() {
+		return operateTime;
+	}
+
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
+	}
 }

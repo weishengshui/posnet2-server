@@ -1,11 +1,13 @@
-package com.chinarewards.qqgbvpn.main.protocol.cmd;
+package com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas;
+
+import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 
 /**
  * Defines the message of a POS client QQ vip adidas sign weixin request
  * 
  * @author Seek
  */
-public class QQVIPAddsSignWeixinRequestMessage implements ICommand{
+public class QQWinxinSignInReqMsg implements ICommand{
 	
 	private static final long CMD_ID = 205;
 	
@@ -15,7 +17,7 @@ public class QQVIPAddsSignWeixinRequestMessage implements ICommand{
 	//user weixin ID
 	private final String weixinId;
 
-	public QQVIPAddsSignWeixinRequestMessage(String weixinId) {
+	public QQWinxinSignInReqMsg(String weixinId) {
 		super();
 		this.weixinId = weixinId;
 	}

@@ -1,5 +1,7 @@
 package com.chinarewards.qqgbvpn.main.logic.qqadidas.impl;
 
+import java.util.Date;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,20 +41,22 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Transactional
 	@Override
 	public QQMemberObtainGiftVo obtainFreeGift(String memberKey, String posId) {
-		int returnCode = -1;
+		int returnCode = QQAdidasConstant.OTHERS;
 		String entityId = "";
+		Date operateTime = null;
 		// obtain gift.
 		try {
 			QQActivityHistory history = qqAdidasActivityLogic.obtainFreeGift(
 					memberKey, posId);
 			entityId = history.getId();
+			operateTime = history.getCreatedAt();
 			returnCode = QQAdidasConstant.GIFT_OK;
 		} catch (InvalidMemberKeyException e) {
 			returnCode = QQAdidasConstant.GIFT_FAIL_INVALID_MEMBER;
 		} catch (GiftObtainedAlreadyException e) {
 			returnCode = QQAdidasConstant.GIFT_FAIL_OBTAINED_ALREADY;
 		} catch (Exception e) {
-			returnCode = -1;
+			returnCode = QQAdidasConstant.OTHERS;
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -60,6 +64,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		giftVo.setMemberKey(memberKey);
 		giftVo.setPosId(posId);
 		giftVo.setReturnCode(returnCode);
+		giftVo.setOperateTime(operateTime);
 		// success
 		if (returnCode == QQAdidasConstant.GIFT_OK) {
 			// print small note
@@ -76,7 +81,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			log.error(
 					"Exception appear when save journal as obtain qq-adidas gift",
 					e);
-			giftVo.setReturnCode(-1);
+			giftVo.setReturnCode(QQAdidasConstant.OTHERS);
 		}
 
 		return giftVo;
@@ -86,8 +91,9 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Override
 	public QQMemberObtainPrivilegeVo obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) {
-		int returnCode = -1;
+		int returnCode = QQAdidasConstant.OTHERS;
 		String entityId = "";
+		Date operateTime = null;
 		ObtainPrvilegePrintModel printModel = new ObtainPrvilegePrintModel();
 		// obtain privilege
 		try {
@@ -95,6 +101,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 					.obtainPrivilege(memberKey, consumeAmt, posId);
 			returnCode = QQAdidasConstant.PRIVILEGE_OK;
 			entityId = result.getHistoryThisTime().getId();
+			operateTime = result.getHistoryThisTime().getCreatedAt();
 			// fill with print model used to print small note.
 			{
 				printModel.setConsumeAmt(consumeAmt);
@@ -116,6 +123,8 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH;
 		} catch (ObtainedPrivilegeAllAlreadyException e) {
 			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY;
+		} catch (Exception e) {
+			returnCode = QQAdidasConstant.OTHERS;
 		}
 
 		// return value.
@@ -125,6 +134,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		privilegeVo.setMemberKey(memberKey);
 		privilegeVo.setPosId(posId);
 		privilegeVo.setReturnCode(returnCode);
+		privilegeVo.setOperateTime(operateTime);
 		// print small note.
 		if (QQAdidasConstant.PRIVILEGE_OK == returnCode) {
 			privilegeVo.setSmallNote(qqAdidasSmallNoteGenerate
@@ -140,7 +150,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			log.error(
 					"Exception appear when save journal as obtain qq-adidas privilege",
 					e);
-			privilegeVo.setReturnCode(-1);
+			privilegeVo.setReturnCode(QQAdidasConstant.OTHERS);
 		}
 
 		return privilegeVo;

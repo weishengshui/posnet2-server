@@ -1,11 +1,13 @@
-package com.chinarewards.qqgbvpn.main.protocol.cmd;
+package com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas;
+
+import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 
 /**
  * Defines the message of a POS client QQ vip adidas sign weixin response
  * 
  * @author Seek
  */
-public class QQVIPAddsSignWeixinResponseMessage implements ICommand{
+public class QQWeixinSignInRespMsg implements ICommand{
 	
 	private static final long CMD_ID = 206;
 	
@@ -15,7 +17,7 @@ public class QQVIPAddsSignWeixinResponseMessage implements ICommand{
 	//结果
 	private final long result;
 
-	public QQVIPAddsSignWeixinResponseMessage(long result) {
+	public QQWeixinSignInRespMsg(long result) {
 		super();
 		this.result = result;
 	}

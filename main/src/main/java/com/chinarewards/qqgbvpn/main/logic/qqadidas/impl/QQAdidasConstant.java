@@ -71,4 +71,9 @@ public class QQAdidasConstant {
 	public static final int WEIXIN_SUCCESS = 0;
 	// ------------weixin signin satus start --------------
 
+	/**
+	 * 非业务状态
+	 */
+	public static final int OTHERS = -1;
+
 }

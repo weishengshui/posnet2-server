@@ -1,11 +1,13 @@
-package com.chinarewards.qqgbvpn.main.protocol.cmd;
+package com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas;
+
+import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 
 /**
  * Defines the message of a POS client QQ vip adidas rebate request
  * 
  * @author Seek
  */
-public class QQVIPAddsRebateRequestMessage implements ICommand{
+public class QQVIPObtainPrivilegeReqMsg implements ICommand{
 	
 	private static final long CMD_ID = 203;
 	
@@ -18,7 +20,7 @@ public class QQVIPAddsRebateRequestMessage implements ICommand{
 	//consume amount
 	private final String amount;
 
-	public QQVIPAddsRebateRequestMessage(String userCode, String amount) {
+	public QQVIPObtainPrivilegeReqMsg(String userCode, String amount) {
 		super();
 		this.userCode = userCode;
 		this.amount = amount;
