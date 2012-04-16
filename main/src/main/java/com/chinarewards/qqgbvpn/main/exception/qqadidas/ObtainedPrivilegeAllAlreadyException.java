@@ -1,12 +1,12 @@
 package com.chinarewards.qqgbvpn.main.exception.qqadidas;
 
 /**
- * The privilege are full achieved.
+ * The member had obtained privilege all already.
  * 
  * @author yanxin
  * @since 0.3.0
  */
-public class PrivilegeDoneException extends Exception {
+public class ObtainedPrivilegeAllAlreadyException extends Exception {
 
 	/**
 	 * 

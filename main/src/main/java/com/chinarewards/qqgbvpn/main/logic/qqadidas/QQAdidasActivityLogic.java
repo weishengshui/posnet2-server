@@ -4,10 +4,9 @@ import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qq.adidas.domain.QQWeixinSignIn;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateWeixinNoException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
 
 public interface QQAdidasActivityLogic {
@@ -22,14 +21,14 @@ public interface QQAdidasActivityLogic {
 	 * 
 	 * @throws InvalidMemberKeyException
 	 *             If the specified memberkey was not invalid.
-	 * @throws DuplicateObtainGiftException
+	 * @throws GiftObtainedAlreadyException
 	 *             If have obtaind the gift more than one times.
 	 * 
 	 * @return {@link QQActivityHistory} If obtain successful it would produce a
 	 *         record of {@link QQActivityHistory}
 	 */
 	public QQActivityHistory obtainFreeGift(String memberKey, String posId)
-			throws InvalidMemberKeyException, DuplicateObtainGiftException;
+			throws InvalidMemberKeyException, GiftObtainedAlreadyException;
 
 	/**
 	 * QQ member can obtain the privilege according to consume at adidas shop.
@@ -62,7 +61,7 @@ public interface QQAdidasActivityLogic {
 	 */
 	public ObtainPrivilegeResult obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) throws InvalidMemberKeyException,
-			ConsumeAmountNotEnoughException, PrivilegeDoneException;
+			ConsumeAmountNotEnoughException, ObtainedPrivilegeAllAlreadyException;
 
 	/**
 	 * Weixin sign in.
@@ -70,9 +69,6 @@ public interface QQAdidasActivityLogic {
 	 * @param weixinNo
 	 * @param posId
 	 * @return {@link QQWeixinSignIn}
-	 * 
-	 * @throws DuplicateWeixinNoException
 	 */
-	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId)
-			throws DuplicateWeixinNoException;
+	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId);
 }

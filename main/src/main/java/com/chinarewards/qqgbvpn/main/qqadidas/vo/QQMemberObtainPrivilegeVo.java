@@ -2,33 +2,13 @@ package com.chinarewards.qqgbvpn.main.qqadidas.vo;
 
 public class QQMemberObtainPrivilegeVo {
 
-	/**
-	 * Obtain successful! It between 50 and 100.
-	 */
-	public static final int QQ_MEMBER_OBTAIN_PRIVILEGE_SUCCESS = 0;
-
-	/**
-	 * Invalid member key.
-	 */
-	public static final int QQ_MEMBER_OBTAIN_PRIVILEGE_INVALID_MEMBER = 1;
-
-	/**
-	 * Not enough consume amount to get privilege.
-	 */
-	public static final int QQ_MEMBER_OBTAIN_PRIVILEGE_CONSUME_NOT_ENOUGH = 2;
-
-	/**
-	 * The privilege had full obtained.
-	 */
-	public static final int QQ_MEMBER_OBTAIN_PRIVILEGE_FULL = 3;
-
 	// input
 	private String memberKey;
 	private double consumeAmt;
 	private String posId;
 
 	// output
-	private String returnCode;
+	private int returnCode = -1;
 	private SmallNote smallNote;
 
 	public String getMemberKey() {
@@ -55,11 +35,11 @@ public class QQMemberObtainPrivilegeVo {
 		this.posId = posId;
 	}
 
-	public String getReturnCode() {
+	public int getReturnCode() {
 		return returnCode;
 	}
 
-	public void setReturnCode(String returnCode) {
+	public void setReturnCode(int returnCode) {
 		this.returnCode = returnCode;
 	}
 

@@ -11,11 +11,11 @@ import com.chinarewards.qq.adidas.domain.QQActivityMember;
 import com.chinarewards.qq.adidas.domain.QQWeixinSignIn;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityHistoryDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityMemberDao;
+import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQWeixinSignInDao;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateWeixinNoException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.vo.CalPrivilegeResult;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
@@ -29,9 +29,12 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 	@Inject
 	QQActivityMemberDao qqActivityMemberDao;
 
+	@Inject
+	QQWeixinSignInDao qqWeixinSignInDao;
+
 	@Override
 	public QQActivityHistory obtainFreeGift(String memberKey, String posId)
-			throws InvalidMemberKeyException, DuplicateObtainGiftException {
+			throws InvalidMemberKeyException, GiftObtainedAlreadyException {
 		// Check status
 		QQActivityMember member = qqActivityMemberDao
 				.findByMemberKey(memberKey);
@@ -39,7 +42,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 			throw new InvalidMemberKeyException();
 		}
 		if (GiftStatus.DONE == member.getGiftStatus()) {
-			throw new DuplicateObtainGiftException();
+			throw new GiftObtainedAlreadyException();
 		}
 		Date now = new Date();
 
@@ -63,7 +66,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 	@Override
 	public ObtainPrivilegeResult obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) throws InvalidMemberKeyException,
-			ConsumeAmountNotEnoughException, PrivilegeDoneException {
+			ConsumeAmountNotEnoughException, ObtainedPrivilegeAllAlreadyException {
 		// check status
 		QQActivityMember member = qqActivityMemberDao
 				.findByMemberKey(memberKey);
@@ -71,7 +74,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 			throw new InvalidMemberKeyException();
 		}
 		if (PrivilegeStatus.DONE == member.getPrivilegeStatus()) {
-			throw new PrivilegeDoneException();
+			throw new ObtainedPrivilegeAllAlreadyException();
 		}
 
 		if (consumeAmt < QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
@@ -149,10 +152,17 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 	}
 
 	@Override
-	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId)
-			throws DuplicateWeixinNoException {
-		// TODO Auto-generated method stub
-		return null;
+	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId) {
+		Date now = new Date();
+
+		// persist weixin signin
+		QQWeixinSignIn signIn = new QQWeixinSignIn();
+		signIn.setCreatedAt(now);
+		signIn.setLastModifiedAt(now);
+		signIn.setWeixinNo(weixinNo);
+		signIn.setPosId(posId);
+		qqWeixinSignInDao.save(signIn);
+		return signIn;
 	}
 
 }

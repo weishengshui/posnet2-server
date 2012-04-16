@@ -1,10 +1,11 @@
 package com.chinarewards.qqgbvpn.main.logic.qqadidas;
 
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
 
 public interface QQAdidasActivityManager {
 
@@ -18,7 +19,7 @@ public interface QQAdidasActivityManager {
 	 * 
 	 * @throws InvalidMemberKeyException
 	 *             If the specified memberkey was not invalid.
-	 * @throws DuplicateObtainGiftException
+	 * @throws GiftObtainedAlreadyException
 	 *             If have obtaind the gift more than one times.
 	 * 
 	 * @return QQMemberObtainGiftVo
@@ -61,5 +62,5 @@ public interface QQAdidasActivityManager {
 	 * @param posId
 	 * @return int
 	 */
-	public int weiXinSignIn(String weixinNo, String posId);
+	public QQWeixinSignInVo weiXinSignIn(String weixinNo, String posId);
 }

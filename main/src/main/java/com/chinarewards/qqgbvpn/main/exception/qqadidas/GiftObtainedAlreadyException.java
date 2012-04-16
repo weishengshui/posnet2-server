@@ -1,12 +1,12 @@
 package com.chinarewards.qqgbvpn.main.exception.qqadidas;
 
 /**
- * Achieve a gift more than one times.
+ * The member had obtained a gift already.
  * 
  * @author yanxin
  * @since 0.3.0
  */
-public class DuplicateObtainGiftException extends Exception {
+public class GiftObtainedAlreadyException extends Exception {
 
 	/**
 	 * 

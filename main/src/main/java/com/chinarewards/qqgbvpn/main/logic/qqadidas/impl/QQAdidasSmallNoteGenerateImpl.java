@@ -34,42 +34,41 @@ public class QQAdidasSmallNoteGenerateImpl implements QQAdidasSmallNoteGenerate 
 					.append("在")
 					.append(dateFormat.format(printModel.getLastConsumeDate()))
 					.append("获得")
-					.append(printModel.getLastRebateAmt())
+					.append((int) printModel.getLastRebateAmt())
 					.append("元折扣优惠.本次消费")
-					.append(printModel.getConsumeAmt())
+					.append((int) printModel.getConsumeAmt())
 					.append("元,享受")
-					.append(printModel.getRebateAmt())
+					.append((int) printModel.getRebateAmt())
 					.append("元折扣优惠.折扣后实际支付金额为")
-					.append(printModel.getConsumeAmt()
-							- printModel.getRebateAmt()).append("元.");
+					.append((int) (printModel.getConsumeAmt() - printModel
+							.getRebateAmt())).append("元.");
 		} else if (printModel.getRebateAmt() == QQAdidasConstant.REBATE_HALF_AMOUNT) {
 			content.append(printModel.getMemberKey())
 					.append("本次消费")
-					.append(printModel.getConsumeAmt())
+					.append((int) printModel.getConsumeAmt())
 					.append("元.")
 					.append("享受")
-					.append(printModel.getRebateAmt())
+					.append((int) printModel.getRebateAmt())
 					.append("元折扣优惠,折扣后实际支付金额为")
-					.append(printModel.getConsumeAmt()
-							- printModel.getRebateAmt())
+					.append((int) (printModel.getConsumeAmt() - printModel
+							.getRebateAmt()))
 					.append("元.")
 					.append("还一次消费")
-					.append(QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE)
+					.append((int) QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE)
 					.append("-")
-					.append(QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE)
+					.append((int) QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE)
 					.append("元,折扣")
-					.append(QQAdidasConstant.REBATE_FULL_AMOUNT
-							- QQAdidasConstant.REBATE_HALF_AMOUNT)
+					.append((int) (QQAdidasConstant.REBATE_FULL_AMOUNT - QQAdidasConstant.REBATE_HALF_AMOUNT))
 					.append("元的机会.");
 		} else {
 			content.append(printModel.getMemberKey())
 					.append("本次消费")
-					.append(printModel.getConsumeAmt())
+					.append((int) printModel.getConsumeAmt())
 					.append("元.享受")
-					.append(printModel.getRebateAmt())
+					.append((int) printModel.getRebateAmt())
 					.append("元折扣优惠,折扣后实际支付金额为")
-					.append(printModel.getConsumeAmt()
-							- printModel.getRebateAmt()).append("元.");
+					.append((int) (printModel.getConsumeAmt() - printModel
+							.getRebateAmt())).append("元.");
 		}
 		note.setTitle(title);
 		note.setContent(content.toString());

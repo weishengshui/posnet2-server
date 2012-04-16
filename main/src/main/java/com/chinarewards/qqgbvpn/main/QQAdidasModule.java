@@ -4,8 +4,10 @@ import javax.inject.Singleton;
 
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityHistoryDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityMemberDao;
+import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQWeixinSignInDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.impl.QQActivityHistoryDaoImpl;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.impl.QQActivityMemberDaoImpl;
+import com.chinarewards.qqgbvpn.main.dao.qqadidas.impl.QQWeixinSignInDaoImpl;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasSmallNoteGenerate;
@@ -20,6 +22,8 @@ public class QQAdidasModule extends AbstractModule {
 	protected void configure() {
 		bind(QQActivityHistoryDao.class).to(QQActivityHistoryDaoImpl.class);
 		bind(QQActivityMemberDao.class).to(QQActivityMemberDaoImpl.class);
+		bind(QQWeixinSignInDao.class).to(QQWeixinSignInDaoImpl.class);
+
 		bind(QQAdidasActivityManager.class).to(
 				QQAdidasActivityManagerImpl.class).in(Singleton.class);
 		bind(QQAdidasActivityLogic.class).to(QQAdidasActivityLogicImpl.class)

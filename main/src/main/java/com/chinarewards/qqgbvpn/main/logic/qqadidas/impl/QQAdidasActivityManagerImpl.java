@@ -4,20 +4,24 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qqgbvpn.domain.event.DomainEntity;
 import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.logic.journal.JournalLogic;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasSmallNoteGenerate;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.vo.CalPrivilegeResult;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrvilegePrintModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
 import com.google.inject.Inject;
+import com.google.inject.persist.Transactional;
 
 public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 
@@ -32,6 +36,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Inject
 	JournalLogic journalLogic;
 
+	@Transactional
 	@Override
 	public QQMemberObtainGiftVo obtainFreeGift(String memberKey, String posId) {
 		int returnCode = -1;
@@ -41,11 +46,11 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			QQActivityHistory history = qqAdidasActivityLogic.obtainFreeGift(
 					memberKey, posId);
 			entityId = history.getId();
-			returnCode = QQMemberObtainGiftVo.QQ_MEMBER_OBTAIN_GIFT_SUCCESS;
+			returnCode = QQAdidasConstant.GIFT_OK;
 		} catch (InvalidMemberKeyException e) {
-			returnCode = QQMemberObtainGiftVo.QQ_MEMBER_OBTAIN_GIFT_INVALID_MEMBER;
-		} catch (DuplicateObtainGiftException e) {
-			returnCode = QQMemberObtainGiftVo.QQ_MEMBER_OBTAIN_GIFT_ALREADY;
+			returnCode = QQAdidasConstant.GIFT_FAIL_INVALID_MEMBER;
+		} catch (GiftObtainedAlreadyException e) {
+			returnCode = QQAdidasConstant.GIFT_FAIL_OBTAINED_ALREADY;
 		} catch (Exception e) {
 			returnCode = -1;
 		}
@@ -56,7 +61,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		giftVo.setPosId(posId);
 		giftVo.setReturnCode(returnCode);
 		// success
-		if (returnCode == QQMemberObtainGiftVo.QQ_MEMBER_OBTAIN_GIFT_SUCCESS) {
+		if (returnCode == QQAdidasConstant.GIFT_OK) {
 			// print small note
 			giftVo.setSmallNote(qqAdidasSmallNoteGenerate
 					.generateAsObtainGift(memberKey));
@@ -77,52 +82,77 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		return giftVo;
 	}
 
+	@Transactional
 	@Override
 	public QQMemberObtainPrivilegeVo obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) {
 		int returnCode = -1;
 		String entityId = "";
+		ObtainPrvilegePrintModel printModel = new ObtainPrvilegePrintModel();
 		// obtain privilege
-		// qqAdidasActivityLogic.obtainPrivilege(memberKey, consumeAmt, posId);
-		return null;
-	}
-
-	/**
-	 * NEW, 300 -> 50<br/>
-	 * NEW, 600 -> 100<br/>
-	 * HALF, 300/600 -> 50<br/>
-	 * 
-	 * @param status
-	 * @param consumeAmt
-	 * @return
-	 */
-	private CalPrivilegeResult calculatePrivilegeResult(PrivilegeStatus status,
-			double consumeAmt) {
-		PrivilegeStatus nextSt = status;
-		double rebateAmt = 0d;
-
-		if (PrivilegeStatus.NEW == status) {
-			if (consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE
-					&& consumeAmt < QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
-				rebateAmt = 50;
-				nextSt = PrivilegeStatus.HALF;
-			} else if (consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
-				rebateAmt = 100;
-				nextSt = PrivilegeStatus.DONE;
+		try {
+			ObtainPrivilegeResult result = qqAdidasActivityLogic
+					.obtainPrivilege(memberKey, consumeAmt, posId);
+			returnCode = QQAdidasConstant.PRIVILEGE_OK;
+			entityId = result.getHistoryThisTime().getId();
+			// fill with print model used to print small note.
+			{
+				printModel.setConsumeAmt(consumeAmt);
+				printModel.setMemberKey(memberKey);
+				printModel.setRebateAmt(result.getHistoryThisTime()
+						.getRebateAmt());
+				printModel.setExistLastTimeConsume(result
+						.isExistHistoryLastTime());
+				if (result.isExistHistoryLastTime()) {
+					printModel.setLastConsumeDate(result.getHistoryLastTime()
+							.getCreatedAt());
+					printModel.setLastRebateAmt(result.getHistoryLastTime()
+							.getRebateAmt());
+				}
 			}
-		} else if (PrivilegeStatus.HALF == status
-				&& consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
-			rebateAmt = 50;
-			nextSt = PrivilegeStatus.DONE;
+		} catch (InvalidMemberKeyException e) {
+			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_INVALD_MEMBER;
+		} catch (ConsumeAmountNotEnoughException e) {
+			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH;
+		} catch (ObtainedPrivilegeAllAlreadyException e) {
+			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY;
 		}
 
-		return new CalPrivilegeResult(rebateAmt, nextSt);
+		// return value.
+		ObjectMapper mapper = new ObjectMapper();
+		QQMemberObtainPrivilegeVo privilegeVo = new QQMemberObtainPrivilegeVo();
+		privilegeVo.setConsumeAmt(consumeAmt);
+		privilegeVo.setMemberKey(memberKey);
+		privilegeVo.setPosId(posId);
+		privilegeVo.setReturnCode(returnCode);
+		// print small note.
+		if (QQAdidasConstant.PRIVILEGE_OK == returnCode) {
+			privilegeVo.setSmallNote(qqAdidasSmallNoteGenerate
+					.generateAsObtainPrivilege(printModel));
+		}
+
+		// save journal
+		try {
+			String eventDetail = mapper.writeValueAsString(privilegeVo);
+			journalLogic.logEvent(DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE,
+					DomainEntity.QQ_ACTIVITY_HISTORY, entityId, eventDetail);
+		} catch (Exception e) {
+			log.error(
+					"Exception appear when save journal as obtain qq-adidas privilege",
+					e);
+			privilegeVo.setReturnCode(-1);
+		}
+
+		return privilegeVo;
 	}
 
+	@Transactional
 	@Override
-	public int weiXinSignIn(String weixinNo, String posId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public QQWeixinSignInVo weiXinSignIn(String weixinNo, String posId) {
+		qqAdidasActivityLogic.weiXinSignIn(weixinNo, posId);
+		QQWeixinSignInVo weixinVo = new QQWeixinSignInVo();
+		weixinVo.setReturnCode(QQAdidasConstant.WEIXIN_SUCCESS);
+		return weixinVo;
 	}
 
 }
