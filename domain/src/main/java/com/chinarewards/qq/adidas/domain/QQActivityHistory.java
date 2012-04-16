@@ -71,11 +71,11 @@ public class QQActivityHistory {
 		this.memberKey = memberKey;
 	}
 
-	public ActivityType getaType() {
+	public ActivityType getAType() {
 		return aType;
 	}
 
-	public void setaType(ActivityType aType) {
+	public void setAType(ActivityType aType) {
 		this.aType = aType;
 	}
 

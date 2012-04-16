@@ -84,5 +84,15 @@ public enum DomainEntity {
 	/**
 	 * QQ_ACTIVITY_MEMBER. The entity ID should be <code>QQActivityMember.getId</code>
 	 */
-	QQ_ACTIVITY_MEMBER
+	QQ_ACTIVITY_MEMBER,
+	
+	/**
+	 * The entity Id should be <code>QQActivityHistory</code>
+	 */
+	QQ_ACTIVITY_HISTORY,
+	
+	/**
+	 * The entity Id should be <code>QQWeinxinSignIn</code>
+	 */
+	QQ_WEIXIN_SIGNIN
 }

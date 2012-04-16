@@ -1,12 +1,16 @@
 package com.chinarewards.qqgbvpn.main.logic.qqadidas;
 
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
+import com.chinarewards.qq.adidas.domain.QQActivityHistory;
+import com.chinarewards.qq.adidas.domain.QQWeixinSignIn;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateWeixinNoException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
 
-public interface QQAdidasActivityManager {
+public interface QQAdidasActivityLogic {
 
 	/**
 	 * QQ member can obtain a gift for free provided by adidas.
@@ -21,9 +25,11 @@ public interface QQAdidasActivityManager {
 	 * @throws DuplicateObtainGiftException
 	 *             If have obtaind the gift more than one times.
 	 * 
-	 * @return QQMemberObtainGiftVo
+	 * @return {@link QQActivityHistory} If obtain successful it would produce a
+	 *         record of {@link QQActivityHistory}
 	 */
-	public QQMemberObtainGiftVo obtainFreeGift(String memberKey, String posId);
+	public QQActivityHistory obtainFreeGift(String memberKey, String posId)
+			throws InvalidMemberKeyException, DuplicateObtainGiftException;
 
 	/**
 	 * QQ member can obtain the privilege according to consume at adidas shop.
@@ -49,17 +55,24 @@ public interface QQAdidasActivityManager {
 	 * @param memberKey
 	 * @param consumeAmt
 	 * @param posId
-	 * @return QQMemberObtainPrivilegeVo
+	 * @return {@link ObtainPrivilegeResult} If obtain successful it would
+	 *         produce a record of {@link QQActivityHistory} in
+	 *         ObtainPrivilegeResult. If exist QQActivityHistory already, return
+	 *         the history .
 	 */
-	public QQMemberObtainPrivilegeVo obtainPrivilege(String memberKey,
-			double consumeAmt, String posId);
+	public ObtainPrivilegeResult obtainPrivilege(String memberKey,
+			double consumeAmt, String posId) throws InvalidMemberKeyException,
+			ConsumeAmountNotEnoughException, PrivilegeDoneException;
 
 	/**
 	 * Weixin sign in.
 	 * 
 	 * @param weixinNo
 	 * @param posId
-	 * @return int
+	 * @return {@link QQWeixinSignIn}
+	 * 
+	 * @throws DuplicateWeixinNoException
 	 */
-	public int weiXinSignIn(String weixinNo, String posId);
+	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId)
+			throws DuplicateWeixinNoException;
 }
