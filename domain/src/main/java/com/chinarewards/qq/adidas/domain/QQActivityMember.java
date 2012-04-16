@@ -42,9 +42,11 @@ public class QQActivityMember {
 	private PrivilegeStatus privilegeStatus;
 
 	/**
-	 * send time. The different between {@link QQActivityMember#sendTime} and
+	 * The sent time which is part of the request body sent from QQ.
+	 * 
+	 * The different between {@link QQActivityMember#sendTime} and
 	 * {@link QQActivityMember#createdAt} is that one is send message time and
-	 * the other is the record time. eg.. QQ send a synch member message at
+	 * the other is the record time. e.g. QQ send a synch member message at
 	 * 12:00:00, maybe the createdAt is 12:00:01
 	 */
 	private Date sendTime;

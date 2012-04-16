@@ -4,7 +4,7 @@ import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qq.adidas.domain.QQWeixinSignIn;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateAchievingGiftException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateWeixinNoException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
@@ -14,21 +14,25 @@ public interface QQAdidasActivityManager {
 	/**
 	 * QQ member can obtain a gift for free provided by adidas.
 	 * 
-	 * @memberKey flag a qq member.
+	 * @param memberKey
+	 *            flag a qq member.
+	 * @param posId
+	 *            flag a pos
 	 * 
 	 * @throws InvalidMemberKeyException
 	 *             If the specified memberkey was not invalid.
-	 * @throws DuplicateAchievingGiftException
+	 * @throws DuplicateObtainGiftException
 	 *             If have obtaind the gift more than one times.
 	 * 
-	 * @return {@link QQActivityHistory} If obtain successful it would produce
-	 *         a record of {@link QQActivityHistory}
+	 * @return {@link QQActivityHistory} If obtain successful it would produce a
+	 *         record of {@link QQActivityHistory}
 	 */
-	public QQActivityHistory obtainFreeGift(String memberKey)
-			throws InvalidMemberKeyException, DuplicateAchievingGiftException;
+	public QQActivityHistory obtainFreeGift(String memberKey, String posId)
+			throws InvalidMemberKeyException, DuplicateObtainGiftException;
 
 	/**
 	 * QQ member can obtain the privilege according to consume at adidas shop.
+	 * 
 	 * 
 	 * Rebate rule:
 	 * <ul>
@@ -47,21 +51,25 @@ public interface QQAdidasActivityManager {
 	 * {@link PrivilegeStatus#DONE} nothing privilege will obtain.</li>
 	 * </ul>
 	 * 
+	 * @param memberKey
+	 * @param consumeAmt
+	 * @param posId
 	 * @return {@link QQActivityHistory} If obtain successful it would produce a
 	 *         record of {@link QQActivityHistory}
 	 */
 	public QQActivityHistory obtainPrivilege(String memberKey,
-			double consumeAmt) throws InvalidMemberKeyException,
+			double consumeAmt, String posId) throws InvalidMemberKeyException,
 			ConsumeAmountNotEnoughException, PrivilegeDoneException;
 
 	/**
 	 * Weixin sign in.
 	 * 
 	 * @param weixinNo
+	 * @param posId
 	 * @return {@link QQWeixinSignIn}
 	 * 
 	 * @throws DuplicateWeixinNoException
 	 */
-	public QQWeixinSignIn weiXinSignIn(String weixinNo)
+	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId)
 			throws DuplicateWeixinNoException;
 }

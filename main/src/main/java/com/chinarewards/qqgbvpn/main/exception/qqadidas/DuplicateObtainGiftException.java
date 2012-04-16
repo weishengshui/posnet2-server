@@ -6,7 +6,7 @@ package com.chinarewards.qqgbvpn.main.exception.qqadidas;
  * @author yanxin
  * @since 0.3.0
  */
-public class DuplicateAchievingGiftException extends Exception {
+public class DuplicateObtainGiftException extends Exception {
 
 	/**
 	 * 

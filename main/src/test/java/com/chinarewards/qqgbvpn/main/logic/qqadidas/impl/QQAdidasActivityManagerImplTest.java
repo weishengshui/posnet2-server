@@ -14,7 +14,7 @@ import com.chinarewards.qqgbpvn.main.TestConfigModule;
 import com.chinarewards.qqgbpvn.main.test.JpaGuiceTest;
 import com.chinarewards.qqgbvpn.core.jpa.JpaPersistModuleBuilder;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughException;
-import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateAchievingGiftException;
+import com.chinarewards.qqgbvpn.main.exception.qqadidas.DuplicateObtainGiftException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.PrivilegeDoneException;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
@@ -64,14 +64,19 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 	}
 
 	@Test
-	public void testAchieveFreeGift() {
+	public void testObtainFreeGift() {
 		// prepare data
 		// 111111 - 合法QQVIP
 		// 123456 - 无效
-		String validKey = "111111";
-		String invalidKey = "123456";
+		String validKey = "11111111111234";
+		String invalidKey = "12345678901234";
 
 		generateMember(validKey);
+
+		// Return code definition
+		// 1 - 成功<br/>
+		// 2 - 会员Key无效<br/>
+		// 3 - 已经领取过<br/>
 
 		// case1: 123456 无效
 		assertEquals(2, obtainGift(invalidKey));
@@ -84,17 +89,25 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 	}
 
 	@Test
-	public void testAchievePrivilege() {
+	public void testObtainPrivilege() {
 		// prepare data
 		// 111111/222222/333333 - 合法QQVIP
 		// 123456 - 非法
-		String validKey1 = "111111";
-		String validKey2 = "222222";
-		String validKey3 = "333333";
-		String invalidKey = "123456";
+		String validKey1 = "11111111111234";
+		String validKey2 = "22222222221234";
+		String validKey3 = "33333333331234";
+		String invalidKey = "12345678901234";
 		generateMember(validKey1);
 		generateMember(validKey2);
 		generateMember(validKey3);
+
+		// return code definition!
+		// 1 - 50元现金抵用劵<br/>
+		// 2 - 100元现金抵用劵<br/>
+		// 3 - 会员key无效 <br/>
+		// 4 - 没有优惠-消费金额不够 <br/>
+		// 5 - 没有优惠-优惠已经领完<br/>
+
 		// key - consume amount - result
 		// case1: 123456 - 0 - 无效
 		assertEquals(3, redeemPrivilege(invalidKey, 0));
@@ -138,12 +151,13 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 	 *         3 - 已经领取过<br/>
 	 */
 	private int obtainGift(String memberKey) {
+		String posId = "CR-000000001";
 		try {
-			getManager().obtainFreeGift(memberKey);
+			getManager().obtainFreeGift(memberKey, posId);
 			return 1;
 		} catch (InvalidMemberKeyException e) {
 			return 2;
-		} catch (DuplicateAchievingGiftException e) {
+		} catch (DuplicateObtainGiftException e) {
 			return 3;
 		}
 	}
@@ -160,12 +174,13 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 	 *         -1 - 未知<br/>
 	 */
 	private int redeemPrivilege(String memberKey, double consumeAmount) {
+		String posId = "CR-000000001";
 		try {
 			QQActivityHistory history = getManager().obtainPrivilege(memberKey,
-					consumeAmount);
-			if (50d == history.getConsumeAmt()) {
+					consumeAmount, posId);
+			if (50d == history.getRebateAmt()) {
 				return 1;
-			} else if (100d == history.getConsumeAmt()) {
+			} else if (100d == history.getRebateAmt()) {
 				return 2;
 			} else {
 				return -1;
