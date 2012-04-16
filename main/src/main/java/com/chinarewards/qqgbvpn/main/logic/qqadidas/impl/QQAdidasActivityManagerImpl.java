@@ -47,7 +47,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		history.setLastModifiedAt(now);
 		history.setMemberKey(memberKey);
 		history.setPosId(posId);
-		history.setaType(ActivityType.GIFT);
+		history.setAType(ActivityType.GIFT);
 		qqActivityHistoryDao.save(history);
 
 		// Change status
@@ -81,7 +81,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 
 		Date now = new Date();
 		QQActivityHistory history = new QQActivityHistory();
-		history.setaType(ActivityType.PRIVILEGE);
+		history.setAType(ActivityType.PRIVILEGE);
 		history.setCreatedAt(now);
 		history.setLastModifiedAt(now);
 		history.setMemberKey(memberKey);

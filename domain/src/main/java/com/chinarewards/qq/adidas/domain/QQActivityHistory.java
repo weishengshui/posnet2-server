@@ -2,6 +2,7 @@ package com.chinarewards.qq.adidas.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,6 +34,7 @@ public class QQActivityHistory {
 	/**
 	 * The type of this activity.
 	 */
+	@Column(name="atype")
 	@Enumerated(EnumType.STRING)
 	private ActivityType aType;
 
@@ -51,7 +53,7 @@ public class QQActivityHistory {
 	 */
 	private String posId;
 
-	private Date createAt;
+	private Date createdAt;
 
 	private Date lastModifiedAt;
 
@@ -71,11 +73,13 @@ public class QQActivityHistory {
 		this.memberKey = memberKey;
 	}
 
-	public ActivityType getaType() {
+	
+
+	public ActivityType getAType() {
 		return aType;
 	}
 
-	public void setaType(ActivityType aType) {
+	public void setAType(ActivityType aType) {
 		this.aType = aType;
 	}
 
@@ -103,12 +107,13 @@ public class QQActivityHistory {
 		this.posId = posId;
 	}
 
-	public Date getCreateAt() {
-		return createAt;
+
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Date createdAt) {
-		this.createAt = createdAt;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public Date getLastModifiedAt() {

@@ -1,4 +1,4 @@
-package com.chinarewards.qqgbvpn.mgmtui.search;
+package com.chinarewards.qqgbvpn.mgmtui.dao.qqadidas.impl;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qqgbvpn.core.BaseDao;
+import com.chinarewards.qqgbvpn.mgmtui.dao.qqadidas.QqActivityHistoryDao;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -14,14 +15,17 @@ public class QqActivityHistoryDaoImpl extends BaseDao implements
 
 	@Inject
 	Provider<EntityManager> em;
-
+	
+	/**
+	 * Get QQ activity history by member key
+	 * @param  memberKey
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<QQActivityHistory> findQqActivityHistoryByCdkey(String cdkey) {
-		List<QQActivityHistory> historys = (List<QQActivityHistory>) (getEm()
-				.createQuery(
-						"from QQActivityHistory where cdkey=:cdkey order by lastModifiedAt")
-				.setParameter("cdkey", cdkey).getResultList());
+	public List<QQActivityHistory> findQqActivityHistoryByMemberKey(String memberKey) {
+		List<QQActivityHistory> historys = getEm()
+				.createQuery("FROM QQActivityHistory WHERE memberKey=:memberKey order by lastModifiedAt asc")
+				.setParameter("memberKey", memberKey).getResultList();
 		return historys;
 	}
 

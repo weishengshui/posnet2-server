@@ -101,5 +101,4 @@
 	
 	<!-- Nested include -->
 	<include file="struts2/common.xml" ></include>
-	
 </struts>
