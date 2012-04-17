@@ -11,12 +11,14 @@ import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException
 import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.persist.Transactional;
 
 public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 
 	@Inject
 	protected Provider<EntityManager> emp;
 
+	@Transactional
 	@Override
 	public String generateQQActivityMember(String memberKey, Date timestamp)
 			throws MemberKeyExistedException {
@@ -29,7 +31,7 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 		member.setCreatedAt(now);
 		member.setLastModifiedAt(now);
 		emp.get().persist(member);
-
+		emp.get().flush();
 		return member.getId();
 	}
 

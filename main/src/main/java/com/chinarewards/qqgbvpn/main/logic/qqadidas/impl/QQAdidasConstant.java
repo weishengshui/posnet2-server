@@ -34,17 +34,18 @@ public class QQAdidasConstant {
 	public static final int PRIVILEGE_OK = 0;
 
 	/**
+	 * 没有优惠-优惠已经领完
+	 */
+	public static final int PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY = 1;
+
+	/**
 	 * 会员key无效
 	 */
-	public static final int PRIVILEGE_FAIL_INVALD_MEMBER = 1;
+	public static final int PRIVILEGE_FAIL_INVALD_MEMBER = 2;
 	/**
 	 * 没有优惠-消费金额不够
 	 */
-	public static final int PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH = 2;
-	/**
-	 * 没有优惠-优惠已经领完
-	 */
-	public static final int PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY = 3;
+	public static final int PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH = 3;
 
 	// ------------------privilege status end -------------
 
@@ -53,14 +54,16 @@ public class QQAdidasConstant {
 	 * 成功
 	 */
 	public static final int GIFT_OK = 0;
-	/**
-	 * 会员Key无效
-	 */
-	public static final int GIFT_FAIL_INVALID_MEMBER = 1;
+
 	/**
 	 * 已经领取过
 	 */
-	public static final int GIFT_FAIL_OBTAINED_ALREADY = 2;
+	public static final int GIFT_FAIL_OBTAINED_ALREADY = 1;
+
+	/**
+	 * 会员Key无效
+	 */
+	public static final int GIFT_FAIL_INVALID_MEMBER = 2;
 
 	// -----------gift status end ----------------------- /**
 
