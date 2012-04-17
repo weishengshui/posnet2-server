@@ -7,7 +7,7 @@ import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
  * 
  * @author Seek
  */
-public class QQWinxinSignInReqMsg implements ICommand{
+public class QQWeixinSignInReqMsg implements ICommand{
 	
 	private static final long CMD_ID = 205;
 	
@@ -17,7 +17,7 @@ public class QQWinxinSignInReqMsg implements ICommand{
 	//user weixin ID
 	private final String weixinId;
 
-	public QQWinxinSignInReqMsg(String weixinId) {
+	public QQWeixinSignInReqMsg(String weixinId) {
 		super();
 		this.weixinId = weixinId;
 	}

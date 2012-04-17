@@ -9,7 +9,7 @@ import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
  * 
  * @author Seek
  */
-public class QQVIPObtainPrivilegeRespMeg implements ICommand{
+public class QQVIPObtainPrivilegeRespMsg implements ICommand{
 	
 	private static final long CMD_ID = 204;
 	
@@ -28,7 +28,7 @@ public class QQVIPObtainPrivilegeRespMeg implements ICommand{
 	//小票上的打印内容
 	private final String tip;
 
-	public QQVIPObtainPrivilegeRespMeg(long result, Date xactTime,
+	public QQVIPObtainPrivilegeRespMsg(long result, Date xactTime,
 			String title, String tip) {
 		super();
 		this.result = result;

@@ -9,7 +9,7 @@ import com.chinarewards.qqgbvpn.main.protocol.ServiceRequest;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceResponse;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceSession;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainPrivilegeReqMsg;
-import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainPrivilegeRespMeg;
+import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainPrivilegeRespMsg;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoginFilter;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
 import com.google.inject.Inject;
@@ -42,7 +42,7 @@ public class QQVIPObtainPrivilegeHandler implements ServiceHandler {
 			noteTitle = privilegeVo.getSmallNote().getTitle();
 			noteContent = privilegeVo.getSmallNote().getContent();
 		}
-		QQVIPObtainPrivilegeRespMeg privilegeRespMeg = new QQVIPObtainPrivilegeRespMeg(
+		QQVIPObtainPrivilegeRespMsg privilegeRespMeg = new QQVIPObtainPrivilegeRespMsg(
 				privilegeVo.getReturnCode(), privilegeVo.getOperateTime(),
 				noteTitle, noteContent);
 

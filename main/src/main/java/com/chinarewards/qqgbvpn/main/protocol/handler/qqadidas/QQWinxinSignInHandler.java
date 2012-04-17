@@ -9,7 +9,7 @@ import com.chinarewards.qqgbvpn.main.protocol.ServiceRequest;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceResponse;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceSession;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQWeixinSignInRespMsg;
-import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQWinxinSignInReqMsg;
+import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQWeixinSignInReqMsg;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoginFilter;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
 import com.google.inject.Inject;
@@ -24,7 +24,7 @@ public class QQWinxinSignInHandler implements ServiceHandler {
 	@Override
 	public void execute(ServiceRequest request, ServiceResponse response) {
 
-		QQWinxinSignInReqMsg bodyMessage = (QQWinxinSignInReqMsg) request
+		QQWeixinSignInReqMsg bodyMessage = (QQWeixinSignInReqMsg) request
 				.getParameter();
 		ServiceSession session = request.getSession();
 		String posId = String.valueOf(session.getAttribute(LoginFilter.POS_ID));
