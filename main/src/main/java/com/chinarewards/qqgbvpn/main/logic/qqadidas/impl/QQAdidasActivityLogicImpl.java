@@ -9,6 +9,7 @@ import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
 import com.chinarewards.qq.adidas.domain.QQWeixinSignIn;
+import com.chinarewards.qqgbvpn.common.DateTimeProvider;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityHistoryDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityMemberDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQWeixinSignInDao;
@@ -32,6 +33,9 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 	@Inject
 	QQWeixinSignInDao qqWeixinSignInDao;
 
+	@Inject
+	DateTimeProvider dateTimeProvider;
+
 	@Override
 	public QQActivityHistory obtainFreeGift(String memberKey, String posId)
 			throws InvalidMemberKeyException, GiftObtainedAlreadyException {
@@ -44,7 +48,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 		if (GiftStatus.DONE == member.getGiftStatus()) {
 			throw new GiftObtainedAlreadyException();
 		}
-		Date now = new Date();
+		Date now = dateTimeProvider.getTime();
 
 		// persist history
 		QQActivityHistory history = new QQActivityHistory();
@@ -66,7 +70,8 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 	@Override
 	public ObtainPrivilegeResult obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) throws InvalidMemberKeyException,
-			ConsumeAmountNotEnoughException, ObtainedPrivilegeAllAlreadyException {
+			ConsumeAmountNotEnoughException,
+			ObtainedPrivilegeAllAlreadyException {
 		// check status
 		QQActivityMember member = qqActivityMemberDao
 				.findByMemberKey(memberKey);
@@ -98,7 +103,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 		CalPrivilegeResult result = calculatePrivilegeResult(
 				member.getPrivilegeStatus(), consumeAmt);
 
-		Date now = new Date();
+		Date now = dateTimeProvider.getTime();
 		QQActivityHistory history = new QQActivityHistory();
 		history.setAType(ActivityType.PRIVILEGE);
 		history.setCreatedAt(now);
@@ -153,7 +158,7 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 
 	@Override
 	public QQWeixinSignIn weiXinSignIn(String weixinNo, String posId) {
-		Date now = new Date();
+		Date now = dateTimeProvider.getTime();
 
 		// persist weixin signin
 		QQWeixinSignIn signIn = new QQWeixinSignIn();

@@ -25,6 +25,7 @@ import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.domain.event.Journal;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+import com.chinarewards.qqgbvpn.main.module.qqadidas.QQAdidasApiModule;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;

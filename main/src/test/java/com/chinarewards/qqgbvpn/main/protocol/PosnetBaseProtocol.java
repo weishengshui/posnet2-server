@@ -1,4 +1,4 @@
-package com.chinarewards.qqgbvpn.main.protocal.qqadidas;
+package com.chinarewards.qqgbvpn.main.protocol;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,10 +30,6 @@ import com.chinarewards.qqgbvpn.main.PosServer;
 import com.chinarewards.qqgbvpn.main.ServerModule;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
 import com.chinarewards.qqgbvpn.main.impl.DefaultPosServer;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdidasApiModule;
-import com.chinarewards.qqgbvpn.main.protocol.ServiceHandlerModule;
-import com.chinarewards.qqgbvpn.main.protocol.ServiceMapping;
-import com.chinarewards.qqgbvpn.main.protocol.ServiceMappingConfigBuilder;
 import com.chinarewards.qqgbvpn.main.protocol.guice.ServiceHandlerGuiceModule;
 import com.chinarewards.qqgbvpn.main.util.HMAC_MD5;
 import com.google.inject.Injector;
@@ -41,12 +37,17 @@ import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.util.Modules;
 
-public abstract class QQAdidasProtocol extends GuiceTest {
+/**
+ * 
+ * @author yanxin
+ * 
+ */
+public abstract class PosnetBaseProtocol extends GuiceTest {
 
-	EntityManager em;
-	long runForSeconds;
-	PosServer posServer;
-	int port;
+	protected EntityManager em;
+	protected long runForSeconds;
+	protected PosServer posServer;
+	protected int port;
 
 	@Before
 	public void setUp() throws Exception {
@@ -138,7 +139,6 @@ public abstract class QQAdidasProtocol extends GuiceTest {
 				buildPersistModule(confModule.getConfiguration()),
 				new ServerModule(),
 				new AppModule(),
-				new QQAdidasApiModule(),
 				Modules.override(
 						new ServiceHandlerModule(confModule.getConfiguration()))
 						.with(new ServiceHandlerGuiceModule(mapping)) };
@@ -157,6 +157,7 @@ public abstract class QQAdidasProtocol extends GuiceTest {
 		return jpaModule;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initDB(EntityManager em) {
 		// need override in child class.
 
@@ -318,23 +319,7 @@ public abstract class QQAdidasProtocol extends GuiceTest {
 
 	}
 
-	protected byte[] getDefaultRequestHeader() {
-		byte[] header = new byte[] {
-				// SEQ
-				0, 0, 0, 24,
-				// ACK
-				0, 0, 0, 0,
-				// flags
-				0, 0,
-				// checksum
-				0, 0,
-				// message length
-				0, 0, 0, 32 };
-
-		return header;
-	}
-
-	protected int getDefaultResponseHeaderLength() {
+	private int getDefaultResponseHeaderLength() {
 		return 16;
 	}
 
@@ -344,5 +329,47 @@ public abstract class QQAdidasProtocol extends GuiceTest {
 
 	protected EntityManager getEm() {
 		return em;
+	}
+
+	/**
+	 * Send byte array message ,return message body byte array.
+	 * 
+	 * @param os
+	 * @param is
+	 * @param sendMsg
+	 * @return
+	 * @throws Exception
+	 */
+	protected byte[] sendMessage(OutputStream os, InputStream is, byte[] sendMsg)
+			throws Exception {
+		os.write(sendMsg);
+		// ----------
+		Thread.sleep(runForSeconds * 500);
+		byte[] response = new byte[500];
+		int respLen = is.read(response);
+
+		log.debug("return byte size:{}", respLen);
+		printToHex(response, respLen);
+
+		// check
+		int respHeaderLen = getDefaultResponseHeaderLength();
+		int respBodyLen = respLen - respHeaderLen;
+		byte[] respBody = new byte[respBodyLen];
+		System.arraycopy(response, respHeaderLen, respBody, 0, respBodyLen);
+
+		return respBody;
+	}
+
+	protected void printToHex(byte[] response, int n) {
+		for (int i = 0; i < n; i++) {
+			String s = Integer.toHexString((byte) response[i]);
+			if (s.length() < 2)
+				s = "0" + s;
+			if (s.length() > 2)
+				s = s.substring(s.length() - 2);
+			System.out.print(s + " ");
+			if ((i + 1) % 8 == 0)
+				System.out.println("");
+		}
 	}
 }

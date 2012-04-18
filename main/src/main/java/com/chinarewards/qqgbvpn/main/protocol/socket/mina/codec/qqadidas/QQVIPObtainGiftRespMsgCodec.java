@@ -50,7 +50,7 @@ public class QQVIPObtainGiftRespMsgCodec implements ICommandCodec {
 			in.get(titleBytes);
 			title = new String(titleBytes, charset);
 		}
-
+		
 		int tipLen = in.getUnsignedShort();
 		if (tipLen > 0) {
 			byte[] tipBytes = new byte[tipLen];

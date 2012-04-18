@@ -19,6 +19,7 @@ import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyExceptio
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
+import com.chinarewards.qqgbvpn.main.module.qqadidas.QQAdidasApiModule;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
 import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
