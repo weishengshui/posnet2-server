@@ -22,6 +22,8 @@ import com.chinarewards.qqgbvpn.main.qqadidas.vo.SmallNote;
 
 public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 
+	private boolean checkDatabase = true;
+
 	@Test
 	public void testObtainGift() throws Exception {
 		Socket socket = new Socket("localhost", port);
@@ -51,12 +53,14 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainGiftReqMsg reqMsg = new QQVIPObtainGiftReqMsg(validKey);
 		QQVIPObtainGiftRespMsg respMsg = (QQVIPObtainGiftRespMsg) execReq(os,
 				is, reqMsg);
-		// check database
-		checkObtainGift_ok_db(validKey);
-		assertEquals(
-				1,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		if (checkDatabase) {
+			// check database
+			checkObtainGift_ok_db(validKey);
+			assertEquals(
+					1,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		}
 
 		SmallNote expectedNote = generateGiftSmallNote(validKey);
 		assertEquals(QQAdidasConstant.GIFT_OK, respMsg.getResult());
@@ -71,12 +75,14 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		assertEquals(null, respMsg.getTitle());
 		assertEquals(null, respMsg.getTip());
 
-		// check database
-		checkObtainGift_ok_db(validKey);
-		assertEquals(
-				2,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		if (checkDatabase) {
+			// check database
+			checkObtainGift_ok_db(validKey);
+			assertEquals(
+					2,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,12 +161,14 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 
-		// check database
-		checkObtainGift_ok_db(validKey);
-		assertEquals(
-				1,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		if (checkDatabase) {
+			// check database
+			checkObtainGift_ok_db(validKey);
+			assertEquals(
+					1,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
+		}
 	}
 
 }

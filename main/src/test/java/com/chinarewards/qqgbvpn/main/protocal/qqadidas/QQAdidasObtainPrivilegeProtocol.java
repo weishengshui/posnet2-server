@@ -24,6 +24,8 @@ import com.chinarewards.qqgbvpn.main.qqadidas.vo.SmallNote;
 
 public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 
+	private boolean checkDatabase = true;
+
 	@Test
 	public void testObtainPrivilege() throws Exception {
 		Socket socket = new Socket("localhost", port);
@@ -213,11 +215,13 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		SmallNote expectedNote = generatePrivilegeSmallNote(printModel);
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
-		checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
-		assertEquals(
-				1,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		if (checkDatabase) {
+			checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
+			assertEquals(
+					1,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		}
 
 		// Second request!
 		reqMsg = new QQVIPObtainPrivilegeReqMsg(validKey,
@@ -228,11 +232,14 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
 		assertEquals(null, respMsg.getTip());
-		checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
-		assertEquals(
-				2,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+
+		if (checkDatabase) {
+			checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
+			assertEquals(
+					2,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		}
 	}
 
 	/**
@@ -276,11 +283,14 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 		Date obtainTime = respMsg.getXactTime();
-		checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
-		assertEquals(
-				1,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+
+		if (checkDatabase) {
+			checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
+			assertEquals(
+					1,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		}
 
 		// Second request!
 		reqMsg = new QQVIPObtainPrivilegeReqMsg(validKey,
@@ -299,12 +309,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		expectedNote = generatePrivilegeSmallNote(printModel);
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
-		checkObtainPrivilege_first_second_ok_db(validKey, firstConsumeAmt,
-				secondConsumeAmt);
-		assertEquals(
-				2,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+
+		if (checkDatabase) {
+			checkObtainPrivilege_first_second_ok_db(validKey, firstConsumeAmt,
+					secondConsumeAmt);
+			assertEquals(
+					2,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		}
 
 		// Third request!
 		reqMsg = new QQVIPObtainPrivilegeReqMsg(validKey,
@@ -315,12 +328,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
 		assertEquals(null, respMsg.getTip());
-		checkObtainPrivilege_first_second_ok_db(validKey, firstConsumeAmt,
-				secondConsumeAmt);
-		assertEquals(
-				3,
-				countDbJournalNum(validKey,
-						DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+
+		if (checkDatabase) {
+			checkObtainPrivilege_first_second_ok_db(validKey, firstConsumeAmt,
+					secondConsumeAmt);
+			assertEquals(
+					3,
+					countDbJournalNum(validKey,
+							DomainEvent.QQ_MEMBER_OBTAIN_PRIVILEGE.toString()));
+		}
 
 	}
 

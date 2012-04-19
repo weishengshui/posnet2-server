@@ -42,7 +42,7 @@ public abstract class QQAdidasBaseProtocol extends PosnetBaseProtocol {
 	private Stack<String> members = new Stack<String>();
 
 	protected void initMembers() {
-		for (int i = 10; i < 100; i++) {
+		for (int i = 99; i > 10; i--) {
 			String key = "1234567890000" + i;
 			generateMember(key);
 			members.push(key);
