@@ -37,7 +37,7 @@ public class QQWinxinSignInHandler implements ServiceHandler {
 
 		QQWeixinSignInRespMsg weixinRespMsg = new QQWeixinSignInRespMsg(
 				weixinSignInVo.getReturnCode());
-
+		log.debug("QQWinxinSignInHandler resp: {} ", weixinRespMsg);
 		response.writeResponse(weixinRespMsg);
 	}
 }

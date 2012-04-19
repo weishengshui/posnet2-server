@@ -43,7 +43,7 @@ public class QQVIPObtainGiftHandler implements ServiceHandler {
 		QQVIPObtainGiftRespMsg giftRespMsg = new QQVIPObtainGiftRespMsg(
 				giftVo.getReturnCode(), giftVo.getOperateTime(), noteTitle,
 				noteContent);
-
+		log.debug("QQVIPObtainGiftHandler resp: {} ", giftRespMsg);
 		response.writeResponse(giftRespMsg);
 	}
 }

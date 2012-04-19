@@ -45,7 +45,7 @@ public class QQVIPObtainPrivilegeHandler implements ServiceHandler {
 		QQVIPObtainPrivilegeRespMsg privilegeRespMeg = new QQVIPObtainPrivilegeRespMsg(
 				privilegeVo.getReturnCode(), privilegeVo.getOperateTime(),
 				noteTitle, noteContent);
-
+		log.debug("QQVIPObtainPrivilegeHandler resp: {} ", privilegeRespMeg);
 		response.writeResponse(privilegeRespMeg);
 	}
 }
