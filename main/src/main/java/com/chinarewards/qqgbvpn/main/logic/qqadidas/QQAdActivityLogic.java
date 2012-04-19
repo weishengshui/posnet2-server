@@ -9,7 +9,7 @@ import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyExceptio
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
 
-public interface QQAdidasActivityLogic {
+public interface QQAdActivityLogic {
 
 	/**
 	 * QQ member can obtain a gift for free provided by adidas.

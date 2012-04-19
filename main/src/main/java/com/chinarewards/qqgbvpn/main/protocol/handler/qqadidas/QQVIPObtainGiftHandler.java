@@ -3,7 +3,7 @@ package com.chinarewards.qqgbvpn.main.protocol.handler.qqadidas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityManager;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceHandler;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceRequest;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceResponse;
@@ -19,7 +19,7 @@ public class QQVIPObtainGiftHandler implements ServiceHandler {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	protected QQAdidasActivityManager qqAdidasActivityManager;
+	protected QQAdActivityManager qqAdidasActivityManager;
 
 	@Override
 	public void execute(ServiceRequest request, ServiceResponse response) {
@@ -34,15 +34,17 @@ public class QQVIPObtainGiftHandler implements ServiceHandler {
 
 		QQMemberObtainGiftVo giftVo = qqAdidasActivityManager.obtainFreeGift(
 				bodyMessage.getUserCode(), posId);
-		String noteTitle = null;
-		String noteContent = null;
-		if (giftVo.getSmallNote() != null) {
-			noteTitle = giftVo.getSmallNote().getTitle();
-			noteContent = giftVo.getSmallNote().getContent();
+		String title = null;
+		String tip = null;
+		if (giftVo.getDisplay() != null) {
+			tip = giftVo.getDisplay().getContent();
+		}
+		if (giftVo.getReceipt() != null) {
+			title = giftVo.getReceipt().getTitle();
+			tip = giftVo.getReceipt().getContent();
 		}
 		QQVIPObtainGiftRespMsg giftRespMsg = new QQVIPObtainGiftRespMsg(
-				giftVo.getReturnCode(), giftVo.getOperateTime(), noteTitle,
-				noteContent);
+				giftVo.getReturnCode(), giftVo.getOperateTime(), title, tip);
 		log.debug("QQVIPObtainGiftHandler resp: {} ", giftRespMsg);
 		response.writeResponse(giftRespMsg);
 	}

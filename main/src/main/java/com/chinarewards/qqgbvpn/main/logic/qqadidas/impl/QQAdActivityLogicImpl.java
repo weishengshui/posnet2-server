@@ -17,12 +17,12 @@ import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughEx
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityLogic;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.vo.CalPrivilegeResult;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
 import com.google.inject.Inject;
 
-public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
+public class QQAdActivityLogicImpl implements QQAdActivityLogic {
 
 	@Inject
 	QQActivityHistoryDao qqActivityHistoryDao;
@@ -46,7 +46,8 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 			throw new InvalidMemberKeyException();
 		}
 		if (GiftStatus.DONE == member.getGiftStatus()) {
-			throw new GiftObtainedAlreadyException();
+			throw new GiftObtainedAlreadyException(getLastHistory(memberKey,
+					ActivityType.GIFT).getCreatedAt());
 		}
 		Date now = dateTimeProvider.getTime();
 
@@ -82,22 +83,16 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 			throw new ObtainedPrivilegeAllAlreadyException();
 		}
 
-		if (consumeAmt < QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
+		if (consumeAmt < QQAdConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
 			throw new ConsumeAmountNotEnoughException();
 		}
 
 		ObtainPrivilegeResult privilegeResult = new ObtainPrivilegeResult();
 
 		if (PrivilegeStatus.HALF == member.getPrivilegeStatus()) {
-			List<QQActivityHistory> histories = qqActivityHistoryDao
-					.findHistoriesByMemberKey(memberKey);
-			if (histories.isEmpty()) {
-				throw new IllegalStateException(
-						"Data error! The history should exist in database already as memberKey="
-								+ memberKey);
-			}
 			privilegeResult.setExistHistoryLastTime(true);
-			privilegeResult.setHistoryLastTime(histories.get(0));
+			privilegeResult.setHistoryLastTime(getLastHistory(memberKey,
+					ActivityType.PRIVILEGE));
 		}
 
 		CalPrivilegeResult result = calculatePrivilegeResult(
@@ -138,18 +133,18 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 		double rebateAmt = 0d;
 
 		if (PrivilegeStatus.NEW == status) {
-			if (consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE
-					&& consumeAmt < QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
-				rebateAmt = QQAdidasConstant.REBATE_HALF_AMOUNT;
+			if (consumeAmt >= QQAdConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE
+					&& consumeAmt < QQAdConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
+				rebateAmt = QQAdConstant.REBATE_HALF_AMOUNT;
 				nextSt = PrivilegeStatus.HALF;
-			} else if (consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
-				rebateAmt = QQAdidasConstant.REBATE_FULL_AMOUNT;
+			} else if (consumeAmt >= QQAdConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE) {
+				rebateAmt = QQAdConstant.REBATE_FULL_AMOUNT;
 				nextSt = PrivilegeStatus.DONE;
 			}
 		} else if (PrivilegeStatus.HALF == status
-				&& consumeAmt >= QQAdidasConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
-			rebateAmt = QQAdidasConstant.REBATE_FULL_AMOUNT
-					- QQAdidasConstant.REBATE_HALF_AMOUNT;
+				&& consumeAmt >= QQAdConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE) {
+			rebateAmt = QQAdConstant.REBATE_FULL_AMOUNT
+					- QQAdConstant.REBATE_HALF_AMOUNT;
 			nextSt = PrivilegeStatus.DONE;
 		}
 
@@ -168,6 +163,18 @@ public class QQAdidasActivityLogicImpl implements QQAdidasActivityLogic {
 		signIn.setPosId(posId);
 		qqWeixinSignInDao.save(signIn);
 		return signIn;
+	}
+
+	private QQActivityHistory getLastHistory(String memberKey, ActivityType type) {
+		List<QQActivityHistory> histories = qqActivityHistoryDao
+				.findHistoriesByMemberKeyAndType(memberKey, type);
+		if (histories.isEmpty()) {
+			throw new IllegalStateException(
+					"Data error! The history should exist in database already as memberKey="
+							+ memberKey);
+		}
+
+		return histories.get(0);
 	}
 
 }

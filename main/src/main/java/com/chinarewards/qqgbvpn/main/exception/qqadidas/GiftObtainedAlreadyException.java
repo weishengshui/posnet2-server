@@ -1,5 +1,7 @@
 package com.chinarewards.qqgbvpn.main.exception.qqadidas;
 
+import java.util.Date;
+
 /**
  * The member had obtained a gift already.
  * 
@@ -13,4 +15,13 @@ public class GiftObtainedAlreadyException extends Exception {
 	 */
 	private static final long serialVersionUID = -3203116604599308090L;
 
+	Date lastObtainedTime;
+
+	public GiftObtainedAlreadyException(Date lastObtainedTime) {
+		this.lastObtainedTime = lastObtainedTime;
+	}
+
+	public Date getLastObtainedTime() {
+		return lastObtainedTime;
+	}
 }

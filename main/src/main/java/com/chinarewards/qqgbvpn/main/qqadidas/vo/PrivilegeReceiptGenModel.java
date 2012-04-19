@@ -2,14 +2,23 @@ package com.chinarewards.qqgbvpn.main.qqadidas.vo;
 
 import java.util.Date;
 
-public class ObtainPrvilegePrintModel {
+public class PrivilegeReceiptGenModel {
 
+	private int returnCode = -1;
 	private String memberKey;
 	private double consumeAmt;
 	private double rebateAmt;
 	private boolean existLastTimeConsume;
 	private Date lastConsumeDate;
 	private double lastRebateAmt;
+
+	public int getReturnCode() {
+		return returnCode;
+	}
+
+	public void setReturnCode(int returnCode) {
+		this.returnCode = returnCode;
+	}
 
 	public String getMemberKey() {
 		return memberKey;

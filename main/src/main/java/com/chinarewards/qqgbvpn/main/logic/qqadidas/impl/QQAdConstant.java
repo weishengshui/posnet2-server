@@ -6,7 +6,7 @@ package com.chinarewards.qqgbvpn.main.logic.qqadidas.impl;
  * @author yanxin
  * @since 0.3.0
  */
-public class QQAdidasConstant {
+public class QQAdConstant {
 
 	/**
 	 * 获取优惠的消费下限,如 300元

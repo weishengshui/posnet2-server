@@ -24,7 +24,7 @@ import com.chinarewards.qqgbvpn.domain.event.DomainEntity;
 import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.domain.event.Journal;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityManager;
 import com.chinarewards.qqgbvpn.main.module.qqadidas.QQAdidasApiModule;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
@@ -79,7 +79,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		String weixinNo = "325435432";
 		String posId = "CR-000000002";
 		QQWeixinSignInVo signInVo = getManager().weiXinSignIn(weixinNo, posId);
-		assertEquals(QQAdidasConstant.WEIXIN_SUCCESS, signInVo.getReturnCode());
+		assertEquals(QQAdConstant.WEIXIN_SUCCESS, signInVo.getReturnCode());
 		// check QQWeixinSignIn
 		List<QQWeixinSignIn> weixins = getEm().createQuery(
 				"FROM QQWeixinSignIn").getResultList();
@@ -89,7 +89,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 
 		// test several times.
 		signInVo = getManager().weiXinSignIn(weixinNo, posId);
-		assertEquals(QQAdidasConstant.WEIXIN_SUCCESS, signInVo.getReturnCode());
+		assertEquals(QQAdConstant.WEIXIN_SUCCESS, signInVo.getReturnCode());
 		// check QQWeixinSignIn
 		weixins = getEm().createQuery("FROM QQWeixinSignIn").getResultList();
 		assertEquals(2, weixins.size());
@@ -115,14 +115,14 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		// 2 - 已经领取过<br/>
 
 		// case1: 123456 无效
-		assertEquals(QQAdidasConstant.GIFT_FAIL_INVALID_MEMBER,
+		assertEquals(QQAdConstant.GIFT_FAIL_INVALID_MEMBER,
 				obtainGift(invalidKey));
 
 		// case2: 111111 成功
-		assertEquals(QQAdidasConstant.GIFT_OK, obtainGift(validKey));
+		assertEquals(QQAdConstant.GIFT_OK, obtainGift(validKey));
 
 		// case3: 111111 已送
-		assertEquals(QQAdidasConstant.GIFT_FAIL_OBTAINED_ALREADY,
+		assertEquals(QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY,
 				obtainGift(validKey));
 	}
 
@@ -148,47 +148,47 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 
 		// key - consume amount - result
 		// case1: 123456 - 0 - 无效
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_INVALD_MEMBER,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_INVALD_MEMBER,
 				redeemPrivilege(invalidKey, 0));
 
 		// case2: 111111 - 30 - 没有优惠
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
 				redeemPrivilege(validKey1, 30));
 
 		// case3: 111111 - 299 - 没有优惠
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
 				redeemPrivilege(validKey1, 299));
 
 		// case4: 111111 - 300 - 50元现金抵用劵
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK,
+		assertEquals(QQAdConstant.PRIVILEGE_OK,
 				redeemPrivilege(validKey1, 300));
 
 		// case5: 111111 - 599 - 50元现金抵用劵
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK,
+		assertEquals(QQAdConstant.PRIVILEGE_OK,
 				redeemPrivilege(validKey1, 599));
 
 		// case6: 111111 - 600 - 没有优惠
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
 				redeemPrivilege(validKey1, 600));
 
 		// case7: 222222 - 600 - 100元现金抵用劵
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK,
+		assertEquals(QQAdConstant.PRIVILEGE_OK,
 				redeemPrivilege(validKey2, 600));
 
 		// case8: 222222 - 352 - 没有优惠
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
 				redeemPrivilege(validKey2, 600));
 
 		// case9: 222222 - 625 - 没有优惠
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
 				redeemPrivilege(validKey2, 625));
 
 		// case10: 333333 - 310 - 50元现金抵用劵
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK,
+		assertEquals(QQAdConstant.PRIVILEGE_OK,
 				redeemPrivilege(validKey3, 310));
 
 		// case11: 333333 - 600 - 50元现金抵用劵
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK,
+		assertEquals(QQAdConstant.PRIVILEGE_OK,
 				redeemPrivilege(validKey3, 600));
 	}
 
@@ -201,8 +201,8 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		generateMember(validKey);
 		QQMemberObtainGiftVo giftVo = getManager().obtainFreeGift(validKey,
 				posId);
-		assertEquals(QQAdidasConstant.GIFT_OK, giftVo.getReturnCode());
-		log.debug("small note:{}", giftVo.getSmallNote().getContent());
+		assertEquals(QQAdConstant.GIFT_OK, giftVo.getReturnCode());
+		log.debug("small note:{}", giftVo.getReceipt().getContent());
 		// check QQActivityHistory
 		List<QQActivityHistory> histories = getEm().createQuery(
 				"FROM QQActivityHistory").getResultList();
@@ -241,8 +241,8 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		generateMember(validKey);
 		QQMemberObtainPrivilegeVo privilegeVo = getManager().obtainPrivilege(
 				validKey, consumeAmt, posId);
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK, privilegeVo.getReturnCode());
-		log.debug("small note:{}", privilegeVo.getSmallNote().getContent());
+		assertEquals(QQAdConstant.PRIVILEGE_OK, privilegeVo.getReturnCode());
+		log.debug("small note:{}", privilegeVo.getReceipt().getContent());
 		// check QQActivityHistory
 		List<QQActivityHistory> histories = getEm().createQuery(
 				"FROM QQActivityHistory").getResultList();
@@ -252,7 +252,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		assertEquals(posId, history.getPosId());
 		assertEquals(consumeAmt, history.getConsumeAmt(), 0);
 		assertEquals(ActivityType.PRIVILEGE, history.getAType());
-		assertEquals(QQAdidasConstant.REBATE_HALF_AMOUNT,
+		assertEquals(QQAdConstant.REBATE_HALF_AMOUNT,
 				history.getRebateAmt(), 0);
 
 		// check QQActivityMember
@@ -309,7 +309,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		}
 	}
 
-	private QQAdidasActivityManager getManager() {
-		return getInjector().getInstance(QQAdidasActivityManager.class);
+	private QQAdActivityManager getManager() {
+		return getInjector().getInstance(QQAdActivityManager.class);
 	}
 }

@@ -11,7 +11,8 @@ public class QQMemberObtainGiftVo {
 	// output
 	private int returnCode = -1;
 	private Date operateTime;
-	private SmallNote smallNote;
+	private Receipt receipt;
+	private ScreenDisplay display;
 
 	public String getMemberKey() {
 		return memberKey;
@@ -37,12 +38,12 @@ public class QQMemberObtainGiftVo {
 		this.returnCode = returnCode;
 	}
 
-	public SmallNote getSmallNote() {
-		return smallNote;
+	public Receipt getReceipt() {
+		return receipt;
 	}
 
-	public void setSmallNote(SmallNote smallNote) {
-		this.smallNote = smallNote;
+	public void setReceipt(Receipt receipt) {
+		this.receipt = receipt;
 	}
 
 	public Date getOperateTime() {
@@ -51,5 +52,13 @@ public class QQMemberObtainGiftVo {
 
 	public void setOperateTime(Date operateTime) {
 		this.operateTime = operateTime;
+	}
+
+	public ScreenDisplay getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(ScreenDisplay display) {
+		this.display = display;
 	}
 }

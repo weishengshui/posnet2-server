@@ -16,11 +16,13 @@ import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
 import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdidasConstant;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdConstant;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainPrivilegeReqMsg;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainPrivilegeRespMsg;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrvilegePrintModel;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.SmallNote;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeScreenDisplayGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ScreenDisplay;
 
 public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 
@@ -68,10 +70,16 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainPrivilegeRespMsg respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(
 				os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_INVALD_MEMBER,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_INVALD_MEMBER,
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+
+		// check screen display
+		PrivilegeScreenDisplayGenModel genModel = new PrivilegeScreenDisplayGenModel(
+				QQAdConstant.PRIVILEGE_FAIL_INVALD_MEMBER, inValidKey,
+				consumeAmt);
+		ScreenDisplay expectedDisplay = genPrivilegeScreenDisplay(genModel);
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 	}
 
@@ -90,15 +98,14 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		assertEquals(memberKey, history.getMemberKey());
 		assertEquals(firstConsumeAmt, history.getConsumeAmt(), 0);
 		assertEquals(ActivityType.PRIVILEGE, history.getAType());
-		assertEquals(QQAdidasConstant.REBATE_HALF_AMOUNT,
-				history.getRebateAmt(), 0);
+		assertEquals(QQAdConstant.REBATE_HALF_AMOUNT, history.getRebateAmt(), 0);
 
 		QQActivityHistory history2 = histories.get(1);
 		assertEquals(memberKey, history2.getMemberKey());
 		assertEquals(secondConsumeAmt, history2.getConsumeAmt(), 0);
 		assertEquals(ActivityType.PRIVILEGE, history2.getAType());
-		assertEquals(QQAdidasConstant.REBATE_HALF_AMOUNT,
-				history2.getRebateAmt(), 0);
+		assertEquals(QQAdConstant.REBATE_HALF_AMOUNT, history2.getRebateAmt(),
+				0);
 
 		// check QQActivityMember
 		List<QQActivityMember> members = getEm()
@@ -120,10 +127,10 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		double rebateAmt = 0d;
 		PrivilegeStatus st = null;
 		if (consumeAmt < 600) {
-			rebateAmt = QQAdidasConstant.REBATE_HALF_AMOUNT;
+			rebateAmt = QQAdConstant.REBATE_HALF_AMOUNT;
 			st = PrivilegeStatus.HALF;
 		} else {
-			rebateAmt = QQAdidasConstant.REBATE_FULL_AMOUNT;
+			rebateAmt = QQAdConstant.REBATE_FULL_AMOUNT;
 			st = PrivilegeStatus.DONE;
 		}
 
@@ -173,10 +180,17 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainPrivilegeRespMsg respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(
 				os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH,
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+
+		// check screen display
+		PrivilegeScreenDisplayGenModel genModel = new PrivilegeScreenDisplayGenModel(
+				QQAdConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH, validKey,
+				firstConsumeAmt);
+		ScreenDisplay expectedDisplay = genPrivilegeScreenDisplay(genModel);
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
+
 	}
 
 	/**
@@ -205,14 +219,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainPrivilegeRespMsg respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(
 				os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK, respMsg.getResult());
-		// assemble expected small note!
-		ObtainPrvilegePrintModel printModel = new ObtainPrvilegePrintModel();
-		printModel.setConsumeAmt(firstConsumeAmt);
-		printModel.setExistLastTimeConsume(false);
-		printModel.setMemberKey(validKey);
-		printModel.setRebateAmt(QQAdidasConstant.REBATE_FULL_AMOUNT);
-		SmallNote expectedNote = generatePrivilegeSmallNote(printModel);
+		assertEquals(QQAdConstant.PRIVILEGE_OK, respMsg.getResult());
+		// assemble expected receipt!
+		PrivilegeReceiptGenModel genModel = new PrivilegeReceiptGenModel();
+		genModel.setReturnCode(QQAdConstant.PRIVILEGE_OK);
+		genModel.setConsumeAmt(firstConsumeAmt);
+		genModel.setExistLastTimeConsume(false);
+		genModel.setMemberKey(validKey);
+		genModel.setRebateAmt(QQAdConstant.REBATE_FULL_AMOUNT);
+		Receipt expectedNote = genPrivilegeReceipt(genModel);
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 		if (checkDatabase) {
@@ -228,10 +243,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 				String.valueOf(secondConsumeAmt));
 		respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+		// check screen display
+		PrivilegeScreenDisplayGenModel psGenModel = new PrivilegeScreenDisplayGenModel(
+				QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY, validKey,
+				secondConsumeAmt);
+		ScreenDisplay expectedDisplay = genPrivilegeScreenDisplay(psGenModel);
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 		if (checkDatabase) {
 			checkObtainPrivilege_first_ok_db(validKey, firstConsumeAmt);
@@ -272,14 +292,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainPrivilegeRespMsg respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(
 				os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK, respMsg.getResult());
-		// assemble expected small note!
-		ObtainPrvilegePrintModel printModel = new ObtainPrvilegePrintModel();
-		printModel.setConsumeAmt(firstConsumeAmt);
-		printModel.setExistLastTimeConsume(false);
-		printModel.setMemberKey(validKey);
-		printModel.setRebateAmt(QQAdidasConstant.REBATE_HALF_AMOUNT);
-		SmallNote expectedNote = generatePrivilegeSmallNote(printModel);
+		assertEquals(QQAdConstant.PRIVILEGE_OK, respMsg.getResult());
+		// assemble expected receipt!
+		PrivilegeReceiptGenModel genModel = new PrivilegeReceiptGenModel();
+		genModel.setReturnCode(QQAdConstant.PRIVILEGE_OK);
+		genModel.setConsumeAmt(firstConsumeAmt);
+		genModel.setExistLastTimeConsume(false);
+		genModel.setMemberKey(validKey);
+		genModel.setRebateAmt(QQAdConstant.REBATE_HALF_AMOUNT);
+		Receipt expectedNote = genPrivilegeReceipt(genModel);
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 		Date obtainTime = respMsg.getXactTime();
@@ -297,16 +318,17 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 				String.valueOf(secondConsumeAmt));
 		respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_OK, respMsg.getResult());
-		// assemble expected small note!
-		printModel = new ObtainPrvilegePrintModel();
-		printModel.setMemberKey(validKey);
-		printModel.setConsumeAmt(secondConsumeAmt);
-		printModel.setExistLastTimeConsume(true);
-		printModel.setLastConsumeDate(obtainTime);
-		printModel.setLastRebateAmt(QQAdidasConstant.REBATE_HALF_AMOUNT);
-		printModel.setRebateAmt(QQAdidasConstant.REBATE_HALF_AMOUNT);
-		expectedNote = generatePrivilegeSmallNote(printModel);
+		assertEquals(QQAdConstant.PRIVILEGE_OK, respMsg.getResult());
+		// assemble expected receipt!
+		genModel = new PrivilegeReceiptGenModel();
+		genModel.setReturnCode(QQAdConstant.PRIVILEGE_OK);
+		genModel.setMemberKey(validKey);
+		genModel.setConsumeAmt(secondConsumeAmt);
+		genModel.setExistLastTimeConsume(true);
+		genModel.setLastConsumeDate(obtainTime);
+		genModel.setLastRebateAmt(QQAdConstant.REBATE_HALF_AMOUNT);
+		genModel.setRebateAmt(QQAdConstant.REBATE_HALF_AMOUNT);
+		expectedNote = genPrivilegeReceipt(genModel);
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 
@@ -324,10 +346,15 @@ public class QQAdidasObtainPrivilegeProtocol extends QQAdidasBaseProtocol {
 				String.valueOf(thirdConsumeAmt));
 		respMsg = (QQVIPObtainPrivilegeRespMsg) execReq(os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
+		assertEquals(QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY,
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+		// check screen display
+		PrivilegeScreenDisplayGenModel psGenModel = new PrivilegeScreenDisplayGenModel(
+				QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY, validKey,
+				thirdConsumeAmt);
+		ScreenDisplay expectedDisplay = genPrivilegeScreenDisplay(psGenModel);
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 		if (checkDatabase) {
 			checkObtainPrivilege_first_second_ok_db(validKey, firstConsumeAmt,

@@ -3,7 +3,7 @@ package com.chinarewards.qqgbvpn.main.protocol.handler.qqadidas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityManager;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceHandler;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceRequest;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceResponse;
@@ -19,7 +19,7 @@ public class QQWinxinSignInHandler implements ServiceHandler {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	protected QQAdidasActivityManager qqAdidasActivityManager;
+	protected QQAdActivityManager qqAdidasActivityManager;
 
 	@Override
 	public void execute(ServiceRequest request, ServiceResponse response) {

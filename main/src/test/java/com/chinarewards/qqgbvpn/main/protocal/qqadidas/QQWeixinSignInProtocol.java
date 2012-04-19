@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import org.junit.Test;
 
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdidasConstant;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdConstant;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQWeixinSignInReqMsg;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQWeixinSignInRespMsg;
 
@@ -37,6 +37,6 @@ public class QQWeixinSignInProtocol extends QQAdidasBaseProtocol {
 		QQWeixinSignInReqMsg reqMsg = new QQWeixinSignInReqMsg(weixinNo);
 		QQWeixinSignInRespMsg respMsg = (QQWeixinSignInRespMsg) execReq(os, is,
 				reqMsg);
-		assertEquals(QQAdidasConstant.WEIXIN_SUCCESS, respMsg.getResult());
+		assertEquals(QQAdConstant.WEIXIN_SUCCESS, respMsg.getResult());
 	}
 }

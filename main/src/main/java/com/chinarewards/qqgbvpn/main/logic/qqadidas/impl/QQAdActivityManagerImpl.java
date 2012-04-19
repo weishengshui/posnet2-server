@@ -14,26 +14,33 @@ import com.chinarewards.qqgbvpn.main.exception.qqadidas.ConsumeAmountNotEnoughEx
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.GiftObtainedAlreadyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.InvalidMemberKeyException;
 import com.chinarewards.qqgbvpn.main.exception.qqadidas.ObtainedPrivilegeAllAlreadyException;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityLogic;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasSmallNoteGenerate;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityLogic;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityManager;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdReceiptGen;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdRespScreenDisplayGen;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftScreenDisplayGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrivilegeResult;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrvilegePrintModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeScreenDisplayGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
-public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
+public class QQAdActivityManagerImpl implements QQAdActivityManager {
 
 	Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	QQAdidasActivityLogic qqAdidasActivityLogic;
+	QQAdActivityLogic qqAdActivityLogic;
 
 	@Inject
-	QQAdidasSmallNoteGenerate qqAdidasSmallNoteGenerate;
+	QQAdReceiptGen receiptGen;
+
+	@Inject
+	QQAdRespScreenDisplayGen displayGen;
 
 	@Inject
 	JournalLogic journalLogic;
@@ -41,22 +48,24 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Transactional
 	@Override
 	public QQMemberObtainGiftVo obtainFreeGift(String memberKey, String posId) {
-		int returnCode = QQAdidasConstant.OTHERS;
+		int returnCode = QQAdConstant.OTHERS;
 		String entityId = "";
+		Date lastObtainedTime = null;
 		Date operateTime = null;
 		// obtain gift.
 		try {
-			QQActivityHistory history = qqAdidasActivityLogic.obtainFreeGift(
+			QQActivityHistory history = qqAdActivityLogic.obtainFreeGift(
 					memberKey, posId);
 			entityId = history.getId();
 			operateTime = history.getCreatedAt();
-			returnCode = QQAdidasConstant.GIFT_OK;
+			returnCode = QQAdConstant.GIFT_OK;
 		} catch (InvalidMemberKeyException e) {
-			returnCode = QQAdidasConstant.GIFT_FAIL_INVALID_MEMBER;
+			returnCode = QQAdConstant.GIFT_FAIL_INVALID_MEMBER;
 		} catch (GiftObtainedAlreadyException e) {
-			returnCode = QQAdidasConstant.GIFT_FAIL_OBTAINED_ALREADY;
+			returnCode = QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY;
+			lastObtainedTime = e.getLastObtainedTime();
 		} catch (Exception e) {
-			returnCode = QQAdidasConstant.OTHERS;
+			returnCode = QQAdConstant.OTHERS;
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -65,12 +74,15 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		giftVo.setPosId(posId);
 		giftVo.setReturnCode(returnCode);
 		giftVo.setOperateTime(operateTime);
-		// success
-		if (returnCode == QQAdidasConstant.GIFT_OK) {
-			// print small note
-			giftVo.setSmallNote(qqAdidasSmallNoteGenerate
-					.generateAsObtainGift(memberKey));
-		}
+
+		// generate pos screen display
+		GiftScreenDisplayGenModel gsGenModel = new GiftScreenDisplayGenModel(
+				returnCode, memberKey, lastObtainedTime);
+		giftVo.setDisplay(displayGen.genGiftRespScreenDisplay(gsGenModel));
+		// generate receipt
+		giftVo.setReceipt(receiptGen
+				.generateGiftReceipt(new GiftReceiptGenModel(returnCode,
+						memberKey)));
 
 		// save journal
 		try {
@@ -81,7 +93,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			log.error(
 					"Exception appear when save journal as obtain qq-adidas gift",
 					e);
-			giftVo.setReturnCode(QQAdidasConstant.OTHERS);
+			giftVo.setReturnCode(QQAdConstant.OTHERS);
 		}
 
 		return giftVo;
@@ -91,40 +103,42 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Override
 	public QQMemberObtainPrivilegeVo obtainPrivilege(String memberKey,
 			double consumeAmt, String posId) {
-		int returnCode = QQAdidasConstant.OTHERS;
+		int returnCode = QQAdConstant.OTHERS;
 		String entityId = "";
 		Date operateTime = null;
-		ObtainPrvilegePrintModel printModel = new ObtainPrvilegePrintModel();
+
+		PrivilegeReceiptGenModel prGenModel = new PrivilegeReceiptGenModel();
+
 		// obtain privilege
 		try {
-			ObtainPrivilegeResult result = qqAdidasActivityLogic
-					.obtainPrivilege(memberKey, consumeAmt, posId);
-			returnCode = QQAdidasConstant.PRIVILEGE_OK;
+			ObtainPrivilegeResult result = qqAdActivityLogic.obtainPrivilege(
+					memberKey, consumeAmt, posId);
+			returnCode = QQAdConstant.PRIVILEGE_OK;
 			entityId = result.getHistoryThisTime().getId();
 			operateTime = result.getHistoryThisTime().getCreatedAt();
 			// fill with print model used to print small note.
 			{
-				printModel.setConsumeAmt(consumeAmt);
-				printModel.setMemberKey(memberKey);
-				printModel.setRebateAmt(result.getHistoryThisTime()
+				prGenModel.setConsumeAmt(consumeAmt);
+				prGenModel.setMemberKey(memberKey);
+				prGenModel.setRebateAmt(result.getHistoryThisTime()
 						.getRebateAmt());
-				printModel.setExistLastTimeConsume(result
+				prGenModel.setExistLastTimeConsume(result
 						.isExistHistoryLastTime());
 				if (result.isExistHistoryLastTime()) {
-					printModel.setLastConsumeDate(result.getHistoryLastTime()
+					prGenModel.setLastConsumeDate(result.getHistoryLastTime()
 							.getCreatedAt());
-					printModel.setLastRebateAmt(result.getHistoryLastTime()
+					prGenModel.setLastRebateAmt(result.getHistoryLastTime()
 							.getRebateAmt());
 				}
 			}
 		} catch (InvalidMemberKeyException e) {
-			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_INVALD_MEMBER;
+			returnCode = QQAdConstant.PRIVILEGE_FAIL_INVALD_MEMBER;
 		} catch (ConsumeAmountNotEnoughException e) {
-			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH;
+			returnCode = QQAdConstant.PRIVILEGE_FAIL_CONSUME_NOT_ENOUGH;
 		} catch (ObtainedPrivilegeAllAlreadyException e) {
-			returnCode = QQAdidasConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY;
+			returnCode = QQAdConstant.PRIVILEGE_FAIL_OBTAINED_ALL_ALREADY;
 		} catch (Exception e) {
-			returnCode = QQAdidasConstant.OTHERS;
+			returnCode = QQAdConstant.OTHERS;
 		}
 
 		// return value.
@@ -135,11 +149,15 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 		privilegeVo.setPosId(posId);
 		privilegeVo.setReturnCode(returnCode);
 		privilegeVo.setOperateTime(operateTime);
-		// print small note.
-		if (QQAdidasConstant.PRIVILEGE_OK == returnCode) {
-			privilegeVo.setSmallNote(qqAdidasSmallNoteGenerate
-					.generateAsObtainPrivilege(printModel));
-		}
+
+		// generate pos screen display
+		PrivilegeScreenDisplayGenModel psGenModel = new PrivilegeScreenDisplayGenModel(
+				returnCode, memberKey, consumeAmt);
+		privilegeVo.setDisplay(displayGen
+				.genPrivilegeRespScreenDisplay(psGenModel));
+		// generate receipt.
+		prGenModel.setReturnCode(returnCode);
+		privilegeVo.setReceipt(receiptGen.generatePrivilegeReceipt(prGenModel));
 
 		// save journal
 		try {
@@ -150,7 +168,7 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 			log.error(
 					"Exception appear when save journal as obtain qq-adidas privilege",
 					e);
-			privilegeVo.setReturnCode(QQAdidasConstant.OTHERS);
+			privilegeVo.setReturnCode(QQAdConstant.OTHERS);
 		}
 
 		return privilegeVo;
@@ -159,9 +177,9 @@ public class QQAdidasActivityManagerImpl implements QQAdidasActivityManager {
 	@Transactional
 	@Override
 	public QQWeixinSignInVo weiXinSignIn(String weixinNo, String posId) {
-		qqAdidasActivityLogic.weiXinSignIn(weixinNo, posId);
+		qqAdActivityLogic.weiXinSignIn(weixinNo, posId);
 		QQWeixinSignInVo weixinVo = new QQWeixinSignInVo();
-		weixinVo.setReturnCode(QQAdidasConstant.WEIXIN_SUCCESS);
+		weixinVo.setReturnCode(QQAdConstant.WEIXIN_SUCCESS);
 		return weixinVo;
 	}
 

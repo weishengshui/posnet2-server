@@ -3,7 +3,7 @@ package com.chinarewards.qqgbvpn.main.protocol.handler.qqadidas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasActivityManager;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdActivityManager;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceHandler;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceRequest;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceResponse;
@@ -19,7 +19,7 @@ public class QQVIPObtainPrivilegeHandler implements ServiceHandler {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	protected QQAdidasActivityManager qqAdidasActivityManager;
+	protected QQAdActivityManager qqAdidasActivityManager;
 
 	@Override
 	public void execute(ServiceRequest request, ServiceResponse response) {
@@ -36,15 +36,18 @@ public class QQVIPObtainPrivilegeHandler implements ServiceHandler {
 
 		QQMemberObtainPrivilegeVo privilegeVo = qqAdidasActivityManager
 				.obtainPrivilege(bodyMessage.getUserCode(), consumeAmt, posId);
-		String noteTitle = null;
-		String noteContent = null;
-		if (privilegeVo.getSmallNote() != null) {
-			noteTitle = privilegeVo.getSmallNote().getTitle();
-			noteContent = privilegeVo.getSmallNote().getContent();
+		String title = null;
+		String tip = null;
+		if (privilegeVo.getDisplay() != null) {
+			tip = privilegeVo.getDisplay().getContent();
+		}
+		if (privilegeVo.getReceipt() != null) {
+			title = privilegeVo.getReceipt().getTitle();
+			tip = privilegeVo.getReceipt().getContent();
 		}
 		QQVIPObtainPrivilegeRespMsg privilegeRespMeg = new QQVIPObtainPrivilegeRespMsg(
 				privilegeVo.getReturnCode(), privilegeVo.getOperateTime(),
-				noteTitle, noteContent);
+				title, tip);
 		log.debug("QQVIPObtainPrivilegeHandler resp: {} ", privilegeRespMeg);
 		response.writeResponse(privilegeRespMeg);
 	}

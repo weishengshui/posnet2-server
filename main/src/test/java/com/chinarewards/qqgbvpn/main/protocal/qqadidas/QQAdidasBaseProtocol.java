@@ -12,7 +12,8 @@ import com.chinarewards.qqgbpvn.main.CommonTestConfigModule;
 import com.chinarewards.qqgbvpn.common.Tools;
 import com.chinarewards.qqgbvpn.main.ServerModule;
 import com.chinarewards.qqgbvpn.main.guice.AppModule;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdidasSmallNoteGenerate;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdReceiptGen;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdRespScreenDisplayGen;
 import com.chinarewards.qqgbvpn.main.module.qqadidas.QQAdidasApiModule;
 import com.chinarewards.qqgbvpn.main.protocol.PosnetBaseProtocol;
 import com.chinarewards.qqgbvpn.main.protocol.ServiceHandlerModule;
@@ -30,8 +31,12 @@ import com.chinarewards.qqgbvpn.main.protocol.socket.mina.codec.qqadidas.QQVIPOb
 import com.chinarewards.qqgbvpn.main.protocol.socket.mina.codec.qqadidas.QQVIPObtainPrivilegeRespMsgCodec;
 import com.chinarewards.qqgbvpn.main.protocol.socket.mina.codec.qqadidas.QQWeixinSignInReqMsgCodec;
 import com.chinarewards.qqgbvpn.main.protocol.socket.mina.codec.qqadidas.QQWeixinSignInRespMsgCodec;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.ObtainPrvilegePrintModel;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.SmallNote;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftScreenDisplayGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeScreenDisplayGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ScreenDisplay;
 import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Module;
@@ -138,15 +143,26 @@ public abstract class QQAdidasBaseProtocol extends PosnetBaseProtocol {
 		oldPosLogin(os, is, challenge);
 	}
 
-	protected SmallNote generateGiftSmallNote(String memberKey) {
-		return getInjector().getInstance(QQAdidasSmallNoteGenerate.class)
-				.generateAsObtainGift(memberKey);
+	protected Receipt genGiftReceipt(GiftReceiptGenModel genModel) {
+		return getInjector().getInstance(QQAdReceiptGen.class)
+				.generateGiftReceipt(genModel);
 	}
 
-	protected SmallNote generatePrivilegeSmallNote(
-			ObtainPrvilegePrintModel printModel) {
-		return getInjector().getInstance(QQAdidasSmallNoteGenerate.class)
-				.generateAsObtainPrivilege(printModel);
+	protected Receipt genPrivilegeReceipt(PrivilegeReceiptGenModel genModel) {
+		return getInjector().getInstance(QQAdReceiptGen.class)
+				.generatePrivilegeReceipt(genModel);
+	}
+
+	protected ScreenDisplay genGiftScreenDisplay(
+			GiftScreenDisplayGenModel genModel) {
+		return getInjector().getInstance(QQAdRespScreenDisplayGen.class)
+				.genGiftRespScreenDisplay(genModel);
+	}
+
+	protected ScreenDisplay genPrivilegeScreenDisplay(
+			PrivilegeScreenDisplayGenModel genModel) {
+		return getInjector().getInstance(QQAdRespScreenDisplayGen.class)
+				.genPrivilegeRespScreenDisplay(genModel);
 	}
 
 	/**

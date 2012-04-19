@@ -2,6 +2,7 @@ package com.chinarewards.qqgbvpn.main.dao.qqadidas.impl;
 
 import java.util.List;
 
+import com.chinarewards.qq.adidas.domain.ActivityType;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qqgbvpn.core.BaseDao;
 import com.chinarewards.qqgbvpn.main.dao.qqadidas.QQActivityHistoryDao;
@@ -17,11 +18,13 @@ public class QQActivityHistoryDaoImpl extends BaseDao implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<QQActivityHistory> findHistoriesByMemberKey(String memberKey) {
+	public List<QQActivityHistory> findHistoriesByMemberKeyAndType(
+			String memberKey, ActivityType type) {
 		return getEm()
 				.createQuery(
-						"FROM QQActivityHistory h WHERE h.memberKey =:memberKey")
-				.setParameter("memberKey", memberKey).getResultList();
+						"FROM QQActivityHistory h WHERE h.memberKey =:memberKey AND h.aType =:aType")
+				.setParameter("memberKey", memberKey)
+				.setParameter("aType", type).getResultList();
 	}
 
 }

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -15,10 +16,13 @@ import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityHistory;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
 import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
-import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdidasConstant;
+import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdConstant;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainGiftReqMsg;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainGiftRespMsg;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.SmallNote;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftReceiptGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftScreenDisplayGenModel;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
+import com.chinarewards.qqgbvpn.main.qqadidas.vo.ScreenDisplay;
 
 public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 
@@ -53,6 +57,7 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainGiftReqMsg reqMsg = new QQVIPObtainGiftReqMsg(validKey);
 		QQVIPObtainGiftRespMsg respMsg = (QQVIPObtainGiftRespMsg) execReq(os,
 				is, reqMsg);
+		Date operationTime = respMsg.getXactTime();
 		if (checkDatabase) {
 			// check database
 			checkObtainGift_ok_db(validKey);
@@ -62,18 +67,23 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 							DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
 		}
 
-		SmallNote expectedNote = generateGiftSmallNote(validKey);
-		assertEquals(QQAdidasConstant.GIFT_OK, respMsg.getResult());
+		Receipt expectedNote = genGiftReceipt(new GiftReceiptGenModel(
+				QQAdConstant.GIFT_OK, validKey));
+		assertEquals(QQAdConstant.GIFT_OK, respMsg.getResult());
 		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
 		assertEquals(expectedNote.getContent(), respMsg.getTip());
 
 		// obtain second time should be error!
 		respMsg = (QQVIPObtainGiftRespMsg) execReq(os, is, reqMsg);
 
-		assertEquals(QQAdidasConstant.GIFT_FAIL_OBTAINED_ALREADY,
+		assertEquals(QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY,
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+		// check screen display
+		ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
+				QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY, validKey,
+				operationTime));
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 		if (checkDatabase) {
 			// check database
@@ -136,10 +146,13 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainGiftRespMsg respMsg = (QQVIPObtainGiftRespMsg) execReq(os,
 				is, reqMsg);
 
-		assertEquals(QQAdidasConstant.GIFT_FAIL_INVALID_MEMBER,
-				respMsg.getResult());
+		assertEquals(QQAdConstant.GIFT_FAIL_INVALID_MEMBER, respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
-		assertEquals(null, respMsg.getTip());
+		// check screen display
+		ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
+				QQAdConstant.GIFT_FAIL_INVALID_MEMBER, invalidKey, null));
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
+
 	}
 
 	/**
@@ -156,10 +169,13 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainGiftRespMsg respMsg = (QQVIPObtainGiftRespMsg) execReq(os,
 				is, reqMsg);
 
-		SmallNote expectedNote = generateGiftSmallNote(validKey);
-		assertEquals(QQAdidasConstant.GIFT_OK, respMsg.getResult());
-		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
-		assertEquals(expectedNote.getContent(), respMsg.getTip());
+		// check title and tip
+		Receipt expectedReceipt = genGiftReceipt(new GiftReceiptGenModel(
+				QQAdConstant.GIFT_OK, validKey));
+
+		assertEquals(QQAdConstant.GIFT_OK, respMsg.getResult());
+		assertEquals(expectedReceipt.getTitle(), respMsg.getTitle());
+		assertEquals(expectedReceipt.getContent(), respMsg.getTip());
 
 		if (checkDatabase) {
 			// check database

@@ -7,7 +7,7 @@ import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
 
-public interface QQAdidasActivityManager {
+public interface QQAdActivityManager {
 
 	/**
 	 * QQ member can obtain a gift for free provided by adidas.
