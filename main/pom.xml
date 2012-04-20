@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.chinarewards.qqgbvpn</groupId>
@@ -134,6 +135,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- ws-ext-api -->
+		<dependency>
+			<groupId>com.chinarewards.qqgbvpn</groupId>
+			<artifactId>ws-ext-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.chinarewards</groupId>
 			<artifactId>utils</artifactId>
@@ -205,6 +214,9 @@
 		</dependency>
 		<!-- Test Scope ENDS -->
 	</dependencies>
+	<properties>
+		<dbdeploy.version>3.0M3</dbdeploy.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -265,6 +277,60 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.dbdeploy</groupId>
+									<artifactId>dbdeploy-cli</artifactId>
+									<version>${dbdeploy.version}</version>
+									<type>jar</type>
+									<outputDirectory>${project.build.directory}/bin</outputDirectory>
+									<destFileName>dbdeploy-cli.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.dbdeploy</groupId>
+									<artifactId>dbdeploy-core</artifactId>
+									<version>${dbdeploy.version}</version>
+									<type>jar</type>
+									<outputDirectory>${project.build.directory}/bin</outputDirectory>
+									<destFileName>dbdeploy-core.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.dbdeploy</groupId>
+									<artifactId>dbdeploy-ant</artifactId>
+									<version>${dbdeploy.version}</version>
+									<type>jar</type>
+									<outputDirectory>${project.build.directory}/bin</outputDirectory>
+									<destFileName>dbdeploy-ant.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2.1</version>
@@ -334,3 +400,4 @@
 		<url>http://build.dev.china-rewards.com:8080/</url>
 	</ciManagement>
 </project>
+

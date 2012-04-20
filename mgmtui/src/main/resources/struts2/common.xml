@@ -12,4 +12,5 @@
 	<include file="struts2/agent.xml" />
 	<include file="struts2/delivery.xml" />
 	<include file="struts2/finance.xml" />
+	<include file="struts2/qqadidas.xml" />
 </struts>
