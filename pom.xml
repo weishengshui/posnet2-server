@@ -219,6 +219,5 @@
     	<module>qqmeishi-wsapi</module>
     	<module>ws-ext-api</module>
     	<module>ws-ext</module>
-    	<module>ws-ext-packaging</module>
   </modules>
 </project>
