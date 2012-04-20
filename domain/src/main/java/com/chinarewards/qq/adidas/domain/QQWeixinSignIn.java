@@ -2,6 +2,7 @@ package com.chinarewards.qq.adidas.domain;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -13,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author yanxin
  * @since 0.3.0
  */
+@Entity
 public class QQWeixinSignIn {
 	@Id
 	@GeneratedValue(generator = "system-uuid")

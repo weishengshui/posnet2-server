@@ -368,6 +368,27 @@ public enum DomainEvent {
 	 * 
 	 * Failed means this process is run failed.
 	 */
-	SYNC_QQ_MEMBER_KEY_FAILED
+	SYNC_QQ_MEMBER_KEY_FAILED,
+
+	/**
+	 * QQ member obtain gift provided by adidas.
+	 * 
+	 * Expected domain: QQActivityHistory
+	 */
+	QQ_MEMBER_OBTAIN_GIFT,
+
+	/**
+	 * QQ member obtain privilege provided by adidas.
+	 * 
+	 * Expected domain: QQActivityHistory
+	 */
+	QQ_MEMBER_OBTAIN_PRIVILEGE,
+
+	/**
+	 * weixin sign in.
+	 * 
+	 * Expected domain: QQWeixinSignIn
+	 */
+	QQ_WEIXIN_SIGN_IN
 
 }

@@ -34,7 +34,7 @@ public class QQActivityHistory {
 	/**
 	 * The type of this activity.
 	 */
-	@Column(name="atype")
+	@Column(name = "atype")
 	@Enumerated(EnumType.STRING)
 	private ActivityType aType;
 
@@ -73,8 +73,6 @@ public class QQActivityHistory {
 		this.memberKey = memberKey;
 	}
 
-	
-
 	public ActivityType getAType() {
 		return aType;
 	}
@@ -106,7 +104,6 @@ public class QQActivityHistory {
 	public void setPosId(String posId) {
 		this.posId = posId;
 	}
-
 
 	public Date getCreatedAt() {
 		return createdAt;

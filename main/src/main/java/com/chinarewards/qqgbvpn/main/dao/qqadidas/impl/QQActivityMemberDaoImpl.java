@@ -24,6 +24,7 @@ public class QQActivityMemberDaoImpl extends BaseDao implements
 
 	@Override
 	public QQActivityMember update(QQActivityMember member) {
+		log.debug("prepare to update member.");
 		getEm().persist(member);
 		return member;
 	}

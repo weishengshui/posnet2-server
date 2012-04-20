@@ -1,0 +1,25 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+	<Set name="contextPath">/ws-ext</Set>
+	<Set name="war">/usr/share/posnet2-ws-ext/lib/ws-ext.war</Set>
+	<!-- Set the system properties without using java -D parameter, which will 
+		go into the Jetty start/stop script and each deployment requires restarting 
+		of jetty, which is not elegant. -->
+	<Call class="java.lang.System" name="setProperties">
+		<Arg>
+			<New class="java.util.Properties">
+				<Call name="putAll">
+					<Arg>
+						<Call class="java.lang.System" name="getProperties" />
+					</Arg>
+				</Call>
+				<Call name="setProperty">
+					<Arg>POSNETWS_HOME</Arg>
+					<Arg>/usr/share/posnet2-ws-ext</Arg>
+				</Call>
+			</New>
+		</Arg>
+	</Call>
+
+</Configure>

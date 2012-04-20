@@ -4,6 +4,8 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
 
@@ -191,6 +193,37 @@ public abstract class Tools {
 		bb[index + 6] = (byte) (s);
 		putUnsignedShort(bb, ms, index+7);
 		putUnsignedShort(bb, tz_min, index+9);
+	}
+	
+	/**
+	 * Get date from the byte stream, the position is the beginning of date.
+	 * 
+	 * @param in
+	 * @param index
+	 * @return
+	 */
+	public static Calendar getDate(byte[] in, int position) {
+		int year = getUnsignedShort(in, position);
+		int month = in[position + 2] - 1;
+		int date = in[position + 3];
+		int hour = in[position + 4];
+		int minute = in[position + 5];
+		int second = in[position + 6];
+		int millsecond = getUnsignedShort(in, position + 7);
+		int timezone_min = getUnsignedShort(in, position + 9);
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONDAY, month);
+		c.set(Calendar.DAY_OF_MONTH, date);
+		c.set(Calendar.HOUR_OF_DAY, hour);
+		c.set(Calendar.MINUTE, minute);
+		c.set(Calendar.SECOND, second);
+		c.set(Calendar.MILLISECOND, millsecond);
+		TimeZone timeZone = SimpleTimeZone.getDefault();
+		timeZone.setRawOffset(timezone_min * 60 * 1000);
+		c.setTimeZone(timeZone);
+
+		return c;
 	}
 	
 	
