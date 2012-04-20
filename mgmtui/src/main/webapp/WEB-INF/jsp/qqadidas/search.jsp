@@ -12,6 +12,7 @@
 <body>
 	<center>
 		<font style="color: red;"><s:fielderror fieldName="inputError" /></font>
+		<h2>QQ权益查询</h2>
 		<s:form action="search" method="post" theme="simple" namespace="/qquery">
 			请输入手机号码：<s:textfield name="memberKey" tabindex="1" />
 			<s:submit value="确认"></s:submit>
