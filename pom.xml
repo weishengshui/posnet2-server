@@ -216,9 +216,10 @@
 		<!-- Packaging projects -->
 		<module>main-packaging</module>
 		<module>mgmtui-packaging</module>
- 	   	<module>qqmeishi-wsapi</module>
-    		<module>ws-ext-api</module>
-    		<module>ws-ext</module>
+    	<module>qqmeishi-wsapi</module>
+    	<module>ws-ext-api</module>
+    	<module>ws-ext</module>
+    	<module>ws-ext-packaging</module>
   </modules>
 </project>
 
