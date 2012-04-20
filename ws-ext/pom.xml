@@ -168,9 +168,6 @@
 	</dependencies>
 
 	<build>
-
-		<finalName>posnet-ws</finalName>
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
