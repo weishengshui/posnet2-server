@@ -15,8 +15,8 @@
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
-DESC="POSNet2 Server Management UI"
-NAME=posnet2-mgmtui
+DESC="POSNet2 Server Web Service"
+NAME=posnet2-ws-ext
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Define LSB log_* functions.
@@ -54,7 +54,7 @@ do_start()
 
 force_stop() 
 {
-	rm -f $JETTY_CONF_CTX_DIR/posnet2-mgmtui.xml
+	rm -f $JETTY_CONF_CTX_DIR/posnet2-ws-ext.xml
 
 	return 0
 }

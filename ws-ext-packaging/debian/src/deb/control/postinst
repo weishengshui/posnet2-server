@@ -26,8 +26,8 @@ case "$1" in
     
     	# create a soft link to the .war file, which will change between 
     	# version.
-	for i in `find /usr/share/posnet2-ws-ext/lib/mgmtui-*.war -type f`; do
-		ln -sf $i /usr/share/posnet2-ws-ext/lib/mgmtui.war
+	for i in `find /usr/share/posnet2-ws-ext/lib/ws-ext-*.war -type f`; do
+		ln -sf $i /usr/share/posnet2-ws-ext/lib/ws-ext.war
 	done
 
 	# restore the conf/ symlink
