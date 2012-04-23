@@ -130,7 +130,7 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 			synMemberResp = new SynMemberResp(returncode);
 			String rawResponseCtn = "";
 			try {
-				rawResponseCtn = JsonUtil.formatObject(rawResponseCtn);
+				rawResponseCtn = JsonUtil.formatObject(synMemberResp);
 			} catch (Throwable e) {
 				logger.error(e.getMessage(), e);
 			}
