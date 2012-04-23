@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-guice</artifactId>
-			<version>${jersey.version}</version>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
@@ -174,9 +174,6 @@
 	</dependencies>
 
 	<build>
-
-		<finalName>posnet-ws</finalName>
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
