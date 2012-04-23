@@ -28,13 +28,6 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 	
 	private static final String QQ_VIP_ADIDAS_DES_SECRET_KEY  = "qq.vip.adidas.des.secretkey";
 	
-	private static final int SUCCESS = 0;
-	private static final int PARSE_ERR = 1;
-	private static final int PARAM_LACK = 2;
-	private static final int MEMBER_KEY_REPEAT = 3;
-	private static final int SYS_ERR = 4;
-	
-	
 	@Override
 	protected Module[] getModules() {
 		CommonTestConfigModule confModule = new CommonTestConfigModule();
@@ -100,7 +93,7 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 		synMemberResp = qqActivityMerberManager.generateQQActivityMember(new String(bytes), secretKey);
 		
 		System.out.println("synMemberResp:"+synMemberResp);
-		Assert.assertEquals(SUCCESS, synMemberResp.getReturncode());
+		Assert.assertEquals(SynMemberResp.SUCCESS, synMemberResp.getReturncode());
 	}
 	
 	@Test
@@ -122,7 +115,7 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 		synMemberResp = qqActivityMerberManager.generateQQActivityMember(new String(bytes), secretKey);
 		
 		System.out.println("synMemberResp:"+synMemberResp);
-		Assert.assertEquals(PARSE_ERR, synMemberResp.getReturncode());
+		Assert.assertEquals(SynMemberResp.PARSE_ERR, synMemberResp.getReturncode());
 	}
 	
 	@Test
@@ -150,7 +143,7 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 		synMemberResp = qqActivityMerberManager.generateQQActivityMember(new String(bytes), secretKey);
 		
 		System.out.println("synMemberResp:"+synMemberResp);
-		Assert.assertEquals(PARAM_LACK, synMemberResp.getReturncode());
+		Assert.assertEquals(SynMemberResp.PARAM_LACK, synMemberResp.getReturncode());
 	}
 	
 	@Test
@@ -179,7 +172,7 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 		synMemberResp = qqActivityMerberManager.generateQQActivityMember(new String(bytes), secretKey);
 		
 		System.out.println("synMemberResp:"+synMemberResp);
-		Assert.assertEquals(SUCCESS, synMemberResp.getReturncode());
+		Assert.assertEquals(SynMemberResp.SUCCESS, synMemberResp.getReturncode());
 		
 		
 		SynMemberReq synMemberReq2 = new SynMemberReq();
@@ -191,7 +184,7 @@ public class QQActivityMerberManagerTest extends JpaGuiceTest {
 		synMemberResp = qqActivityMerberManager.generateQQActivityMember(new String(bytes), secretKey);
 		
 		System.out.println("synMemberResp:"+synMemberResp);
-		Assert.assertEquals(MEMBER_KEY_REPEAT, synMemberResp.getReturncode());
+		Assert.assertEquals(SynMemberResp.MEMBER_KEY_REPEAT, synMemberResp.getReturncode());
 	}
 	/******************************** Test Case *******************************/
 	
