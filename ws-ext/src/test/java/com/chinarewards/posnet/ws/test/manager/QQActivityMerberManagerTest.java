@@ -7,12 +7,12 @@ import org.junit.Test;
 
 import com.chinarewards.posnet.ws.guice.TestAppModule;
 import com.chinarewards.posnet.ws.manager.QQActivityMerberManager;
+import com.chinarewards.posnet.ws.test.CommonTestConfigModule;
 import com.chinarewards.posnet.ws.test.JpaGuiceTest;
 import com.chinarewards.posnet.ws.util.DESECBUtil;
 import com.chinarewards.posnet.ws.util.json.JsonUtil;
 import com.chinarewards.posnet.ws.vo.SynMemberReq;
 import com.chinarewards.posnet.ws.vo.SynMemberResp;
-import com.chinarewards.qqgbpvn.core.test.CommonTestConfigModule;
 import com.chinarewards.qqgbvpn.core.jpa.JpaPersistModuleBuilder;
 import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
