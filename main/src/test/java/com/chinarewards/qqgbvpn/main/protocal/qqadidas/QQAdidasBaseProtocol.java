@@ -8,6 +8,8 @@ import java.util.Stack;
 
 import org.apache.mina.core.buffer.IoBuffer;
 
+import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
+import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.chinarewards.qqgbpvn.main.CommonTestConfigModule;
 import com.chinarewards.qqgbvpn.common.Tools;
 import com.chinarewards.qqgbvpn.main.ServerModule;
@@ -37,8 +39,6 @@ import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeReceiptGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeScreenDisplayGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ScreenDisplay;
-import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
-import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 
