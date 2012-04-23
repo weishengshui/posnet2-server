@@ -71,7 +71,7 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 						Base64.decodeBase64(originStr), secretKey));
 				logger.debug("decrypt json string:"+ jsonString);
 			} catch (Exception e) {
-				returncode = 1;
+				returncode = SynMemberResp.PARSE_ERR;
 				exception = new Exception(e);
 				throw exception;
 			}
@@ -91,25 +91,25 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 				timestampDate = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ")
 						.parse(synMemberReq.getTimestamp());
 			} catch (Throwable e) {
-				returncode = 1;
+				returncode = SynMemberResp.PARSE_ERR;
 				exception = new Exception(e);
 				throw exception;
 			}
 		
 			if (synMemberReq.getMemberKey() == null || "".equals(synMemberReq.getMemberKey())) {
-				returncode = 2;
+				returncode = SynMemberResp.PARAM_LACK;
 			} else {
 				try {
 					qqActivityMemberId = memberService
 							.generateQQActivityMember(
 									synMemberReq.getMemberKey(), timestampDate);
-					returncode = 0;
+					returncode = SynMemberResp.SUCCESS;
 				} catch (MemberKeyExistedException e) {
-					returncode = 3;
+					returncode = SynMemberResp.MEMBER_KEY_REPEAT;
 					exception = new Exception(e);
 					throw exception;
 				} catch (Exception e) {
-					returncode = 4;
+					returncode = SynMemberResp.SYS_ERR;
 					exception = new Exception(e);
 					throw exception;
 				}
@@ -122,7 +122,7 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 			SyncQQMemberKeyJournalVo journalVo = new SyncQQMemberKeyJournalVo();
 			
 			//set errorStackTrace
-			if(returncode != 0 && returncode != 2){
+			if(returncode != SynMemberResp.SUCCESS && returncode != SynMemberResp.PARAM_LACK){
 				journalVo.setErrorStackTrace(getExceptionStackTrace(exception));
 			}
 			
@@ -130,7 +130,7 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 			synMemberResp = new SynMemberResp(returncode);
 			String rawResponseCtn = "";
 			try {
-				rawResponseCtn = JsonUtil.formatObject(rawResponseCtn);
+				rawResponseCtn = JsonUtil.formatObject(synMemberResp);
 			} catch (Throwable e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -142,7 +142,7 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 			
 			
 			DomainEvent domainEvent = DomainEvent.SYNC_QQ_MEMBER_KEY_OK;
-			if(returncode != 0){
+			if(returncode != SynMemberResp.SUCCESS){
 				domainEvent = DomainEvent.SYNC_QQ_MEMBER_KEY_FAILED;
 			}
 			
