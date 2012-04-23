@@ -1,4 +1,4 @@
-package com.chinarewards.qq.meishi.util.json;
+package com.chinarewards.posnet.ws.util.json;
 
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;

@@ -23,7 +23,7 @@ public final class IoUtil {
 	 * @author Seek
 	 */
 	public static String readStream(InputStream in, String charset) throws 
-			Throwable {
+			Exception {
 		StringBuilder sb = new StringBuilder("");
 		if (in != null) {
 			BufferedReader reader = null;
@@ -37,7 +37,7 @@ public final class IoUtil {
 				while ((line = reader.readLine()) != null) {
 					sb.append(line.trim());
 				}
-			} catch (Throwable e) {
+			} catch (Exception e) {
 				throw new Exception(e);
 			} finally {
 				try {

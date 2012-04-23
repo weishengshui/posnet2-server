@@ -164,7 +164,13 @@
 			<artifactId>ws-ext-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+	
+		<!-- common-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>

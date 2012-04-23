@@ -10,7 +10,6 @@ import com.chinarewards.qqgbvpn.common.DateTimeProvider;
 import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Inject;
-import com.google.inject.persist.Transactional;
 
 public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 
@@ -20,7 +19,6 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 	@Inject
 	DateTimeProvider dateTimeProvider;
 
-	@Transactional
 	@Override
 	public String generateQQActivityMember(String memberKey, Date sendTime)
 			throws MemberKeyExistedException {
@@ -38,8 +36,6 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 		member.setMemberKey(memberKey);
 		member.setSendTime(sendTime);
 		memberDao.insert(member);
-
-		// Insert journal
 
 		return member.getId();
 	}

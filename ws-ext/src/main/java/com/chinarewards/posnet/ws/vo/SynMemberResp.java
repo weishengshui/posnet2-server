@@ -3,13 +3,13 @@ package com.chinarewards.posnet.ws.vo;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class synMemberResp {
+public class SynMemberResp {
 	private int returncode = -1;
 
-	public synMemberResp() {
+	public SynMemberResp() {
 	}
 
-	public synMemberResp(int returncode) {
+	public SynMemberResp(int returncode) {
 		this.returncode = returncode;
 	}
 

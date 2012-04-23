@@ -1,44 +1,50 @@
 package com.chinarewards.posnet.ws.resource;
 
-import java.util.Date;
-
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.chinarewards.posnet.ws.vo.synMemberResp;
-import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
-import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
+import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.chinarewards.posnet.ws.manager.QQActivityMerberManager;
+import com.chinarewards.posnet.ws.vo.SynMemberResp;
 import com.google.inject.Inject;
 
 /**
- * QQ-Adidas resource!
- * 
- * @author yanxin
- * 
+ * description：QQ-Adidas resource!
+ * @copyright binfen.cc
+ * @projectName ws-ext
+ * @time 2012-4-20   下午04:16:03
+ * @author Seek
  */
 @Path("/qq-adidas")
 public class QQAdidasResource {
+	
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private static final String QQVIP_ADIDAS_DES_SECRET_KEY = "qq.vip.adidas.des.secretkey";
+	
+	@Inject
+	Configuration configuration;
 
 	@Inject
-	QQActivityMemberService memberService;
+	QQActivityMerberManager merberManager;
 
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/sync/qq/member")
-	public synMemberResp synMember(String originStr) {
-		int returncode = -1;
-		if (originStr == null || "".equals(originStr)) {
-			returncode = 2;
-		} else {
-			try {
-				memberService.generateQQActivityMember(originStr, new Date());
-			} catch (MemberKeyExistedException e) {
-				returncode = 3;
-			}
+	public SynMemberResp synMember(String originStr) {
+		String secretKey = configuration.getString(QQVIP_ADIDAS_DES_SECRET_KEY);
+		logger.debug("originStr:"+ originStr);
+		logger.debug("secretKey:"+ secretKey);
+		
+		try{
+			return merberManager.generateQQActivityMember(originStr, secretKey);
+		}catch(Throwable e){
+			return new SynMemberResp(4);
 		}
-		returncode = 0;
-		return new synMemberResp(returncode);
 	}
 }
