@@ -29,7 +29,7 @@ public final class DigestUtil {
 	 * @author Seek
 	 */
 	public static String digestData(String source, String algorithm)
-			throws Throwable {
+			throws Exception {
 		return digestData(source.getBytes(), algorithm);
 	}
 	
@@ -42,7 +42,7 @@ public final class DigestUtil {
 	 * @author Seek
 	 */
 	public static String digestData(byte[] source, String algorithm)
-			throws Throwable {
+			throws Exception {
 		String s = null;
 		char hexDigits[] = { // 用来将字节转换成 16 进制表示的字符
 				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
@@ -66,7 +66,7 @@ public final class DigestUtil {
 			}
 			s = new String(str); // 换后的结果转换为字符串
 
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new Exception("data digest is ERROR!", e);
 		}
 		return s;
@@ -82,7 +82,7 @@ public final class DigestUtil {
 	 * @author Seek
 	 */
 	public final static boolean compareDigest(byte[] b1, byte[] b2,
-			String algorithm) throws Throwable {
+			String algorithm) throws Exception {
 		boolean result = false;
 		try {
 			MessageDigest digest1 = MessageDigest.getInstance(algorithm);
@@ -95,7 +95,7 @@ public final class DigestUtil {
 			result = MessageDigest.isEqual(digest1Bytes, digest2.digest());
 			
 			logger.debug("bytes1 and bytes2 compareDigest = " + result);
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new Exception("compare digest is ERROR!", e);
 		}
 		return result;

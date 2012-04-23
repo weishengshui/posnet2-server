@@ -10,6 +10,8 @@ import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 
+import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
+import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.chinarewards.qq.adidas.domain.ActivityType;
 import com.chinarewards.qq.adidas.domain.GiftStatus;
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
@@ -29,8 +31,6 @@ import com.chinarewards.qqgbvpn.main.module.qqadidas.QQAdidasApiModule;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainGiftVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQMemberObtainPrivilegeVo;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.QQWeixinSignInVo;
-import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
-import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Module;
 import com.google.inject.persist.jpa.JpaPersistModule;
 
