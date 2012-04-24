@@ -28,6 +28,16 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>appinfo</servlet-name>
+		<servlet-class>com.chinarewards.common.web.appinfo.AppInfoServlet</servlet-class>
+		<load-on-startup>99</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>appinfo</servlet-name>
+		<url-pattern>/appinfo.html</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

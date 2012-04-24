@@ -146,6 +146,12 @@
 		</dependency>
 
 		<!-- China Rewards -->
+		<!-- AppInfoServlet -->
+		<dependency>
+			<groupId>com.chinarewards</groupId>
+			<artifactId>common-web</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.chinarewards.qqgbvpn</groupId>
 			<artifactId>core</artifactId>
