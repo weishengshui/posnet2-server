@@ -4,11 +4,11 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
+import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.chinarewards.qq.adidas.domain.GiftStatus;
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
-import com.chinarewards.ws.ext.api.qq.adidas.exception.MemberKeyExistedException;
-import com.chinarewards.ws.ext.api.qq.adidas.service.QQActivityMemberService;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;

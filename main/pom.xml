@@ -136,10 +136,10 @@
 			</exclusions>
 		</dependency>
 		
-		<!-- ws-ext-api -->
+		<!-- external-api -->
 		<dependency>
 			<groupId>com.chinarewards.qqgbvpn</groupId>
-			<artifactId>ws-ext-api</artifactId>
+			<artifactId>external-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

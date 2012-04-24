@@ -44,13 +44,13 @@ public final class QQMeishiUtil {
 	 * @param commSecretKey 通讯密钥
 	 * @param charset 编码方式
 	 * @return sig value
-	 * @throws Throwable data digest Exception
+	 * @throws Exception data digest Exception
 	 * @time 2012-3-7   下午04:27:04
 	 * @author Seek
 	 */
 	public static String buildSig(Map<String, String> otherReqParams,
 			String commSecretKey, String charset)
-			throws Throwable {
+			throws Exception {
 		String urlPart = null;
 		
 		StringBuffer buff = new StringBuffer("");
@@ -76,19 +76,19 @@ public final class QQMeishiUtil {
 	 * @param urlPart 其他的所有请求参数URL,&key=value,需要字符编码后的
 	 * @param commSecretKey 通讯密钥
 	 * @return sig value
-	 * @throws Throwable data digest Exception
+	 * @throws Exception data digest Exception
 	 * @time 2012-3-7   下午04:27:04
 	 * @author Seek
 	 */
 	public static String buildSig(String urlPart, String commSecretKey)
-			throws Throwable {
+			throws Exception {
 		try {
 			String seed = urlPart + commSecretKey;
 			
 			log.debug("buildSig seed:"+seed);
 			return DigestUtil.digestData(seed.getBytes(), DigestUtil.MD5);
-		} catch (Throwable e) {
-			throw new Throwable(e);
+		} catch (Exception e) {
+			throw new Exception(e);
 		}
 	}
 	
@@ -107,12 +107,12 @@ public final class QQMeishiUtil {
 	 * @param content 内容
 	 * @param charset 编码方式
 	 * @return 编码后的内容
-	 * @throws Throwable
+	 * @throws Exception
 	 * @time 2012-3-8   上午10:05:22
 	 * @author Seek
 	 */
 	public static String encoder(String content, String charset)
-			throws Throwable {
+			throws Exception {
 		return URLEncoder.encode(content, charset);
 	}
 	

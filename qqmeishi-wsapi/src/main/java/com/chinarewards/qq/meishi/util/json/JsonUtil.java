@@ -26,7 +26,7 @@ public final class JsonUtil {
 	 * @author Seek
 	 */
 	public static <T> T parseObject(String jsonString,
-			TypeReference<T> typeReference) throws Throwable {
+			TypeReference<T> typeReference) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 		
@@ -39,11 +39,11 @@ public final class JsonUtil {
 	 * description：format Object to Json String
 	 * @param obj any object 
 	 * @return Json String
-	 * @throws Throwable
+	 * @throws Exception
 	 * @time 2012-3-7   上午09:51:00
 	 * @author Seek
 	 */
-	public static String formatObject(Object obj) throws Throwable {
+	public static String formatObject(Object obj) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 
 		return mapper.writeValueAsString(obj);

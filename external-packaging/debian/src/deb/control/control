@@ -1,0 +1,9 @@
+Package: posnet2-external
+Version: [[version]]
+Section: chinarewards
+Priority: extra
+Distribution: chinarewards
+Architecture: all
+Description: POSNet2 Server External Service
+Maintainer: China Rewards (info@china-rewards.com)
+Depends: jetty (>= 6.0), libjetty-extra (>= 6.0), ant (>= 1.8)

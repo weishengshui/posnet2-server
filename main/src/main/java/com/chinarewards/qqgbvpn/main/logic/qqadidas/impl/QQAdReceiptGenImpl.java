@@ -7,6 +7,7 @@ import com.chinarewards.qqgbvpn.main.logic.qqadidas.QQAdReceiptGen;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftReceiptGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.PrivilegeReceiptGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
+import com.chinarewards.qqgbvpn.main.util.BigDecimalUtil;
 
 public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 
@@ -33,6 +34,7 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 			StringBuffer content = new StringBuffer();
 			if (genModel.isExistLastTimeConsume()) {
 				DateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
+
 				content.append(genModel.getMemberKey())
 						.append("在")
 						.append(dateFormat.format(genModel.getLastConsumeDate()))
@@ -43,8 +45,8 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 						.append("元,享受")
 						.append((int) genModel.getRebateAmt())
 						.append("元折扣优惠.折扣后实际支付金额为")
-						.append(genModel.getConsumeAmt()
-								- genModel.getRebateAmt()).append("元.");
+						.append(BigDecimalUtil.sub(genModel.getConsumeAmt(),
+								genModel.getRebateAmt())).append("元.");
 			} else if (genModel.getRebateAmt() == QQAdConstant.REBATE_HALF_AMOUNT) {
 				content.append(genModel.getMemberKey())
 						.append("本次消费")
@@ -53,8 +55,8 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 						.append("享受")
 						.append((int) genModel.getRebateAmt())
 						.append("元折扣优惠,折扣后实际支付金额为")
-						.append(genModel.getConsumeAmt()
-								- genModel.getRebateAmt())
+						.append(BigDecimalUtil.sub(genModel.getConsumeAmt(),
+								genModel.getRebateAmt()))
 						.append("元.")
 						.append("还一次消费")
 						.append((int) QQAdConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE)
@@ -70,8 +72,8 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 						.append("元.享受")
 						.append((int) genModel.getRebateAmt())
 						.append("元折扣优惠,折扣后实际支付金额为")
-						.append(genModel.getConsumeAmt()
-								- genModel.getRebateAmt()).append("元.");
+						.append(BigDecimalUtil.sub(genModel.getConsumeAmt(),
+								genModel.getRebateAmt())).append("元.");
 			}
 			receipt = new Receipt(title, content.toString());
 		}
