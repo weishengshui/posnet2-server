@@ -10,10 +10,10 @@
 			<result name="input">/WEB-INF/jsp/qqadidas/search.jsp</result>
 			<interceptor-ref name="defaultStack" />
 		</action>
-		<action name="qqadidas" class="com.chinarewards.qqgbvpn.mgmtui.struts.qq.adidas.QQMemberSearchAction" method="execute">
+		<!-- <action name="qqadidas" class="com.chinarewards.qqgbvpn.mgmtui.struts.qq.adidas.QQMemberSearchAction" method="execute">
 			<result name="success">
 				/WEB-INF/jsp/qqadidas/search.jsp
 			</result>
-		</action>
+		</action> -->
 	</package>
 </struts>
