@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.chinarewards.qqgbvpn</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.3.0-SNAPSHOT</version>
+		<version>0.3.0-RC3</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>com.chinarewards.qqgbvpn</groupId>
 	<artifactId>external-api</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.3.0-RC3</version>
 	<name>api provided to external </name>
 	<description>Service API Provided to External</description>
 </project>
