@@ -55,7 +55,6 @@ public class QQMemberSearchAction extends BaseAction {
 	 */
 	public String searchMemberObtainStatus() {
 		if (null == memberKey || "".equals(memberKey.trim())) {
-			addFieldError("inputError", "验证码不能为空！");
 			log.debug("memberKey is empty");
 			return INPUT;
 		}
