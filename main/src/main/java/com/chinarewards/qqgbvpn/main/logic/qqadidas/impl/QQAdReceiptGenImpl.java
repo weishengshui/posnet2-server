@@ -58,7 +58,7 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 						.append(BigDecimalUtil.sub(genModel.getConsumeAmt(),
 								genModel.getRebateAmt()))
 						.append("元.")
-						.append("还一次消费")
+						.append("还有一次消费")
 						.append((int) QQAdConstant.CONSUME_AMOUNT_TO_REBATE_HALF_PRIVILEGE)
 						.append("-")
 						.append((int) QQAdConstant.CONSUME_AMOUNT_TO_REBATE_FULL_PRIVILEGE)
