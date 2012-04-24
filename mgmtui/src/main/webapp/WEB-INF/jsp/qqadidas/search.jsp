@@ -11,8 +11,8 @@
 </head>
 <body>
 	<center>
-		<font style="color: red;"><s:fielderror fieldName="inputError" /></font>
 		<h2>QQ权益查询</h2>
+		<font style="color: red;"><s:fielderror fieldName="inputError" /></font>
 		<s:form action="search" method="post" theme="simple" namespace="/qquery">
 			请输入验证码：<s:textfield name="memberKey" tabindex="1" />
 			<s:submit value="确认"></s:submit>
