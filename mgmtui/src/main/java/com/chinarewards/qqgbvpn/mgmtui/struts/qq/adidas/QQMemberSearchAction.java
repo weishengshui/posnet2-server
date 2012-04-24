@@ -55,8 +55,9 @@ public class QQMemberSearchAction extends BaseAction {
 	 */
 	public String searchMemberObtainStatus() {
 		if (null == memberKey || "".equals(memberKey.trim())) {
-			addFieldError("inputError", "memberKey为空！");
+			addFieldError("inputError", "验证码不能为空！");
 			log.debug("memberKey is empty");
+			return INPUT;
 		}
 		QQMemberSearchLogic searchLogic = super.getInstance(QQMemberSearchLogic.class);
 		setHistorys(searchLogic.findQqActivityHistoryByMemberKey(memberKey));
