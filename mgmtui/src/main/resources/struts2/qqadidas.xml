@@ -4,8 +4,8 @@
 	"http://struts.apache.org/dtds/struts-2.1.7.dtd">
 
 <struts>
-	<package namespace="/qquery" name="search" extends="struts-default">
-		<action name="search" class="com.chinarewards.qqgbvpn.mgmtui.struts.qq.adidas.QQMemberSearchAction" method="searchMemberObtainStatus">
+	<package namespace="/qq-adidas/backend" name="search" extends="struts-default">
+		<action name="pquery" class="com.chinarewards.qqgbvpn.mgmtui.struts.qq.adidas.QQMemberSearchAction" method="searchMemberObtainStatus">
 			<result name="success">/WEB-INF/jsp/qqadidas/search.jsp</result>
 			<result name="input">/WEB-INF/jsp/qqadidas/search.jsp</result>
 			<interceptor-ref name="defaultStack" />

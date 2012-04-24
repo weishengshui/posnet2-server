@@ -13,7 +13,7 @@
 	<center>
 		<h2>QQ权益查询</h2>
 		<font style="color: red;"><s:fielderror fieldName="inputError" /></font>
-		<s:form action="search" method="post" theme="simple" namespace="/qquery">
+		<s:form action="pquery" method="get" theme="simple" namespace="/qq-adidas/backend">
 			请输入验证码：<s:textfield name="memberKey" tabindex="1" />
 			<s:submit value="确认"></s:submit>
 		</s:form>
