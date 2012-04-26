@@ -1,1 +1,1 @@
-alter table QQActivityMember add constraint uk_qqmember_key unique (memberKey);
+alter table QQActivityMember add index (memberKey);
