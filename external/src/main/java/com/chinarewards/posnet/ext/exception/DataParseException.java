@@ -1,4 +1,4 @@
-package exception;
+package com.chinarewards.posnet.ext.exception;
 
 /**
  * description：数据解析异常

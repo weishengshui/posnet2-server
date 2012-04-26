@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
+import com.chinarewards.posnet.ext.exception.DataParseException;
 import com.chinarewards.posnet.ext.manager.QQActivityMerberManager;
 import com.chinarewards.posnet.ext.util.DESECBUtil;
 import com.chinarewards.posnet.ext.util.json.JacksonTypeReference;
@@ -24,7 +25,6 @@ import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.logic.journal.JournalLogic;
 import com.google.inject.Inject;
 
-import exception.DataParseException;
 
 public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 	
