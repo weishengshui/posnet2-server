@@ -2,6 +2,8 @@ package com.chinarewards.posnet.ext.logic.impl;
 
 import java.util.Date;
 
+import javax.persistence.PersistenceException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,7 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 		try
 		{
 			memberDao.insert(member);
-		}catch (Throwable e) {
+		}catch (PersistenceException e) {
 			logger.error("save member error!", e);
 			throw new MemberKeyExistedException();
 		}

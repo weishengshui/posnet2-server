@@ -17,4 +17,15 @@ public class QQActivityMemberDao extends WsBaseDao<QQActivityMember> {
 		}
 		return list.get(0);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.chinarewards.hr.dao.Dao#insert(java.lang.Object)
+	 */
+	public QQActivityMember insert(QQActivityMember t) {
+		getEm().persist(t);
+		getEm().flush();
+		return t;
+	}
 }
