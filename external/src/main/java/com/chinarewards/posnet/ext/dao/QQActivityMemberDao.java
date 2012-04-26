@@ -17,4 +17,5 @@ public class QQActivityMemberDao extends WsBaseDao<QQActivityMember> {
 		}
 		return list.get(0);
 	}
+
 }

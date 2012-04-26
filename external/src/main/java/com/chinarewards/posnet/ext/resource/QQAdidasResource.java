@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 @Path("/qq-adidas")
 public class QQAdidasResource {
 	
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected Logger logger = LoggerFactory.getLogger(QQAdidasResource.class);
 	
 	private static final String QQVIP_ADIDAS_DES_SECRET_KEY = "qq.vip.adidas.des.secretkey";
 	
@@ -44,6 +44,7 @@ public class QQAdidasResource {
 		try{
 			return merberManager.generateQQActivityMember(originStr, secretKey);
 		}catch(Throwable e){
+			logger.error(e.getMessage(), e);
 			return new SynMemberResp(4);
 		}
 	}

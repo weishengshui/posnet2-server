@@ -20,9 +20,6 @@ import com.chinarewards.posnet.ext.config.ConfigReader;
 import com.chinarewards.posnet.ext.config.HardCodedConfigModule;
 import com.chinarewards.posnet.ext.module.AppModule;
 import com.chinarewards.posnet.ext.resource.QQAdidasResource;
-import com.chinarewards.posnet.ext.sample.BenchResource;
-import com.chinarewards.posnet.ext.sample.JacksonResource;
-import com.chinarewards.posnet.ext.sample.SampleResource;
 import com.chinarewards.qqgbvpn.core.jpa.JpaPersistModuleBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -67,9 +64,6 @@ public class GuiceBootstrap extends GuiceServletContextListener {
 				params.put("com.sun.jersey.config.feature.Debug", "true");
 
 				/* bind the REST resources */
-				bind(BenchResource.class);
-				bind(SampleResource.class);
-				bind(JacksonResource.class);
 				bind(QQAdidasResource.class);
 
 				/* bind jackson converters for JAXB/JSON serialization */

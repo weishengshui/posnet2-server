@@ -1,0 +1,1 @@
+alter table QQActivityMember add index (memberKey);

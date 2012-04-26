@@ -13,4 +13,20 @@ public class MemberKeyExistedException extends Exception {
 	 */
 	private static final long serialVersionUID = -5556625882667841398L;
 
+	public MemberKeyExistedException() {
+		super();
+	}
+
+	public MemberKeyExistedException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public MemberKeyExistedException(String message) {
+		super(message);
+	}
+
+	public MemberKeyExistedException(Throwable cause) {
+		super(cause);
+	}
+
 }
