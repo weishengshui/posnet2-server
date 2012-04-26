@@ -2,6 +2,7 @@ package com.chinarewards.qq.adidas.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,6 +28,7 @@ public class QQActivityMember {
 	/**
 	 * It flag a member.
 	 */
+	@Column(unique=true, nullable=false) 
 	private String memberKey;
 
 	/**
