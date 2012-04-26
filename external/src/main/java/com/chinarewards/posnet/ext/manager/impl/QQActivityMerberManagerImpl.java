@@ -126,7 +126,9 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 		
 		//set errorStackTrace
 		if(returncode != SynMemberResp.SUCCESS && returncode != SynMemberResp.PARAM_LACK){
-			if(exception instanceof DataParseException){
+			if(exception instanceof MemberKeyExistedException){
+				journalVo.setErrorStackTrace(MemberKeyExistedException.class.getName());
+			}else if(exception instanceof DataParseException){
 				journalVo.setErrorStackTrace(DataParseException.class.getName());
 			}else {
 				journalVo.setErrorStackTrace(getExceptionStackTrace(exception));
@@ -175,25 +177,27 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 		try{
 			//parse originStr, decrypt des, base64 decode, json string to object.
 			SynMemberReq synMemberReq = parseData(originStr, secretKey);
+			memberKey = synMemberReq.getMemberKey();
+			timestamp = synMemberReq.getTimestamp();
 			//parse timestamp to Date
-			Date timestampDate = parseTimestamp(synMemberReq.getTimestamp());
+			Date timestampDate = parseTimestamp(timestamp);
 		
-			if (synMemberReq.getMemberKey() == null || "".equals(synMemberReq.getMemberKey())) {
+			if (memberKey == null || "".equals(memberKey)) {
 				returncode = SynMemberResp.PARAM_LACK;
 			} else {
 				qqActivityMemberId = memberService
 						.generateQQActivityMember(
-								synMemberReq.getMemberKey(), timestampDate);
+								memberKey, timestampDate);
 				returncode = SynMemberResp.SUCCESS;
 			}
 		}catch(MemberKeyExistedException e){
 			returncode = SynMemberResp.MEMBER_KEY_REPEAT;
 			logger.error(e.getMessage(), e);
-			exception = new Exception(e);
+			exception = e;
 		}catch(DataParseException e){
 			returncode = SynMemberResp.PARSE_ERR;
 			logger.error(e.getMessage(), e);
-			exception = new Exception(e);
+			exception = e;
 		}catch(Throwable e) {
 			returncode = SynMemberResp.SYS_ERR;
 			logger.error(e.getMessage(), e);
