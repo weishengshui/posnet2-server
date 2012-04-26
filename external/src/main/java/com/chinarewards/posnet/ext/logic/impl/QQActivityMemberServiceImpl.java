@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
-import com.chinarewards.posnet.ext.dao.QQActivityMemberDao;
+import com.chinarewards.posnet.ext.dao.IQQActivityMemberDao;
 import com.chinarewards.qq.adidas.domain.GiftStatus;
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
@@ -17,14 +17,14 @@ import com.google.inject.persist.Transactional;
 
 public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 	
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected Logger logger = LoggerFactory.getLogger(QQActivityMemberServiceImpl.class);
 	
 	@Inject
-	QQActivityMemberDao memberDao;
+	IQQActivityMemberDao memberDao;
 
 	@Inject
 	DateTimeProvider dateTimeProvider;
-
+	
 	@Transactional
 	@Override
 	public String generateQQActivityMember(String memberKey, Date sendTime)
@@ -50,7 +50,7 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 			memberDao.insert(member);
 		}catch (Throwable e) {
 			logger.error("save member error!", e);
-			throw new MemberKeyExistedException();
+			throw new MemberKeyExistedException(e);
 		}
 		logger.debug("End method generateQQActivityMember, return:{}",
 				member.getId());
