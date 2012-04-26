@@ -2,14 +2,12 @@ package com.chinarewards.posnet.ext.logic.impl;
 
 import java.util.Date;
 
-import javax.persistence.PersistenceException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.ext.api.qq.adidas.exception.MemberKeyExistedException;
 import com.chinarewards.ext.api.qq.adidas.service.QQActivityMemberService;
-import com.chinarewards.posnet.ext.dao.IQQActivityMemberDao;
+import com.chinarewards.posnet.ext.dao.QQActivityMemberDao;
 import com.chinarewards.qq.adidas.domain.GiftStatus;
 import com.chinarewards.qq.adidas.domain.PrivilegeStatus;
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
@@ -22,7 +20,7 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 	protected Logger logger = LoggerFactory.getLogger(QQActivityMemberServiceImpl.class);
 	
 	@Inject
-	IQQActivityMemberDao memberDao;
+	QQActivityMemberDao memberDao;
 
 	@Inject
 	DateTimeProvider dateTimeProvider;
@@ -34,10 +32,10 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 		logger.debug("Begin method generateQQActivityMember, param:{}",
 				memberKey);
 		
-//		QQActivityMember foundMember = memberDao.findQQMemberByKey(memberKey);
-//		if (foundMember != null) {
-//			throw new MemberKeyExistedException();
-//		}
+		QQActivityMember foundMember = memberDao.findQQMemberByKey(memberKey);
+		if (foundMember != null) {
+			throw new MemberKeyExistedException();
+		}
 		Date now = dateTimeProvider.getTime();
 
 		QQActivityMember member = new QQActivityMember();
@@ -47,13 +45,8 @@ public class QQActivityMemberServiceImpl implements QQActivityMemberService {
 		member.setPrivilegeStatus(PrivilegeStatus.NEW);
 		member.setMemberKey(memberKey);
 		member.setSendTime(sendTime);
-		try
-		{
-			memberDao.insert(member);
-		}catch (PersistenceException e) {
-			logger.error("save member error!", e);
-			throw new MemberKeyExistedException(e);
-		}
+		memberDao.insert(member);
+		
 		logger.debug("End method generateQQActivityMember, return:{}",
 				member.getId());
 		

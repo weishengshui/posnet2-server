@@ -28,7 +28,6 @@ public class QQActivityMember {
 	/**
 	 * It flag a member.
 	 */
-	@Column(unique=true, nullable=false) 
 	private String memberKey;
 
 	/**

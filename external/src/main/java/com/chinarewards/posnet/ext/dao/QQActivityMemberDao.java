@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.chinarewards.qq.adidas.domain.QQActivityMember;
 
-public class QQActivityMemberDao extends WsBaseDao<QQActivityMember> implements
-		IQQActivityMemberDao {
+public class QQActivityMemberDao extends WsBaseDao<QQActivityMember> {
 
 	@SuppressWarnings("unchecked")
 	public QQActivityMember findQQMemberByKey(String memberKey) {
@@ -17,12 +16,6 @@ public class QQActivityMemberDao extends WsBaseDao<QQActivityMember> implements
 			return null;
 		}
 		return list.get(0);
-	}
-
-	@Override
-	public QQActivityMember insert(QQActivityMember t) {
-		getEm().persist(t);
-		return t;
 	}
 
 }

@@ -6,10 +6,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.RollbackException;
-
 import org.apache.commons.codec.binary.Base64;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,14 +192,6 @@ public class QQActivityMerberManagerImpl implements QQActivityMerberManager {
 			exception = new Exception(e);
 		}catch(DataParseException e){
 			returncode = SynMemberResp.PARSE_ERR;
-			logger.error(e.getMessage(), e);
-			exception = new Exception(e);
-		}catch(RollbackException e) {
-			if(e.getCause() instanceof ConstraintViolationException){
-				returncode = SynMemberResp.MEMBER_KEY_REPEAT;
-			}else {
-				returncode = SynMemberResp.SYS_ERR;
-			}
 			logger.error(e.getMessage(), e);
 			exception = new Exception(e);
 		}catch(Throwable e) {
