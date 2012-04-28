@@ -212,12 +212,9 @@
 		<module>domain</module>
 		<module>main</module>
 		<module>mgmtui</module>
-		<module>qqapi</module>
 		<!-- Packaging projects -->
 		<module>main-packaging</module>
 		<module>mgmtui-packaging</module>
-    	<module>qqmeishi-wsapi</module>
-    	<module>external-api</module>
     	<module>external</module>
     	<module>external-packaging</module>
   </modules>
