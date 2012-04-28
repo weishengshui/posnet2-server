@@ -193,7 +193,7 @@
 		<dependency>
 			<groupId>com.chinarewards.qqgbvpn</groupId>
 			<artifactId>qqapi</artifactId>
-			<version>0.2.0</version>
+			<version>{qqapi.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
