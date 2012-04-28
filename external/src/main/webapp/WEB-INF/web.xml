@@ -19,24 +19,15 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>emptyServlet</servlet-name>
-		<servlet-class>com.chinarewards.posnet.ext.main.EmptyServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>emptyServlet</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>appinfo</servlet-name>
 		<servlet-class>com.chinarewards.common.web.appinfo.AppInfoServlet</servlet-class>
 		<load-on-startup>99</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>appinfo</servlet-name>
-		<url-pattern>/appinfo.html</url-pattern>
+		<url-pattern>/appinfo</url-pattern>
 	</servlet-mapping>
+
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

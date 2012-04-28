@@ -70,7 +70,7 @@ public class GuiceBootstrap extends GuiceServletContextListener {
 				bind(MessageBodyReader.class).to(JacksonJsonProvider.class);
 				bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
 
-				serve("*").with(GuiceContainer.class, params);
+				serve("/ws/*").with(GuiceContainer.class, params);
 			}
 		});
 
