@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.chinarewards.qqgbvpn</groupId>
 	<artifactId>external-packaging-debian</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.3.0-RC5</version>
 	<packaging>pom</packaging>
 	<name>POSNetv2 Server web service Packaging (Debian)</name>
 	<parent>
 		<groupId>com.chinarewards.qqgbvpn</groupId>
 		<artifactId>external-packaging</artifactId>
-		<version>0.3.0-SNAPSHOT</version>
+		<version>0.3.0-RC5</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<properties>
