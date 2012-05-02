@@ -121,6 +121,14 @@ public class BootStrap {
 	}
 
 	/**
+	 * 
+	 */
+	protected void printEnvInfo() {
+		System.out.println("Processor available to JVM: " + Runtime.getRuntime().availableProcessors());
+	}
+
+	
+	/**
 	 * Starts the bootstrap sequence.
 	 * <p>
 	 * 
@@ -132,6 +140,9 @@ public class BootStrap {
 
 		// print application version.
 		printAppVersion();
+
+		// print environment information.
+		printEnvInfo();
 
 		// parse command line arguments.
 		parseCmdArgs();
