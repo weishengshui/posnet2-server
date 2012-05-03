@@ -26,6 +26,8 @@ public class QQAdRespScreenDisplayGenImpl implements QQAdRespScreenDisplayGen {
 			content.append(genModel.getMemberKey()).append("在")
 					.append(dateFormat.format(genModel.getLastObtainedTime()))
 					.append("已经领取了礼品");
+		} else if (QQAdConstant.GIFT_OK == genModel.getReturnCode()) {
+			content.append("可以免费领取礼品一份");
 		}
 
 		return new ScreenDisplay(content.toString());
