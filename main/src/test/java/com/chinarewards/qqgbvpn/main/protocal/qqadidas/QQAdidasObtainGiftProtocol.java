@@ -19,9 +19,7 @@ import com.chinarewards.qqgbvpn.domain.event.DomainEvent;
 import com.chinarewards.qqgbvpn.main.logic.qqadidas.impl.QQAdConstant;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainGiftReqMsg;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.qqadidas.QQVIPObtainGiftRespMsg;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftReceiptGenModel;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.GiftScreenDisplayGenModel;
-import com.chinarewards.qqgbvpn.main.qqadidas.vo.Receipt;
 import com.chinarewards.qqgbvpn.main.qqadidas.vo.ScreenDisplay;
 
 public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
@@ -66,12 +64,12 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 					countDbJournalNum(validKey,
 							DomainEvent.QQ_MEMBER_OBTAIN_GIFT.toString()));
 		}
-
-		Receipt expectedNote = genGiftReceipt(new GiftReceiptGenModel(
-				QQAdConstant.GIFT_OK, validKey));
 		assertEquals(QQAdConstant.GIFT_OK, respMsg.getResult());
-		assertEquals(expectedNote.getTitle(), respMsg.getTitle());
-		assertEquals(expectedNote.getContent(), respMsg.getTip());
+		assertEquals(null, respMsg.getTitle());
+		// check screen display
+		ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
+				QQAdConstant.GIFT_OK, validKey, null));
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 		// obtain second time should be error!
 		respMsg = (QQVIPObtainGiftRespMsg) execReq(os, is, reqMsg);
@@ -80,7 +78,7 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 				respMsg.getResult());
 		assertEquals(null, respMsg.getTitle());
 		// check screen display
-		ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
+		expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
 				QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY, validKey,
 				operationTime));
 		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
@@ -169,13 +167,12 @@ public class QQAdidasObtainGiftProtocol extends QQAdidasBaseProtocol {
 		QQVIPObtainGiftRespMsg respMsg = (QQVIPObtainGiftRespMsg) execReq(os,
 				is, reqMsg);
 
-		// check title and tip
-		Receipt expectedReceipt = genGiftReceipt(new GiftReceiptGenModel(
-				QQAdConstant.GIFT_OK, validKey));
-
 		assertEquals(QQAdConstant.GIFT_OK, respMsg.getResult());
-		assertEquals(expectedReceipt.getTitle(), respMsg.getTitle());
-		assertEquals(expectedReceipt.getContent(), respMsg.getTip());
+		assertEquals(null, respMsg.getTitle());
+		// check screen display
+		ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
+				QQAdConstant.GIFT_OK, validKey, null));
+		assertEquals(expectedDisplay.getContent(), respMsg.getTip());
 
 		if (checkDatabase) {
 			// check database

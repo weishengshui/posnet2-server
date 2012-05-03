@@ -202,7 +202,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		QQMemberObtainGiftVo giftVo = getManager().obtainFreeGift(validKey,
 				posId);
 		assertEquals(QQAdConstant.GIFT_OK, giftVo.getReturnCode());
-		log.debug("small note:{}", giftVo.getReceipt().getContent());
+		log.debug("Receipt:{}", giftVo.getReceipt());
 		// check QQActivityHistory
 		List<QQActivityHistory> histories = getEm().createQuery(
 				"FROM QQActivityHistory").getResultList();
@@ -242,7 +242,7 @@ public class QQAdidasActivityManagerImplTest extends JpaGuiceTest {
 		QQMemberObtainPrivilegeVo privilegeVo = getManager().obtainPrivilege(
 				validKey, consumeAmt, posId);
 		assertEquals(QQAdConstant.PRIVILEGE_OK, privilegeVo.getReturnCode());
-		log.debug("small note:{}", privilegeVo.getReceipt().getContent());
+		log.debug("Receipt:{}", privilegeVo.getReceipt().getContent());
 		// check QQActivityHistory
 		List<QQActivityHistory> histories = getEm().createQuery(
 				"FROM QQActivityHistory").getResultList();
