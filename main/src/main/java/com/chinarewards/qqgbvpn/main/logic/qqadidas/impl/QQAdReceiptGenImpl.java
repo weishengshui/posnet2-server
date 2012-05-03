@@ -53,8 +53,7 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 								genModel.getRebateAmt()))).append("元.")
 						.append("本券打印后仅限当次使用.即日起至6月19日止.");
 			} else if (genModel.getRebateAmt() == QQAdConstant.REBATE_HALF_AMOUNT) {
-				content.append(genModel.getMemberKey())
-						.append("本次消费")
+				content.append("本次消费")
 						.append(decimalFormat.format(genModel.getConsumeAmt()))
 						.append("元.")
 						.append("即刻享受")
@@ -68,8 +67,7 @@ public class QQAdReceiptGenImpl implements QQAdReceiptGen {
 						.append((int) (QQAdConstant.REBATE_FULL_AMOUNT - QQAdConstant.REBATE_HALF_AMOUNT))
 						.append("元优惠可用.").append("本券打印后仅限当次使用.即日起至6月19日止.");
 			} else {
-				content.append(genModel.getMemberKey())
-						.append("本次消费")
+				content.append("本次消费")
 						.append(decimalFormat.format(genModel.getConsumeAmt()))
 						.append("元.即刻享受")
 						.append((int) genModel.getRebateAmt())
