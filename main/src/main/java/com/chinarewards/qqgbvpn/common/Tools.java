@@ -36,12 +36,12 @@ public abstract class Tools {
 
 	public static String byteToString(byte[] array, Charset charset) {
 		int pos = findFirstZero(array);
-		
+
 		// first byte is zero, or is an empty string
 		if (pos == 0 || (pos < 0 && array.length == 0)) {
 			return null;
 		}
-		
+
 		// the whole string, if no numeric zero is found in array
 		if (pos < 0) {
 			pos = array.length;
@@ -93,87 +93,85 @@ public abstract class Tools {
 		bb[index + 2] = (byte) (x >> 8);
 		bb[index + 3] = (byte) (x >> 0);
 	}
-	
 
-	/** 
-     * float转换byte 
-     *  
-     * @param bb 
-     * @param x 
-     * @param index 
-     */ 
-    public static void putFloat(byte[] bb, float x, int index) {  
-        // byte[] b = new byte[4];  
-        int l = Float.floatToIntBits(x);  
-        for (int i = 0; i < 4; i++) {  
-            bb[index + i] = new Integer(l).byteValue();  
-            l = l >> 8;  
-        }  
-    }  
- 
-    /** 
-     * 通过byte数组取得float 
-     *  
-     * @param bb 
-     * @param index 
-     * @return 
-     */ 
-    public static float getFloat(byte[] bb, int index) {  
-        int l;  
-        l = bb[index + 0];  
-        l &= 0xff;  
-        l |= ((long) bb[index + 1] << 8);  
-        l &= 0xffff;  
-        l |= ((long) bb[index + 2] << 16);  
-        l &= 0xffffff;  
-        l |= ((long) bb[index + 3] << 24);  
-        return Float.intBitsToFloat(l);  
-    }  
-    
-    
-    /** 
-     * double转换byte 
-     *  
-     * @param bb 
-     * @param x 
-     * @param index 
-     */ 
-    public static void putDouble(byte[] bb, double x, int index) {  
-        long l = Double.doubleToLongBits(x);  
-        for (int i = 0; i < 8; i++) {  
-            bb[index + i] = new Long(l).byteValue();  
-            l = l >> 8;  
-        }  
-    }  
- 
-    /** 
-     * 通过byte数组取得double 
-     *  
-     * @param bb 
-     * @return 
-     */ 
-    public static double getDouble(byte[] bb) {  
-        long l;  
-        l = bb[0];  
-        l &= 0xff;  
-        l |= ((long) bb[1] << 8);  
-        l &= 0xffff;  
-        l |= ((long) bb[2] << 16);  
-        l &= 0xffffff;  
-        l |= ((long) bb[3] << 24);  
-        l &= 0xffffffffl;  
-        l |= ((long) bb[4] << 32);  
-        l &= 0xffffffffffl;  
-        l |= ((long) bb[5] << 40);  
-        l &= 0xffffffffffffl;  
-        l |= ((long) bb[6] << 48);  
-        l &= 0xffffffffffffffl;  
-        l |= ((long) bb[7] << 56);  
-        return Double.longBitsToDouble(l);  
-    }  
+	/**
+	 * float转换byte
+	 * 
+	 * @param bb
+	 * @param x
+	 * @param index
+	 */
+	public static void putFloat(byte[] bb, float x, int index) {
+		// byte[] b = new byte[4];
+		int l = Float.floatToIntBits(x);
+		for (int i = 0; i < 4; i++) {
+			bb[index + i] = new Integer(l).byteValue();
+			l = l >> 8;
+		}
+	}
+
+	/**
+	 * 通过byte数组取得float
+	 * 
+	 * @param bb
+	 * @param index
+	 * @return
+	 */
+	public static float getFloat(byte[] bb, int index) {
+		int l;
+		l = bb[index + 0];
+		l &= 0xff;
+		l |= ((long) bb[index + 1] << 8);
+		l &= 0xffff;
+		l |= ((long) bb[index + 2] << 16);
+		l &= 0xffffff;
+		l |= ((long) bb[index + 3] << 24);
+		return Float.intBitsToFloat(l);
+	}
+
+	/**
+	 * double转换byte
+	 * 
+	 * @param bb
+	 * @param x
+	 * @param index
+	 */
+	public static void putDouble(byte[] bb, double x, int index) {
+		long l = Double.doubleToLongBits(x);
+		for (int i = 0; i < 8; i++) {
+			bb[index + i] = new Long(l).byteValue();
+			l = l >> 8;
+		}
+	}
+
+	/**
+	 * 通过byte数组取得double
+	 * 
+	 * @param bb
+	 * @return
+	 */
+	public static double getDouble(byte[] bb) {
+		long l;
+		l = bb[0];
+		l &= 0xff;
+		l |= ((long) bb[1] << 8);
+		l &= 0xffff;
+		l |= ((long) bb[2] << 16);
+		l &= 0xffffff;
+		l |= ((long) bb[3] << 24);
+		l &= 0xffffffffl;
+		l |= ((long) bb[4] << 32);
+		l &= 0xffffffffffl;
+		l |= ((long) bb[5] << 40);
+		l &= 0xffffffffffffl;
+		l |= ((long) bb[6] << 48);
+		l &= 0xffffffffffffffl;
+		l |= ((long) bb[7] << 56);
+		return Double.longBitsToDouble(l);
+	}
 
 	public static void putDate(byte[] bb, Calendar calendar, int index) {
-		if(calendar == null){
+		if (calendar == null) {
 			return;
 		}
 		int y = calendar.get(Calendar.YEAR);
@@ -183,26 +181,37 @@ public abstract class Tools {
 		int miu = calendar.get(Calendar.MINUTE);
 		int s = calendar.get(Calendar.SECOND);
 		int ms = calendar.get(Calendar.MILLISECOND);
-//		int tz = calendar.getTimeZone().getRawOffset() / (3600*1000);
-		int tz_min = calendar.getTimeZone().getRawOffset() / (60*1000);
+		// int tz = calendar.getTimeZone().getRawOffset() / (3600*1000);
+		int tz_min = calendar.getTimeZone().getRawOffset() / (60 * 1000);
 		putUnsignedShort(bb, y, index);
 		bb[index + 2] = (byte) (m);
 		bb[index + 3] = (byte) (d);
 		bb[index + 4] = (byte) (h);
 		bb[index + 5] = (byte) (miu);
 		bb[index + 6] = (byte) (s);
-		putUnsignedShort(bb, ms, index+7);
-		putUnsignedShort(bb, tz_min, index+9);
+		putUnsignedShort(bb, ms, index + 7);
+		putUnsignedShort(bb, tz_min, index + 9);
 	}
-	
+
 	/**
 	 * Get date from the byte stream, the position is the beginning of date.
+	 * 
+	 * If all 0, date is null.
 	 * 
 	 * @param in
 	 * @param index
 	 * @return
 	 */
-	public static Calendar getDate(byte[] in, int position) {
+	public static Date getDate(byte[] in, int position) {
+		String nullStr = "00000000000";
+		StringBuffer sb = new StringBuffer();
+		for (byte i : in) {
+			sb.append(i);
+		}
+		if (nullStr.equals(sb.toString())) {
+			return null;
+		}
+
 		int year = getUnsignedShort(in, position);
 		int month = in[position + 2] - 1;
 		int date = in[position + 3];
@@ -223,10 +232,9 @@ public abstract class Tools {
 		timeZone.setRawOffset(timezone_min * 60 * 1000);
 		c.setTimeZone(timeZone);
 
-		return c;
+		return c.getTime();
 	}
-	
-	
+
 	public static void putBytes(byte[] bb, byte[] x, int index) {
 		for (int i = 0; i < x.length; i++) {
 			bb[index + i] = x[i];
@@ -304,7 +312,7 @@ public abstract class Tools {
 		sum = sum & 0xFFFF;
 		return sum;
 	}
-	
+
 	public static final String byteToHexString(byte[] src) {
 		return new String(Hex.encodeHex(src));
 	}
