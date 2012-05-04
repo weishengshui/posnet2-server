@@ -8,7 +8,6 @@ import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
-import org.mortbay.log.Log;
 
 /**
  * byte tools
@@ -209,7 +208,6 @@ public abstract class Tools {
 		for (byte i : in) {
 			sb.append(i);
 		}
-		Log.debug("date string:{}", sb.toString());
 		if (nullStr.equals(sb.toString())) {
 			return null;
 		}
