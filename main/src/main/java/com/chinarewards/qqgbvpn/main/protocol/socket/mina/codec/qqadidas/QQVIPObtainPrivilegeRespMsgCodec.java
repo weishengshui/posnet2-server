@@ -41,8 +41,7 @@ public class QQVIPObtainPrivilegeRespMsgCodec implements ICommandCodec {
 
 		byte[] xactTimeBytes = new byte[ProtocolLengths.CR_DATE_LENGTH];
 		in.get(xactTimeBytes);
-		Calendar c = Tools.getDate(xactTimeBytes, 0);
-		xactTime = c.getTime();
+		xactTime = Tools.getDate(xactTimeBytes, 0);
 
 		int titleLen = in.getUnsignedShort();
 		if (titleLen > 0) {

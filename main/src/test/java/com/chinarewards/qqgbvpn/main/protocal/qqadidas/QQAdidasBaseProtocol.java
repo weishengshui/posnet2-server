@@ -71,6 +71,18 @@ public abstract class QQAdidasBaseProtocol extends PosnetBaseProtocol {
 	}
 
 	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+		// clear database
+		em.getTransaction().begin();
+		em.createQuery("DELETE FROM Journal").executeUpdate();
+		em.createQuery("DELETE FROM QQActivityHistory").executeUpdate();
+		em.createQuery("DELETE FROM QQActivityMember").executeUpdate();
+		em.createQuery("DELETE FROM QQWeixinSignIn").executeUpdate();
+		em.getTransaction().commit();
+	}
+
+	@Override
 	protected Module[] getModules() {
 
 		CommonTestConfigModule confModule = new CommonTestConfigModule();
@@ -93,7 +105,7 @@ public abstract class QQAdidasBaseProtocol extends PosnetBaseProtocol {
 		return modules;
 	}
 
-	private void generateMember(String memberKey) {
+	protected void generateMember(String memberKey) {
 		try {
 			getInjector().getInstance(QQActivityMemberService.class)
 					.generateQQActivityMember(memberKey, new Date());
