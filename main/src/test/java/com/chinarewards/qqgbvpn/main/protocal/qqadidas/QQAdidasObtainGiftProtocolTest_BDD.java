@@ -44,7 +44,6 @@ public class QQAdidasObtainGiftProtocolTest_BDD extends QQAdidasBaseProtocol {
 		andRedeemGift("123456789012345");
 		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_OK);
 		thenPosScreenDisplayShouldBe("You will get a gift!");
-		thenPosReceiptShouldBe("No receipt need!");
 		if (shouldCheckDb) {
 			thenPosServerDbShouldBe("Table Journal : one redeem record, Table QQActivityHistory : one record, and Table QQActivityMember gift status DONE, privilege status NEW");
 		}
@@ -60,7 +59,6 @@ public class QQAdidasObtainGiftProtocolTest_BDD extends QQAdidasBaseProtocol {
 		andRedeemGift("123456789012345");
 		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY);
 		thenPosScreenDisplayShouldBe("You had redeemed gift already!");
-		thenPosReceiptShouldBe("No receipt need!");
 		if (shouldCheckDb) {
 			thenPosServerDbShouldBe("Table Journal : two redeem record, Table QQActivityHistory : one record, and Table QQActivityMember gift status DONE, privilege status NEW");
 		}
@@ -74,10 +72,29 @@ public class QQAdidasObtainGiftProtocolTest_BDD extends QQAdidasBaseProtocol {
 		andRedeemGift("123456789012345");
 		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_FAIL_INVALID_MEMBER);
 		thenPosScreenDisplayShouldBe("You are not qq vip!");
-		thenPosReceiptShouldBe("No receipt need!");
 		if (shouldCheckDb) {
 			thenPosServerDbShouldBe("Table Journal : one redeem record, Table QQActivityHistory : zero record");
 		}
+		closeConnection();
+	}
+
+	@Test
+	public void testGift_complex() throws Exception {
+		whenIStartANewConnection();
+		andPosInitAndLogin();
+		andRedeemGift("123456789012345");
+		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_FAIL_INVALID_MEMBER);
+		thenPosScreenDisplayShouldBe("You are not qq vip!");
+
+		andRegisterQQVIP("123456789012345");
+		andRedeemGift("123456789012345");
+		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_OK);
+		thenPosScreenDisplayShouldBe("You will get a gift!");
+
+		andRedeemGift("123456789012345");
+		thenPosReturnCodeShouldBe(QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY);
+		thenPosScreenDisplayShouldBe("You had redeemed gift already!");
+
 		closeConnection();
 	}
 
@@ -128,33 +145,25 @@ public class QQAdidasObtainGiftProtocolTest_BDD extends QQAdidasBaseProtocol {
 		assertEquals(st, blackBox.getResult());
 	}
 
-	private void thenPosReceiptShouldBe(String string) {
-		if ("No receipt need!".equals(string)) {
-			assertEquals(null, blackBox.getReceipt());
-		}
-	}
-
 	private void thenPosScreenDisplayShouldBe(String string) {
 		// check screen display
 		if ("You can get a gift!".equals(string)) {
 			ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
 					QQAdConstant.GIFT_OK, blackBox.getMemberKey(), null));
-			assertEquals(expectedDisplay.getContent(), blackBox.getDisplay()
-					.getContent());
+			assertEquals(expectedDisplay.getContent(), blackBox.getTip());
 		} else if ("You had redeemed gift already!".equals(string)) {
 			ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
 					QQAdConstant.GIFT_FAIL_OBTAINED_ALREADY,
-					blackBox.getMemberKey(),
-					blackBox.getLastSuccessfulOperationTime()));
-			assertEquals(expectedDisplay.getContent(), blackBox.getDisplay()
-					.getContent());
+					blackBox.getMemberKey(), blackBox
+							.getLastSuccessfulOpTimeMap().get(
+									blackBox.getMemberKey())));
+			assertEquals(expectedDisplay.getContent(), blackBox.getTip());
 
 		} else if ("You are not qq vip!".equals(string)) {
 			ScreenDisplay expectedDisplay = genGiftScreenDisplay(new GiftScreenDisplayGenModel(
 					QQAdConstant.GIFT_FAIL_INVALID_MEMBER,
 					blackBox.getMemberKey(), null));
-			assertEquals(expectedDisplay.getContent(), blackBox.getDisplay()
-					.getContent());
+			assertEquals(expectedDisplay.getContent(), blackBox.getTip());
 
 		}
 	}
@@ -173,12 +182,11 @@ public class QQAdidasObtainGiftProtocolTest_BDD extends QQAdidasBaseProtocol {
 
 		blackBox.setMemberKey(memberKey);
 		blackBox.setResult(respMsg.getResult());
-		blackBox.setDisplay(new ScreenDisplay(respMsg.getTip()));
-		blackBox.setReceipt(null);
-		if (respMsg.getXactTime() != null) {
-			blackBox.setLastSuccessfulOperationTime(respMsg.getXactTime());
-			log.debug("response content: {}",
-					blackBox.getLastSuccessfulOperationTime());
+		blackBox.setTip(respMsg.getTip());
+		if (respMsg.getXactTime() != null
+				&& blackBox.getLastSuccessfulOpTimeMap().get(memberKey) == null) {
+			blackBox.getLastSuccessfulOpTimeMap().put(memberKey,
+					respMsg.getXactTime());
 		}
 	}
 

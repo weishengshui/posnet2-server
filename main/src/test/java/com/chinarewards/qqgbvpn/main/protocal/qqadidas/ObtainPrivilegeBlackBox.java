@@ -7,15 +7,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ObtainGiftBlackBox {
+public class ObtainPrivilegeBlackBox {
 
 	Socket socket;
 	OutputStream os;
 	InputStream is;
 	String memberKey;
-	// Used to generate pos screen display
+	double consumeAmt;
 	Map<String, Date> lastSuccessfulOpTimeMap = new HashMap<String, Date>();
 	long result;
+	String title;
 	String tip;
 
 	public Socket getSocket() {
@@ -42,6 +43,14 @@ public class ObtainGiftBlackBox {
 		this.is = is;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getTip() {
 		return tip;
 	}
@@ -56,6 +65,14 @@ public class ObtainGiftBlackBox {
 
 	public void setMemberKey(String memberKey) {
 		this.memberKey = memberKey;
+	}
+
+	public double getConsumeAmt() {
+		return consumeAmt;
+	}
+
+	public void setConsumeAmt(double consumeAmt) {
+		this.consumeAmt = consumeAmt;
 	}
 
 	public Map<String, Date> getLastSuccessfulOpTimeMap() {
