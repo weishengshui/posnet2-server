@@ -73,6 +73,10 @@ public abstract class QQAdidasBaseProtocol extends PosnetBaseProtocol {
 	@Override
 	public void tearDown() throws Exception {
 		super.tearDown();
+		resetDb();
+	}
+
+	private void resetDb() {
 		// clear database
 		em.getTransaction().begin();
 		em.createQuery("DELETE FROM Journal").executeUpdate();
