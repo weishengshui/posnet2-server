@@ -31,9 +31,9 @@
 		<logback.version>0.9.19</logback.version>
 		<slf4j.version>1.5.11</slf4j.version>
 		<jersey.version>1.1.5</jersey.version>
-		<qqapi.version>0.3.0-RC5</qqapi.version>
-		<qqmeishi.version>0.3.0-RC5</qqmeishi.version>
-		<posnet2.ext.version>0.3.0-RC5</posnet2.ext.version>
+		<qqapi.version>0.3.0</qqapi.version>
+		<qqmeishi.version>0.3.0</qqmeishi.version>
+		<posnet2.ext.version>0.3.0</posnet2.ext.version>
 	</properties>
 	<organization>
 		<name>China Rewards</name>
