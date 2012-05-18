@@ -1,0 +1,1 @@
+alter table Pos add index `IDX_POS_POSID` (posId);
