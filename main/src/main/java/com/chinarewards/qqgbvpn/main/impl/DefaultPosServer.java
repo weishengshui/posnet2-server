@@ -37,6 +37,7 @@ import com.chinarewards.qqgbvpn.main.ConfigKey;
 import com.chinarewards.qqgbvpn.main.PosServer;
 import com.chinarewards.qqgbvpn.main.PosServerException;
 import com.chinarewards.qqgbvpn.main.SessionStore;
+import com.chinarewards.qqgbvpn.main.management.DatabaseMXBean;
 import com.chinarewards.qqgbvpn.main.protocol.CmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.CmdMapping;
 import com.chinarewards.qqgbvpn.main.protocol.CodecMappingConfigBuilder;
@@ -443,6 +444,10 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		
 		mbs.registerMBean(this.monitorCommandManageFilter, new ObjectName(
 		"PosnetCommand:name=Command"));
+		
+		DatabaseMXBean mxBean = injector.getInstance(DatabaseMXBean.class);
+		mbs.registerMBean(mxBean,
+				new ObjectName("PosnetDBManage:name=DBManage"));
 
 		String jmxServiceURL = "service:jmx:rmi:///jndi/rmi://localhost:"
 				+ jmxMoniterPort + "/jmxrmi";

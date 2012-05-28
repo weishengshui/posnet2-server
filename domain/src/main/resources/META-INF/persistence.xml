@@ -36,6 +36,12 @@
 		 -->
 		 <class>com.chinarewards.qq.adidas.domain.QQActivityMember</class>
 		 <class>com.chinarewards.qq.adidas.domain.QQActivityHistory</class>
-		 <class>com.chinarewards.qq.adidas.domain.QQWeixinSignIn</class>
+		 <class>com.chinarewards.qq.adidas.domain.QQWeixinSignIn</class> 
+		 
+		 <!-- 
+			DB Manage
+		  -->
+		  <class>com.chinarewards.qqgbvpn.domain.PingTest</class>
+		  
 	</persistence-unit>
 </persistence>

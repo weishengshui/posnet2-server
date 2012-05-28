@@ -123,6 +123,9 @@ case "$1" in
         1) log_daemon_msg "POSNet2 server not running" ;;
     esac
     ;;
+  version)
+   		java -jar $POSNET2_HOME/qqgbvpn.jar --version ;;
+   ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
     exit 3

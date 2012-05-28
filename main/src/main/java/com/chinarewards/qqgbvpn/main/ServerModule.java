@@ -5,8 +5,9 @@ package com.chinarewards.qqgbvpn.main;
 
 import com.chinarewards.qqgbvpn.main.impl.DefaultPosServer;
 import com.chinarewards.qqgbvpn.main.impl.InMemorySessionStore;
+import com.chinarewards.qqgbvpn.main.management.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.protocol.filter.DatabaseManage;
 import com.chinarewards.qqgbvpn.main.protocol.filter.ErrorConnectionKillerFilter;
-import com.chinarewards.qqgbvpn.main.protocol.filter.IdleConnectionKillerFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoggingFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoginFilter;
 import com.google.inject.AbstractModule;
@@ -34,6 +35,8 @@ public class ServerModule extends AbstractModule {
 				Singleton.class);
 		
 		bind(LoginFilter.class);
+		bind(DatabaseMXBean.class).to(DatabaseManage.class);
+		
 //		bind(IdleConnectionKillerFilter.class);
 		bind(ErrorConnectionKillerFilter.class);
 		bind(LoggingFilter.class);

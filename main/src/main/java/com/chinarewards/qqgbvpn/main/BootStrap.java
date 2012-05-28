@@ -137,6 +137,9 @@ public class BootStrap {
 	 * method.
 	 */
 	public void run() throws Exception {
+		
+		// parse command line arguments.
+		parseCmdArgs();
 
 		// print application version.
 		printAppVersion();
@@ -144,8 +147,6 @@ public class BootStrap {
 		// print environment information.
 		printEnvInfo();
 
-		// parse command line arguments.
-		parseCmdArgs();
 
 		// build the configuration object.
 		buildConfiguration();
