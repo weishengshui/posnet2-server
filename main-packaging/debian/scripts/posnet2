@@ -124,8 +124,8 @@ case "$1" in
     esac
     ;;
   version)
-   		java -jar $POSNET2_HOME/qqgbvpn.jar --version ;;
-   ;;
+	java -jar $POSNET2_HOME/qqgbvpn.jar --version
+	;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
     exit 3
