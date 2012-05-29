@@ -55,5 +55,10 @@ public abstract class ConfigKey {
 	 * 0=检查，1=不检查
 	 */
 	public static final String SERVER_DISABLE_CHALLENGE_CHECK = "server.disable_challenge_check";
+	
+	/**
+	 * Jmx rmi server hostname
+	 */
+	public static final  String JMX_RMI_SERVER_HOSTNAME = "jmx.rmi.server.hostname";
 
 }

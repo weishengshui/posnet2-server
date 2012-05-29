@@ -73,6 +73,8 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 
 	public static final long DEFAULT_SERVER_CLIENTMAXIDLETIME = 1800;
 	
+	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "0.0.0.0";
+	
 	/**
 	 * Default monitor port
 	 */
@@ -449,8 +451,11 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		mbs.registerMBean(mxBean,
 				new ObjectName("PosnetDBManage:name=DBManage"));
 
-		String jmxServiceURL = "service:jmx:rmi:///jndi/rmi://localhost:"
-				+ jmxMoniterPort + "/jmxrmi";
+		String hostname = configuration.getString(
+				ConfigKey.JMX_RMI_SERVER_HOSTNAME,
+				DEFAULT_JMX_RMI_SERVER_HOSTNAME);
+		String jmxServiceURL = "service:jmx:rmi:///jndi/rmi://" + hostname
+				+ ":" + jmxMoniterPort + "/jmxrmi";
 		// Create an RMI connector and start it
 		JMXServiceURL url = new JMXServiceURL(jmxServiceURL);
 
