@@ -32,7 +32,7 @@ public class DatabaseManage implements DatabaseMXBean {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public boolean getSelectByJPA() {
+	public boolean isAliveJpa() {
 		boolean flag = false;
 		try {
 			List<Pos> list = em.createQuery("FROM PingTest").setFirstResult(0)
@@ -47,7 +47,7 @@ public class DatabaseManage implements DatabaseMXBean {
 	}
 
 	@Override
-	public boolean getSelectByJDBC() {
+	public boolean isAliveJdbc() {
 		boolean flag = false;
 		Connection conn = getConnectionFromConfiguration(conf);
 		if (conn == null)
@@ -58,7 +58,7 @@ public class DatabaseManage implements DatabaseMXBean {
 			stmt = conn.createStatement();
 			String sql = "select count(*) from PingTest";
 			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
+			while (rs.next()) {
 				long count = rs.getLong(1);
 				if (count > 0) {
 					log.debug("xxxxxxx={}", count);
