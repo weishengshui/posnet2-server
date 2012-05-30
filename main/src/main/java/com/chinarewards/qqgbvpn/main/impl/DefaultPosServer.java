@@ -73,7 +73,7 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 
 	public static final long DEFAULT_SERVER_CLIENTMAXIDLETIME = 1800;
 	
-	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "0.0.0.0";
+	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "localhost";
 	
 	/**
 	 * Default monitor port
