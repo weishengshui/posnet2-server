@@ -61,7 +61,7 @@ public class DatabaseManage implements DatabaseMXBean {
 			while (rs.next()) {
 				long count = rs.getLong(1);
 				if (count > 0) {
-					log.debug("xxxxxxx={}", count);
+					log.debug("isAliveJdbc PingTest records count={}", count);
 					flag = true;
 				}
 				break;

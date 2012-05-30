@@ -72,9 +72,9 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 	 */
 
 	public static final long DEFAULT_SERVER_CLIENTMAXIDLETIME = 1800;
-	
+
 	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "localhost";
-	
+
 	/**
 	 * Default monitor port
 	 */
@@ -99,10 +99,10 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 	protected final ServiceDispatcher serviceDispatcher;
 
 	protected JMXConnectorServer cs;
-	
+
 	private MonitorConnectManageFilter monitorConnectManageFilter;
 	private MonitorCommandManageFilter monitorCommandManageFilter;
-	
+
 	/**
 	 * socket server address
 	 */
@@ -166,10 +166,9 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		// setup Apache Mina server.
 		startMinaService();
 
-
 		// 启动定时任务（清理session store）
 		startTimer();
-		
+
 		log.info("Server running, listening on {}", getLocalPort());
 
 	}
@@ -178,8 +177,7 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		long timerDelay = this.configuration.getLong(
 				ConfigKey.SERVER_SESSION_TIMEOUT_CHECK_INTERVAL,
 				DEFAULT_SERVER_START_TIMER_DELAY);
-		log.debug("config server.session.timeout_check_interval={}",
-				timerDelay);
+		log.debug("config server.session.timeout_check_interval={}", timerDelay);
 		// 启动定时器
 		this.timer.scheduleAtFixedInterval(
 				timerDelay,
@@ -216,12 +214,12 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 			NotCompliantMBeanException, MalformedObjectNameException,
 			NullPointerException, IOException {
 
-		
 		// default 1800 seconds
-		long idleTime = configuration.getLong(ConfigKey.SERVER_CLIENTMAXIDLETIME,
+		long idleTime = configuration.getLong(
+				ConfigKey.SERVER_CLIENTMAXIDLETIME,
 				DEFAULT_SERVER_CLIENTMAXIDLETIME);
 
-		log.debug("idleTime={}",idleTime);
+		log.debug("idleTime={}", idleTime);
 
 		port = configuration.getInt("server.port");
 		serverAddr = new InetSocketAddress(port);
@@ -237,13 +235,14 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 
 		// ManageIoSessionConnect filter if idle server will not close any idle
 		// IoSession
-		acceptor.getFilterChain().addLast("ManageIoSessionConnect",
+		acceptor.getFilterChain().addLast(
+				"ManageIoSessionConnect",
 				new IdleConnectionKillerFilter(injector
 						.getInstance(SessionStore.class), idleTime));
-		
+
 		// add jmx monitor
 		addMonitor();
-		
+
 		// monitor manage connect count filter ------> jmx
 		acceptor.getFilterChain().addLast("monitorConnectManageFilter",
 				this.monitorConnectManageFilter);
@@ -260,16 +259,17 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		// size
 		acceptor.getFilterChain().addLast(
 				"codec",
-				new ProtocolCodecFilter(
-						new MessageCoderFactory(cmdCodecFactory, this.configuration)));
+				new ProtocolCodecFilter(new MessageCoderFactory(
+						cmdCodecFactory, this.configuration)));
 
 		// kills error connection if too many.
-		acceptor.getFilterChain().addLast("errorConnectionKiller",injector.getInstance(ErrorConnectionKillerFilter.class));
-		
+		acceptor.getFilterChain().addLast("errorConnectionKiller",
+				injector.getInstance(ErrorConnectionKillerFilter.class));
+
 		// monitor manage command filter ------> jmx
 		acceptor.getFilterChain().addLast("monitorCommandManageFilter",
 				this.monitorCommandManageFilter);
-		
+
 		// bodyMessage filter - short-circuit if error message is received.
 		acceptor.getFilterChain().addLast("bodyMessage",
 				new BodyMessageFilter());
@@ -400,7 +400,8 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 			InstanceAlreadyExistsException, MBeanRegistrationException,
 			NotCompliantMBeanException, MalformedObjectNameException,
 			NullPointerException, IOException {
-		jmxMoniterPort = configuration.getInt(ConfigKey.SERVER_MONITORPORT, DEFAULT_SERVER_MONITORPORT);
+		jmxMoniterPort = configuration.getInt(ConfigKey.SERVER_MONITORPORT,
+				DEFAULT_SERVER_MONITORPORT);
 		log.debug(" monitor port ={}", jmxMoniterPort);
 		// jmx----------------------code start--------------------------
 		// jmx 服务器
@@ -410,43 +411,49 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		this.monitorConnectManageFilter = new MonitorConnectManageFilter();
 		this.monitorCommandManageFilter = new MonitorCommandManageFilter();
 		// 注册需要被管理的MBean
-		mbs.registerMBean(ManagementFactory.getClassLoadingMXBean(), new ObjectName(
-		"ClassLoading:name=ClassLoading"));
-		
-		mbs.registerMBean(ManagementFactory.getCompilationMXBean(), new ObjectName(
-		"Compilation:name=Compilation"));
-		
+		mbs.registerMBean(ManagementFactory.getClassLoadingMXBean(),
+				new ObjectName("ClassLoading:name=ClassLoading"));
+
+		mbs.registerMBean(ManagementFactory.getCompilationMXBean(),
+				new ObjectName("Compilation:name=Compilation"));
+
 		mbs.registerMBean(ManagementFactory.getMemoryMXBean(), new ObjectName(
-		"Memory:name=Memory"));
-		
-		mbs.registerMBean(ManagementFactory.getOperatingSystemMXBean(), new ObjectName(
-		"OperatingSystem:name=OperatingSystem"));
-		
+				"Memory:name=Memory"));
+
+		mbs.registerMBean(ManagementFactory.getOperatingSystemMXBean(),
+				new ObjectName("OperatingSystem:name=OperatingSystem"));
+
 		mbs.registerMBean(ManagementFactory.getRuntimeMXBean(), new ObjectName(
-		"Runtime:name=Runtime"));
-		
+				"Runtime:name=Runtime"));
+
 		mbs.registerMBean(ManagementFactory.getThreadMXBean(), new ObjectName(
-		"Thread:name=Thread"));
-		
-		int unm=1;
-		for(GarbageCollectorMXBean garbageCollector : ManagementFactory.getGarbageCollectorMXBeans()){
-			mbs.registerMBean(garbageCollector, new ObjectName("GarbageCollector:name=GarbageCollector_"+(unm++)));
+				"Thread:name=Thread"));
+
+		int unm = 1;
+		for (GarbageCollectorMXBean garbageCollector : ManagementFactory
+				.getGarbageCollectorMXBeans()) {
+			mbs.registerMBean(garbageCollector, new ObjectName(
+					"GarbageCollector:name=GarbageCollector_" + (unm++)));
 		}
-		unm=1;
-		for(MemoryManagerMXBean memoryManager : ManagementFactory.getMemoryManagerMXBeans()){
-			mbs.registerMBean(memoryManager, new ObjectName("MemoryManager:name=MemoryManager_"+(unm++)));
+		unm = 1;
+		for (MemoryManagerMXBean memoryManager : ManagementFactory
+				.getMemoryManagerMXBeans()) {
+			mbs.registerMBean(memoryManager, new ObjectName(
+					"MemoryManager:name=MemoryManager_" + (unm++)));
 		}
-		unm=1;
-		for(MemoryPoolMXBean memoryPool : ManagementFactory.getMemoryPoolMXBeans()){
-			mbs.registerMBean(memoryPool, new ObjectName("MemoryPool:name=MemoryPool_"+(unm++)));
+		unm = 1;
+		for (MemoryPoolMXBean memoryPool : ManagementFactory
+				.getMemoryPoolMXBeans()) {
+			mbs.registerMBean(memoryPool, new ObjectName(
+					"MemoryPool:name=MemoryPool_" + (unm++)));
 		}
-		
+
 		mbs.registerMBean(this.monitorConnectManageFilter, new ObjectName(
 				"PosnetConnect:name=Connect"));
-		
+
 		mbs.registerMBean(this.monitorCommandManageFilter, new ObjectName(
-		"PosnetCommand:name=Command"));
-		
+				"PosnetCommand:name=Command"));
+
 		DatabaseMXBean mxBean = injector.getInstance(DatabaseMXBean.class);
 		mbs.registerMBean(mxBean,
 				new ObjectName("PosnetDBManage:name=DBManage"));
@@ -454,6 +461,9 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		String hostname = configuration.getString(
 				ConfigKey.JMX_RMI_SERVER_HOSTNAME,
 				DEFAULT_JMX_RMI_SERVER_HOSTNAME);
+
+		log.debug(" Jxm rmi server hostname = {}", hostname);
+
 		String jmxServiceURL = "service:jmx:rmi:///jndi/rmi://" + hostname
 				+ ":" + jmxMoniterPort + "/jmxrmi";
 		// Create an RMI connector and start it
@@ -471,11 +481,12 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 			RMIRegistry.createRegistry(jmxMoniterPort);
 			cs.start();
 		} else {
-			if (cs != null && cs.isActive()&& !isMonitorEnable){
+			if (cs != null && cs.isActive() && !isMonitorEnable) {
 				cs.stop();
 			}
 		}
 	}
+
 	public Injector getInjector() {
 		return injector;
 	}
