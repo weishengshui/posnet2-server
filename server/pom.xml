@@ -12,24 +12,6 @@
 	<version>0.3.3-SNAPSHOT</version>
 	<description>Server for POS Network Server version 2</description>
 	
-	<properties>
-		<!-- posnet2 -->
-		<posnet2.core.version>0.3.3-SNAPSHOT</posnet2.core.version>
-		<qqapi.version>0.3.1</qqapi.version>
-		<qqmeishi.version>0.3.0</qqmeishi.version>
-		<posnet2.ext.version>0.3.1</posnet2.ext.version>
-		<!-- others -->
-		<guice.version>3.0</guice.version>
-		<ejb3.persistence.version>1.0.2.GA</ejb3.persistence.version>
-		<apache.commonconfig.version>1.7</apache.commonconfig.version>
-		<jackson.json.version>1.8.5</jackson.json.version>
-		<dbdeploy.version>3.0M3</dbdeploy.version>
-		<junit.version>4.8.2</junit.version>
-		<hsqldb.version>1.8.0.10</hsqldb.version>
-		<logback.version>0.9.19</logback.version>
-		<slf4j.version>1.5.11</slf4j.version>
-	</properties>
-	
 	<dependencies>
 	
 		<!-- Google Guice - Dependency injection -->
