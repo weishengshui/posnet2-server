@@ -6,35 +6,18 @@
 		<groupId>com.chinarewards</groupId>
 		<version>2.1.0</version>
 	</parent>
-	<groupId>com.chinarewards.qqgbvpn</groupId>
-	<artifactId>parent</artifactId>
+	<groupId>com.chinarewards.posnet2</groupId>
+	<artifactId>posnet2-server-parent</artifactId>
 	<version>0.3.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>POS Network Server 2 Parent POM</name>
-	<description>POS Network Server 2 parent Maven project.</description>
+	<name>POS Network Server 2 POM</name>
+	<description>POS Network Server 2 Maven project.</description>
 	<scm>
 		<url>http://git.dev.china-rewards.com/repo</url>
-		<connection>scm:git:git://git.dev.china-rewards.com/qqgbvpn/qqgbvpn-server.git</connection>
-		<developerConnection>scm:git:ssh://git@git.dev.china-rewards.com/qqgbvpn/qqgbvpn-server.git</developerConnection>
+		<connection>scm:git:git://git.dev.china-rewards.com/posnet2/posnet2-server.git</connection>
+		<developerConnection>scm:git:ssh://git@git.dev.china-rewards.com/posnet2/posnet2-server.git</developerConnection>
 	</scm>
-	<inceptionYear>2011</inceptionYear>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<apache.commonconfig.version>1.7</apache.commonconfig.version>
-		<apache.hc.version>4.1.2</apache.hc.version>
-		<guice.version>3.0</guice.version>
-		<guice-struts2>3.0</guice-struts2>
-		<hibernate.version>3.4.0</hibernate.version>
-		<hsqldb.version>1.8.0.10</hsqldb.version>
-		<jackson.json.version>1.8.5</jackson.json.version>
-		<junit.version>4.8.2</junit.version>
-		<logback.version>0.9.19</logback.version>
-		<slf4j.version>1.5.11</slf4j.version>
-		<jersey.version>1.1.5</jersey.version>
-		<qqapi.version>0.3.0</qqapi.version>
-		<qqmeishi.version>0.3.0</qqmeishi.version>
-		<posnet2.ext.version>0.3.0</posnet2.ext.version>
-	</properties>
+	<inceptionYear>2012</inceptionYear>
 	<organization>
 		<name>China Rewards</name>
 		<url>http://www.china-rewards.com</url>
@@ -47,157 +30,6 @@
 		<system>Jenkins CI</system>
 		<url>http://build.dev.china-rewards.com:8080</url>
 	</ciManagement>
-	<dependencyManagement>
-		<dependencies>
-			<!-- Apache Mina - Socket programming -->
-			<dependency>
-				<groupId>org.apache.mina</groupId>
-				<artifactId>mina-core</artifactId>
-				<version>2.0.4</version>
-			</dependency>
-
-			<!-- Google Guice - dependenct injection -->
-			<dependency>
-				<groupId>com.google.inject</groupId>
-				<artifactId>guice</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-servlet</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-jndi</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-multibindings</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-persist</artifactId>
-				<version>${guice.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject.extensions</groupId>
-				<artifactId>guice-struts2-plugin</artifactId>
-				<version>${guice-struts2}</version>
-			</dependency>
-
-
-			<!-- Servlet related -->
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.5</version>
-				<scope>provided</scope>
-			</dependency>
-
-
-			<!-- JPA and related -->
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc14</artifactId>
-				<version>10.2.0.4</version>
-				<scope>runtime</scope>
-			</dependency>
-			<!-- MySQL JDBC driver - Use for running, not for programming -->
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>5.1.17</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>ejb3-persistence</artifactId>
-				<version>1.0.2.GA</version>
-			</dependency>
-
-			<!-- Configuration -->
-			<dependency>
-				<groupId>commons-configuration</groupId>
-				<artifactId>commons-configuration</artifactId>
-				<version>${apache.commonconfig.version}</version>
-			</dependency>
-
-			<!-- JavaMail -->
-			<dependency>
-				<groupId>javax.activation</groupId>
-				<artifactId>activation</artifactId>
-				<version>1.1</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.mail</groupId>
-				<artifactId>mail</artifactId>
-				<version>1.4</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>3.0.6.RELEASE</version>
-			</dependency>
-
-			<!-- China Rewards -->
-			<dependency>
-				<groupId>com.chinarewards</groupId>
-				<artifactId>common-web</artifactId>
-				<version>2.2.0</version>
-			</dependency>
-
-			<!-- JSON -->
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
-				<version>${jackson.json.version}</version>
-			</dependency>
-
-			<!-- Logging -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-				<!-- Must be runtime since we are not using this for compilation -->
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<!-- If it is not included, JUnit test has no output. -->
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-access</artifactId>
-				<version>${logback.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-
-			<!-- Test Scope STARTS -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>${hsqldb.version}</version>
-			</dependency>
-			<!-- Test Scope ENDS -->
-		</dependencies>
-	</dependencyManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -210,15 +42,7 @@
 		</pluginManagement>
 	</build>
 	<modules>
-		<module>testing</module>
-		<module>core</module>
-		<module>domain</module>
-		<module>main</module>
-		<module>mgmtui</module>
-		<!-- Packaging projects -->
-		<module>main-packaging</module>
-		<module>mgmtui-packaging</module>
-    	<module>external</module>
-    	<module>external-packaging</module>
+		<module>server</module>
+		<module>server-packaging</module>
   </modules>
 </project>
