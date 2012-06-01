@@ -33,10 +33,10 @@
 
 	<properties>
 		<!-- posnet2 -->
-		<posnet2.core.version>0.3.3-SNAPSHOT</posnet2.core.version>
-		<qqapi.version>0.3.2-SNAPSHOT</qqapi.version>
-		<qqmeishi.version>0.3.1-SNAPSHOT</qqmeishi.version>
-		<posnet2.ext.version>0.3.2-SNAPSHOT</posnet2.ext.version>
+		<posnet2.core.version>0.3.3-RC1</posnet2.core.version>
+		<qqapi.version>0.3.2-RC1</qqapi.version>
+		<qqmeishi.version>0.3.1-RC1</qqmeishi.version>
+		<posnet2.ext.version>0.3.2-RC1</posnet2.ext.version>
 		<!-- others -->
 		<guice.version>3.0</guice.version>
 		<ejb3.persistence.version>1.0.2.GA</ejb3.persistence.version>
