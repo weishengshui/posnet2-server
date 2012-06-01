@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.chinarewards.posnet2</groupId>
 		<artifactId>posnet2-server-packaging</artifactId>
-		<version>0.3.3-RC1</version>
+		<version>0.3.3-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
