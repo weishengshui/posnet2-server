@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>com.chinarewards.posnet2</groupId>
 		<artifactId>posnet2-server-parent</artifactId>
-		<version>0.3.3-SNAPSHOT</version>
+		<version>0.3.3-RC1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>com.chinarewards.posnet2</groupId>
 	<artifactId>posnet2-server</artifactId>
 	<name>POS Network Server 2</name>
-	<version>0.3.3-SNAPSHOT</version>
+	<version>0.3.3-RC1</version>
 	<description>Server for POS Network Server version 2</description>
 	
 	<dependencies>
