@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.domain.Pos;
-import com.chinarewards.qqgbvpn.main.management.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
 import com.google.inject.Inject;
 
 public class DatabaseManage implements DatabaseMXBean {

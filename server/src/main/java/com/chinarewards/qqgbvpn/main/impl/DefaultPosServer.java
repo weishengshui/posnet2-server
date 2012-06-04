@@ -37,7 +37,9 @@ import com.chinarewards.qqgbvpn.main.ConfigKey;
 import com.chinarewards.qqgbvpn.main.PosServer;
 import com.chinarewards.qqgbvpn.main.PosServerException;
 import com.chinarewards.qqgbvpn.main.SessionStore;
-import com.chinarewards.qqgbvpn.main.management.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.IKnownClientsMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IPosnetConnectAttr;
 import com.chinarewards.qqgbvpn.main.protocol.CmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.CmdMapping;
 import com.chinarewards.qqgbvpn.main.protocol.CodecMappingConfigBuilder;
@@ -48,6 +50,7 @@ import com.chinarewards.qqgbvpn.main.protocol.SimpleCmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.filter.BodyMessageFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.ErrorConnectionKillerFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.IdleConnectionKillerFilter;
+import com.chinarewards.qqgbvpn.main.protocol.filter.JmxManageFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoginFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.MonitorCommandManageFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.MonitorConnectManageFilter;
@@ -238,7 +241,8 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		acceptor.getFilterChain().addLast(
 				"ManageIoSessionConnect",
 				new IdleConnectionKillerFilter(injector
-						.getInstance(SessionStore.class), idleTime));
+						.getInstance(SessionStore.class), injector
+						.getInstance(IPosnetConnectAttr.class), idleTime));
 
 		// add jmx monitor
 		addMonitor();
@@ -261,7 +265,11 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 				"codec",
 				new ProtocolCodecFilter(new MessageCoderFactory(
 						cmdCodecFactory, this.configuration)));
-
+		
+		// config jmx manage filter
+		acceptor.getFilterChain().addLast("jmx-manage",
+				injector.getInstance(JmxManageFilter.class));
+		
 		// kills error connection if too many.
 		acceptor.getFilterChain().addLast("errorConnectionKiller",
 				injector.getInstance(ErrorConnectionKillerFilter.class));
@@ -457,6 +465,9 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		DatabaseMXBean mxBean = injector.getInstance(DatabaseMXBean.class);
 		mbs.registerMBean(mxBean,
 				new ObjectName("PosnetDBManage:name=DBManage"));
+		
+		mbs.registerMBean(injector.getInstance(IKnownClientsMXBean.class),
+				new ObjectName("PosnetKnownClient:name=KnownClient"));
 
 		String hostname = configuration.getString(
 				ConfigKey.JMX_RMI_SERVER_HOSTNAME,

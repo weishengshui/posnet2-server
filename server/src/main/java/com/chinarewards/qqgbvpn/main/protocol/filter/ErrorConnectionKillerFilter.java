@@ -1,14 +1,21 @@
 package com.chinarewards.qqgbvpn.main.protocol.filter;
 
+import java.util.Date;
+import java.util.Map;
+
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.chinarewards.qqgbvpn.common.DateTool;
 import com.chinarewards.qqgbvpn.main.SessionStore;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IPosnetConnectAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ErrorBodyMessage;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.Message;
 import com.chinarewards.qqgbvpn.main.util.MinaUtil;
+import com.chinarewards.utils.StringUtil;
 import com.google.inject.Inject;
 
 /**
@@ -27,14 +34,17 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 	 * TODO make this configurable.
 	 */
 	private int errorCountThreshold = 5;
-	
+
 	final SessionStore sessionStore;
-	
+
+	final IPosnetConnectAttr connectAttr;
+
 	@Inject
-	public ErrorConnectionKillerFilter(SessionStore sessionStore) {
+	public ErrorConnectionKillerFilter(SessionStore sessionStore,
+			IPosnetConnectAttr connectAttr) {
 		this.sessionStore = sessionStore;
+		this.connectAttr = connectAttr;
 	}
-	
 
 	/**
 	 * Returns the error count threshold. When a Mina session has a consecutive
@@ -61,7 +71,8 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 	 *             if errorCountThreshold is set to a value less than zero.
 	 */
 	public void setErrorCountThreshold(int errorCountThreshold) {
-		if (errorCountThreshold < 0) throw new IllegalArgumentException();
+		if (errorCountThreshold < 0)
+			throw new IllegalArgumentException();
 		this.errorCountThreshold = errorCountThreshold;
 	}
 
@@ -77,10 +88,10 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 
 		ICommand msg = ((Message) message).getBodyMessage();
 		if (msg instanceof ErrorBodyMessage) {
-			
-			// increment error message counter and see if it reaches the 
+
+			// increment error message counter and see if it reaches the
 			// threshold. If so, close the session.
-			
+
 			int errorCount = incrementErrorCount(session);
 			if (errorCount >= getErrorCountThreshold()) {
 				if (log.isInfoEnabled()) {
@@ -90,22 +101,44 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 							new Object[] {
 									MinaUtil.buildAddressPortString(session),
 									session.getId(),
-									MinaUtil.getPosIdFromSession(getServerSession(session, sessionStore)) });
+									MinaUtil.getPosIdFromSession(getServerSession(
+											session, sessionStore)) });
 				}
-				
+
 				// close and return.
 				session.close(true);
+				
+				// jmx record when close session!
+				String posId = connectAttr.getPosIdFromSessionId(String
+						.valueOf(session.getId()));
+				if (!StringUtil.isEmptyString(posId)) {
+					OriginalKnownClient knownClient = connectAttr
+							.getKnownPosClientByPosId(posId);
+					if (knownClient != null) {
+						Map<String, Integer> dataErrorCount = knownClient
+								.getCorruptDataConnectionDropCount();
+						Date now = new Date();
+						String s = DateTool.getSingleStr(now);
+						if (dataErrorCount.containsKey(s)) {
+							int i = dataErrorCount.get(s);
+							dataErrorCount.put(s, i++);
+						} else {
+							dataErrorCount.put(s, 1);
+						}
+					}
+				}
+
 				return;
 			} else {
 				// continue processing, let the client has a chance to correct
 				// itself by sending correct messages.
 				nextFilter.messageReceived(session, message);
 			}
-			
-		} else {	// not error message, reset the stat if needed.
+
+		} else { // not error message, reset the stat if needed.
 
 			resetErrorCount(session);
-			
+
 			// continue the filter chain
 			nextFilter.messageReceived(session, message);
 		}
@@ -114,25 +147,27 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 	}
 
 	protected void resetErrorCount(IoSession session) {
-		
+
 		// reset only if needed.
 		int oldCount = getErrorCount(session);
 		if (oldCount > 0) {
 			if (log.isTraceEnabled()) {
-				log.trace("Reset error message counter to zero for connection  (addr={}, "
-									+ "Mina session ID {}, POS ID={}), closing connection.",
-							new Object[] {
-									MinaUtil.buildAddressPortString(session),
-									session.getId(),
-									MinaUtil.getPosIdFromSession(getServerSession(session, sessionStore)) });
+				log.trace(
+						"Reset error message counter to zero for connection  (addr={}, "
+								+ "Mina session ID {}, POS ID={}), closing connection.",
+						new Object[] {
+								MinaUtil.buildAddressPortString(session),
+								session.getId(),
+								MinaUtil.getPosIdFromSession(getServerSession(
+										session, sessionStore)) });
 			}
 		}
 		session.setAttribute(getSessionKey(), 0);
-		
+
 	}
 
 	protected int getErrorCount(IoSession session) {
-		Integer count = (Integer)session.getAttribute(getSessionKey());
+		Integer count = (Integer) session.getAttribute(getSessionKey());
 		return (count == null ? 0 : count);
 	}
 

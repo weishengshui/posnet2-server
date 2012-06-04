@@ -1,4 +1,4 @@
-package com.chinarewards.qqgbvpn.main.management;
+package com.chinarewards.qqgbvpn.main.mxBean;
 
 
 /**
