@@ -6,10 +6,12 @@ package com.chinarewards.qqgbvpn.main;
 import com.chinarewards.qqgbvpn.main.impl.DefaultPosServer;
 import com.chinarewards.qqgbvpn.main.impl.InMemorySessionStore;
 import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.IKnownClientsMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.impl.KnownClientsMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.vo.IPosnetConnectAttr;
-import com.chinarewards.qqgbvpn.main.mxBean.vo.PosnetConnectAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.ConnectionAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IConnectionAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.KnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.protocol.filter.DatabaseManage;
 import com.chinarewards.qqgbvpn.main.protocol.filter.ErrorConnectionKillerFilter;
 import com.chinarewards.qqgbvpn.main.protocol.filter.LoggingFilter;
@@ -37,16 +39,17 @@ public class ServerModule extends AbstractModule {
 
 		bind(SessionStore.class).to(InMemorySessionStore.class).in(
 				Singleton.class);
-		
+
 		bind(LoginFilter.class);
 		// mxbean
 		bind(DatabaseMXBean.class).to(DatabaseManage.class);
-		bind(IPosnetConnectAttr.class).to(PosnetConnectAttr.class).in(
-				Singleton.class);
-		bind(IKnownClientsMXBean.class).to(KnownClientsMXBean.class);
-		
-		
-//		bind(IdleConnectionKillerFilter.class);
+		bind(IConnectionAttr.class).to(ConnectionAttr.class)
+				.in(Singleton.class);
+		bind(IKnownClientConnectAttr.class).to(KnownClientConnectAttr.class)
+				.in(Singleton.class);
+		bind(IPosnetConnectionMXBean.class).to(PosnetConnectionMXBean.class);
+
+		// bind(IdleConnectionKillerFilter.class);
 		bind(ErrorConnectionKillerFilter.class);
 		bind(LoggingFilter.class);
 	}

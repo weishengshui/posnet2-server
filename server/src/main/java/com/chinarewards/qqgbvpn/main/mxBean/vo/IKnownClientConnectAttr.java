@@ -2,7 +2,13 @@ package com.chinarewards.qqgbvpn.main.mxBean.vo;
 
 import java.util.Map;
 
-public interface IPosnetConnectAttr {
+/**
+ * Known clients attributions
+ * 
+ * @author yanxin
+ * @since 0.3.3
+ */
+public interface IKnownClientConnectAttr {
 
 	/**
 	 * Get known pos client by pos id.
@@ -23,7 +29,12 @@ public interface IPosnetConnectAttr {
 
 	public int countKnownClients();
 
-	public String getPosIdFromSessionId(String sessionId);
+	public String getPosIdFromSessionId(long sessionId);
 
-	public void addNewRoute(String sessionId, String posId);
+	public void addNewRoute(long sessionId, String posId);
+
+	public void afterIdleClientClosed(long sessionId);
+
+	public void afterBadDataClientClosed(long sessionId);
+
 }

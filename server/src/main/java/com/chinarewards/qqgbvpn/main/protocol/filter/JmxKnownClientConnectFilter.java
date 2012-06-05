@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.mina.core.filterchain.IoFilterAdapter;
 import org.apache.mina.core.session.IoSession;
 
-import com.chinarewards.qqgbvpn.main.mxBean.vo.IPosnetConnectAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.InitRequestMessage;
@@ -14,27 +14,28 @@ import com.chinarewards.utils.StringUtil;
 import com.google.inject.Inject;
 
 /**
- * This filter should be placed after an <code>ICommand</code> has been decoded.
+ * Why do not put this filter into {@link JmxConnectionManageFilter} ? <br/>
+ * Because this filter must be placed after an <code>ICommand</code> has been
+ * decoded. It is different from {@link JmxConnectionManageFilter}.
  * 
  * @author yanxin
  * 
  */
-public class JmxManageFilter extends IoFilterAdapter {
+public class JmxKnownClientConnectFilter extends IoFilterAdapter {
 
 	@Inject
-	private IPosnetConnectAttr connectAttr;
+	private IKnownClientConnectAttr knownClientConnectAttr;
 
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
-
-		// Add jmx
+		// known client operation!
 		ICommand msg = ((Message) message).getBodyMessage();
 		if (msg instanceof InitRequestMessage) {
 			// init
 			InitRequestMessage initMsg = (InitRequestMessage) msg;
 			String posId = initMsg.getPosId();
-			OriginalKnownClient knownClient = connectAttr
+			OriginalKnownClient knownClient = knownClientConnectAttr
 					.getKnownPosClientByPosId(posId);
 			Date now = new Date();
 			String ip = session.getRemoteAddress().toString();
@@ -48,16 +49,16 @@ public class JmxManageFilter extends IoFilterAdapter {
 				knownClient.setPosId(posId);
 				knownClient.setLastConnectedAt(now);
 				knownClient.setLastDataReceivedAt(now);
-				connectAttr.addNewRoute(String.valueOf(session.getId()), posId);
-				connectAttr.addNewPosClient(knownClient);
+				knownClientConnectAttr.addNewRoute(session.getId(), posId);
+				knownClientConnectAttr.addNewPosClient(knownClient);
 			}
 		} else {
 			// Others, get posid according to session id. If not, skip it.
 			Date now = new Date();
-			String posId = connectAttr.getPosIdFromSessionId(String
-					.valueOf(session.getId()));
+			String posId = knownClientConnectAttr.getPosIdFromSessionId(session
+					.getId());
 			if (!StringUtil.isEmptyString(posId)) {
-				OriginalKnownClient knownClient = connectAttr
+				OriginalKnownClient knownClient = knownClientConnectAttr
 						.getKnownPosClientByPosId(posId);
 				knownClient.setLastDataReceivedAt(now);
 			}

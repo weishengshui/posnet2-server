@@ -1,21 +1,16 @@
 package com.chinarewards.qqgbvpn.main.protocol.filter;
 
-import java.util.Date;
-import java.util.Map;
-
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.chinarewards.qqgbvpn.common.DateTool;
 import com.chinarewards.qqgbvpn.main.SessionStore;
-import com.chinarewards.qqgbvpn.main.mxBean.vo.IPosnetConnectAttr;
-import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
+import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ErrorBodyMessage;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.Message;
 import com.chinarewards.qqgbvpn.main.util.MinaUtil;
-import com.chinarewards.utils.StringUtil;
 import com.google.inject.Inject;
 
 /**
@@ -37,13 +32,17 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 
 	final SessionStore sessionStore;
 
-	final IPosnetConnectAttr connectAttr;
+	final IKnownClientConnectAttr connectAttr;
+
+	final PosnetConnectionMXBean connectionMXBean;
 
 	@Inject
 	public ErrorConnectionKillerFilter(SessionStore sessionStore,
-			IPosnetConnectAttr connectAttr) {
+			IKnownClientConnectAttr connectAttr,
+			PosnetConnectionMXBean connectionMXBean) {
 		this.sessionStore = sessionStore;
 		this.connectAttr = connectAttr;
+		this.connectionMXBean = connectionMXBean;
 	}
 
 	/**
@@ -105,28 +104,14 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 											session, sessionStore)) });
 				}
 
+				long sid = session.getId();
+
 				// close and return.
 				session.close(true);
-				
+
 				// jmx record when close session!
-				String posId = connectAttr.getPosIdFromSessionId(String
-						.valueOf(session.getId()));
-				if (!StringUtil.isEmptyString(posId)) {
-					OriginalKnownClient knownClient = connectAttr
-							.getKnownPosClientByPosId(posId);
-					if (knownClient != null) {
-						Map<String, Integer> dataErrorCount = knownClient
-								.getCorruptDataConnectionDropCount();
-						Date now = new Date();
-						String s = DateTool.getSingleStr(now);
-						if (dataErrorCount.containsKey(s)) {
-							int i = dataErrorCount.get(s);
-							dataErrorCount.put(s, i++);
-						} else {
-							dataErrorCount.put(s, 1);
-						}
-					}
-				}
+				connectAttr.afterBadDataClientClosed(sid);
+				connectionMXBean.notifyBadDataConnectionDroppped(sid);
 
 				return;
 			} else {

@@ -7,13 +7,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.chinarewards.qqgbvpn.common.DateTool;
+import com.chinarewards.utils.StringUtil;
 
-public class PosnetConnectAttr implements IPosnetConnectAttr {
+public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 
 	private Map<String, OriginalKnownClient> knownClients = new HashMap<String, OriginalKnownClient>();
 
 	// route from sessionid to posid
-	private Map<String, String> posIdRouteMap = new HashMap<String, String>();
+	private Map<Long, String> posIdRouteMap = new HashMap<Long, String>();
 
 	@Override
 	public OriginalKnownClient getKnownPosClientByPosId(String posId) {
@@ -75,16 +76,56 @@ public class PosnetConnectAttr implements IPosnetConnectAttr {
 
 	@Override
 	public int countKnownClients() {
-		return knownClients.size();
+		return knownClients.keySet().size();
 	}
 
 	@Override
-	public String getPosIdFromSessionId(String sessionId) {
+	public String getPosIdFromSessionId(long sessionId) {
 		return posIdRouteMap.get(sessionId);
 	}
 
 	@Override
-	public void addNewRoute(String sessionId, String posId) {
+	public void addNewRoute(long sessionId, String posId) {
 		posIdRouteMap.put(sessionId, posId);
+	}
+
+	@Override
+	public void afterIdleClientClosed(long sessionId) {
+		String posId = getPosIdFromSessionId(sessionId);
+		if (!StringUtil.isEmptyString(posId)) {
+			OriginalKnownClient knownClient = getKnownPosClientByPosId(posId);
+			if (knownClient != null) {
+				Map<String, Integer> idleCount = knownClient
+						.getIdleConnectionDropCount();
+				Date now = new Date();
+				String s = DateTool.getSingleStr(now);
+				if (idleCount.containsKey(s)) {
+					int i = idleCount.get(s);
+					idleCount.put(s, i++);
+				} else {
+					idleCount.put(s, 1);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void afterBadDataClientClosed(long sessionId) {
+		String posId = getPosIdFromSessionId(sessionId);
+		if (!StringUtil.isEmptyString(posId)) {
+			OriginalKnownClient knownClient = getKnownPosClientByPosId(posId);
+			if (knownClient != null) {
+				Map<String, Integer> dataErrorCount = knownClient
+						.getCorruptDataConnectionDropCount();
+				Date now = new Date();
+				String s = DateTool.getSingleStr(now);
+				if (dataErrorCount.containsKey(s)) {
+					int i = dataErrorCount.get(s);
+					dataErrorCount.put(s, i++);
+				} else {
+					dataErrorCount.put(s, 1);
+				}
+			}
+		}
 	}
 }

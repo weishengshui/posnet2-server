@@ -10,7 +10,6 @@ import org.apache.mina.core.session.IoSession;
  */
 public class IoSessionMessageManage {
 
-	// IoSession连接 state
 	private String state;
 
 	private IoSession session;
