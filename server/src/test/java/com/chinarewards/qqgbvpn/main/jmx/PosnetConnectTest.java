@@ -153,7 +153,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 	// s1.close();
 	// }
 
-//	@Test
+	// @Test
 	public void testConnect_AppearIdle() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -203,7 +203,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-//	@Test
+	// @Test
 	public void testConnect_AppearIdleThenActiveAgain() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -289,7 +289,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-//	@Test
+	// @Test
 	public void testKnownClient_IdleDropped() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -547,7 +547,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-//	@Test
+	// @Test
 	public void testCloseIdleConnections_SettingIdleTime() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
