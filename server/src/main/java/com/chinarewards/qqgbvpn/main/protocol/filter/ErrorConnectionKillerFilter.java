@@ -79,6 +79,8 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
 
+		log.debug("ErrorConnectionKillerFilter#messageReceived() begin!");
+
 		// this filter only take cares of our message.
 		if (!(message instanceof Message)) {
 			nextFilter.messageReceived(session, message);
@@ -128,7 +130,7 @@ public class ErrorConnectionKillerFilter extends AbstractFilter {
 			nextFilter.messageReceived(session, message);
 		}
 
-		log.trace("messageReceived() done");
+		log.debug("ErrorConnectionKillerFilter#messageReceived() end!");
 	}
 
 	protected void resetErrorCount(IoSession session) {

@@ -33,6 +33,8 @@ public class MonitorCommandManageFilter extends IoFilterAdapter implements	PosCo
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
+		log.debug("MonitorCommandManageFilter#messageReceived() begin!");
+		
 		// 得到指令信息
 		ICommand msg = ((Message) message).getBodyMessage();
 //		log.debug(" msg = {}", msg);
@@ -47,6 +49,8 @@ public class MonitorCommandManageFilter extends IoFilterAdapter implements	PosCo
 			}
 		}
 		nextFilter.messageReceived(session, message);
+		
+		log.debug("MonitorCommandManageFilter#messageReceived() end!");
 	}
 
 	/**

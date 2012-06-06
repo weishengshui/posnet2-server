@@ -3,6 +3,8 @@ package com.chinarewards.qqgbvpn.main.protocol.filter;
 import org.apache.mina.core.filterchain.IoFilterAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IConnectionAttr;
 import com.google.inject.Inject;
@@ -13,6 +15,8 @@ import com.google.inject.Inject;
  * 
  */
 public class JmxConnectionManageFilter extends IoFilterAdapter {
+
+	Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
 	private IConnectionAttr connectionAttr;
@@ -41,8 +45,11 @@ public class JmxConnectionManageFilter extends IoFilterAdapter {
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
+		log.debug("JmxConnectionManageFilter#messageReceived() begin!");
 		// change connection to active
 		connectionAttr.activeConnection(session.getId());
 		nextFilter.messageReceived(session, message);
+
+		log.debug("JmxConnectionManageFilter#messageReceived() end!");
 	}
 }

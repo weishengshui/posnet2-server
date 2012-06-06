@@ -7,14 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.SessionStore;
+import com.chinarewards.qqgbvpn.main.impl.DefaultPosServer;
 import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.util.MinaUtil;
+import com.google.inject.Inject;
 
 /**
  * Kills idle connections.
  * 
  * @author dengrenwen
+ * @author yanxin
  * @since 0.1.0
  */
 public class IdleConnectionKillerFilter extends AbstractFilter {
@@ -28,20 +31,20 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 	// 闲置了idleKillerTime毫秒就关闭连接
 	private long idleKillerTime;
 
+	@Inject
 	public IdleConnectionKillerFilter(SessionStore sessionStore,
 			IKnownClientConnectAttr connectAttr,
-			PosnetConnectionMXBean connectionMXBean, long idleKillerTime) {
+			PosnetConnectionMXBean connectionMXBean) {
 		this.sessionStore = sessionStore;
 		this.connectAttr = connectAttr;
 		this.connectionMXBean = connectionMXBean;
-		// time millisecond
-		this.idleKillerTime = idleKillerTime * 1000;
+		this.idleKillerTime = DefaultPosServer.DEFAULT_SERVER_CLIENTMAXIDLETIME * 1000;
 	}
 
 	@Override
 	public void sessionIdle(NextFilter nextFilter, IoSession session,
 			IdleStatus status) throws Exception {
-
+		log.debug("IdleConnectionKillerFilter#messageReceived() begin!");
 		// 第一次闲置触发就设置闲置开始时间
 		if (session.getAttribute("startIdleTime") == null) {
 			session.setAttribute("startIdleTime", System.currentTimeMillis());
@@ -76,7 +79,7 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 				connectAttr.afterIdleClientClosed(sid);
 				connectionMXBean.notifyIdleConnectionDropped(sid);
 
-				log.trace("sessionIdle() done");
+				log.debug("IdleConnectionKillerFilter#messageReceived() end!");
 			}
 		}
 
@@ -107,4 +110,8 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 
 	}
 
+	public void setIdleTime(long seconds) {
+		// time millisecond
+		this.idleKillerTime = seconds * 1000;
+	}
 }

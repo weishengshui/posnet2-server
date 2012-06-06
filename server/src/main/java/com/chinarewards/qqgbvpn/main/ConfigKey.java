@@ -26,6 +26,13 @@ public abstract class ConfigKey {
 	 * @since 0.1.0
 	 */
 	public static final String SERVER_CLIENTMAXIDLETIME = "server.client_max_idle_time";
+
+	/**
+	 * Every several seconds (this value), server should trigger server filter's
+	 * sessionIdle() method to check whether this session had been idle.
+	 */
+	public static final String SERVER_CHECK_IDLE_INTERVAL = "server.check.idle.interval";
+
 	/**
 	 * 这个是用来配置监控端口用的
 	 * 

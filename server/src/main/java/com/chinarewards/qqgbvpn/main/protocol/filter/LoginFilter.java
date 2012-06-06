@@ -55,7 +55,7 @@ public class LoginFilter extends AbstractFilter {
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
-		log.trace("messageReceived() started");
+		log.debug("LoginFilter#messageReceived() begin!");
 		
 		Boolean isLogin = null;
 		
@@ -124,6 +124,8 @@ public class LoginFilter extends AbstractFilter {
 		// case 1: cmdId is INIT or LOGIN.
 		// case 2: had login
 		nextFilter.messageReceived(session, messageTmp);
+		
+		log.debug("LoginFilter#messageReceived() end!");
 	}
 	
 	/**

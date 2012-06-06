@@ -1,15 +1,18 @@
 package com.chinarewards.qqgbvpn.main.mxBean.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.DroppedReason;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IConnectionAttr;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.KnownClient;
@@ -21,8 +24,7 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 
 	protected Logger log = LoggerFactory.getLogger(getClass());
 
-	public static final String CORRUPT_DATA_CONNECTION_DROPPED = "CORRUPT_DATA_CONNECTION_DROPPED";
-	public static final String IDLE_CONNECTION_DROPPED = "IDLE_CONNECTION_DROPPED";
+	public static final String CONNECTION_DROPPED = "CONNECTION_DROPPED";
 
 	IConnectionAttr connectionAttr;
 	IKnownClientConnectAttr knownClientConnectAttr;
@@ -95,14 +97,20 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 			OriginalKnownClient client = knownClientConnectAttr
 					.getKnownPosClientByPosId(posId);
 			if (client != null) {
-				StringBuffer sb = new StringBuffer();
-				sb.append("The pos client[posId=").append(client.getPosId())
-						.append(", ip=").append(client.getIp())
-						.append("] dropped because of idle!");
-				log.debug("notify message:{}", sb.toString());
-				Notification event = new Notification(IDLE_CONNECTION_DROPPED,
-						this, sessionId, System.currentTimeMillis(),
-						sb.toString());
+				ObjectMapper mapper = new ObjectMapper();
+				String msg = null;
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("posId", client.getPosId());
+				map.put("ip", client.getIp());
+				map.put("reason", DroppedReason.IDLE);
+				try {
+					msg = mapper.writeValueAsString(map);
+				} catch (Exception e) {
+					log.error("convert map to json error.", e);
+				}
+				log.debug("notify message:{}", msg);
+				Notification event = new Notification(CONNECTION_DROPPED, this,
+						sessionId, System.currentTimeMillis(), msg);
 				sendNotification(event);
 			}
 		}
@@ -114,13 +122,19 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 			OriginalKnownClient client = knownClientConnectAttr
 					.getKnownPosClientByPosId(posId);
 			if (client != null) {
-				StringBuffer sb = new StringBuffer();
-				sb.append("The pos client[posId=").append(client.getPosId())
-						.append(", ip=").append(client.getIp())
-						.append("] dropped because of bad data!");
-				Notification event = new Notification(
-						CORRUPT_DATA_CONNECTION_DROPPED, this, sessionId,
-						System.currentTimeMillis(), sb.toString());
+				ObjectMapper mapper = new ObjectMapper();
+				String msg = null;
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("posId", client.getPosId());
+				map.put("ip", client.getIp());
+				map.put("reason", DroppedReason.BADDATA);
+				try {
+					msg = mapper.writeValueAsString(map);
+				} catch (Exception e) {
+					log.error("convert map to json error.", e);
+				}
+				Notification event = new Notification(CONNECTION_DROPPED, this,
+						sessionId, System.currentTimeMillis(), msg);
 				sendNotification(event);
 			}
 		}

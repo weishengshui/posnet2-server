@@ -17,7 +17,7 @@ public class BodyMessageFilter extends IoFilterAdapter {
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) {
 		
-		log.trace("messageReceived() started");
+		log.debug("BodyMessageFilter#messageReceived() begin!");
 		
 		ICommand msg = ((Message) message).getBodyMessage();
 		// return when IBodyMessage instanceof ErrorBodyMessage
@@ -30,7 +30,7 @@ public class BodyMessageFilter extends IoFilterAdapter {
 			nextFilter.messageReceived(session, message);
 		}
 
-		log.trace("messageReceived() done");
+		log.debug("BodyMessageFilter#messageReceived() end!");
 	}
 
 }

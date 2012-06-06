@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.apache.mina.core.filterchain.IoFilterAdapter;
 import org.apache.mina.core.session.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
@@ -23,12 +25,16 @@ import com.google.inject.Inject;
  */
 public class JmxKnownClientConnectFilter extends IoFilterAdapter {
 
+	Logger log = LoggerFactory.getLogger(getClass());
+
 	@Inject
 	private IKnownClientConnectAttr knownClientConnectAttr;
 
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
+		log.debug("JmxKnownClientConnectFilter#messageReceived() begin!");
+
 		// known client operation!
 		ICommand msg = ((Message) message).getBodyMessage();
 		if (msg instanceof InitRequestMessage) {
@@ -65,5 +71,7 @@ public class JmxKnownClientConnectFilter extends IoFilterAdapter {
 		}
 
 		nextFilter.messageReceived(session, message);
+		
+		log.debug("JmxKnownClientConnectFilter#messageReceived() end!");
 	}
 }

@@ -39,8 +39,6 @@ import com.chinarewards.qqgbvpn.main.PosServerException;
 import com.chinarewards.qqgbvpn.main.SessionStore;
 import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
 import com.chinarewards.qqgbvpn.main.protocol.CmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.CmdMapping;
 import com.chinarewards.qqgbvpn.main.protocol.CodecMappingConfigBuilder;
@@ -76,6 +74,8 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 	 */
 
 	public static final long DEFAULT_SERVER_CLIENTMAXIDLETIME = 1800;
+	
+	public static final int DEFAULT_SERVER_CHECK_IDLE_INTERVAL = 10;
 
 	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "localhost";
 
@@ -239,12 +239,11 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 
 		// ManageIoSessionConnect filter if idle server will not close any idle
 		// IoSession
-		acceptor.getFilterChain().addLast(
-				"ManageIoSessionConnect",
-				new IdleConnectionKillerFilter(injector
-						.getInstance(SessionStore.class), injector
-						.getInstance(IKnownClientConnectAttr.class), injector
-						.getInstance(PosnetConnectionMXBean.class), idleTime));
+		IdleConnectionKillerFilter idleConnectionKillerFilter = injector
+				.getInstance(IdleConnectionKillerFilter.class);
+		idleConnectionKillerFilter.setIdleTime(idleTime);
+		acceptor.getFilterChain().addLast("ManageIoSessionConnect",
+				idleConnectionKillerFilter);
 
 		// add jmx monitor
 		addMonitor();
@@ -312,7 +311,11 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 					idleTime);
 		}
 
-		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
+		int idleCheckInterval = configuration.getInt(
+				ConfigKey.SERVER_CHECK_IDLE_INTERVAL,
+				DEFAULT_SERVER_CHECK_IDLE_INTERVAL);
+		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
+				idleCheckInterval);
 
 		// start the acceptor and listen to incomming connection!
 		try {

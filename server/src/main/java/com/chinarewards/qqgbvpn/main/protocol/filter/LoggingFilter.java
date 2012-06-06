@@ -31,9 +31,9 @@ public class LoggingFilter extends AbstractFilter {
 	Logger log = LoggerFactory.getLogger(getClass());
 
 	private int maxHexDumpLength = 96;
-	
+
 	private SessionStore sessionStore;
-	
+
 	@Inject
 	public LoggingFilter(SessionStore sessionStore) {
 		this.sessionStore = sessionStore;
@@ -76,7 +76,7 @@ public class LoggingFilter extends AbstractFilter {
 			Throwable cause) throws Exception {
 
 		logError(session, cause);
-		
+
 		nextFilter.exceptionCaught(session, cause);
 
 	}
@@ -96,22 +96,23 @@ public class LoggingFilter extends AbstractFilter {
 	 * </ol>
 	 */
 	protected void logError(IoSession session, Throwable cause) {
-		
+
 		try {
 
 			// return immediately if insufficient level is given.
 			if (!log.isDebugEnabled())
 				return;
-			
+
 			if (!session.isConnected()) {
 				return;
 			}
-	
+
 			// prepare the logging data
 			if (log.isWarnEnabled()) {
 				log.warn("An exception is caught when handling command. Detailed information: "
 						+ " client "
-						+ MinaUtil.buildCommonClientAddressText(session, getServerSession(session, sessionStore)));
+						+ MinaUtil.buildCommonClientAddressText(session,
+								getServerSession(session, sessionStore)));
 			}
 		} catch (Throwable t) {
 			// should not affect the normal flow
@@ -128,14 +129,16 @@ public class LoggingFilter extends AbstractFilter {
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
 
+		log.debug("LoggingFilter#messageReceived() begin!");
+
 		// print the source address
 		printMessageReceivedFrom(session);
 		// dump part of the raw message
 		doHexDump(message, getMaxHexDumpLength());
-		
+
 		nextFilter.messageReceived(session, message);
 
-		log.trace("messageReceived() done");
+		log.debug("LoggingFilter#messageReceived() end!");
 	}
 
 	/**
@@ -145,21 +148,24 @@ public class LoggingFilter extends AbstractFilter {
 	@Override
 	public void sessionCreated(NextFilter nextFilter, IoSession session)
 			throws Exception {
-		
+
 		// print session.
 		try {
 			printRemoteSocketAddress(session);
 			printTotalOpenedSessions(session);
 		} catch (Throwable t) {
-			// this filter should be nice, although our code should have no error
-			log.warn("An internal error occurred when print debug information, fix it!", t);
+			// this filter should be nice, although our code should have no
+			// error
+			log.warn(
+					"An internal error occurred when print debug information, fix it!",
+					t);
 		}
-		
+
 		// pass to next
 		nextFilter.sessionCreated(session);
-		
+
 	}
-	
+
 	/**
 	 * Print the total number of opened sessions.
 	 * 
@@ -185,17 +191,18 @@ public class LoggingFilter extends AbstractFilter {
 		}
 
 		// print it
-		log.info("incoming connection from remote address: {}, Mina session ID: {}"
-				,buildAddressPortString(session), session.getId());
+		log.info(
+				"incoming connection from remote address: {}, Mina session ID: {}",
+				buildAddressPortString(session), session.getId());
 	}
-	
+
 	protected void printMessageReceivedFrom(IoSession session) {
 		if (log.isTraceEnabled()) {
 			log.trace("raw message received from "
-					+ MinaUtil.buildCommonClientAddressText(session, getServerSession(session, sessionStore)));
+					+ MinaUtil.buildCommonClientAddressText(session,
+							getServerSession(session, sessionStore)));
 		}
 	}
-	
 
 	protected void doHexDump(Object message, int maxLength) {
 		// do nothing if not IoBuffer
@@ -223,12 +230,13 @@ public class LoggingFilter extends AbstractFilter {
 			byte[] part = new byte[partLength];
 			buffer.get(part);
 			int omitted = buffer.remaining();
-			
+
 			String hexDump = CodecUtil.hexDumpAsString(part);
 
 			// use hex dump to output
 			if (log.isTraceEnabled()) {
-				log.trace("received raw bytes: (showing {} of {} bytes, {} omitted)\n{}",
+				log.trace(
+						"received raw bytes: (showing {} of {} bytes, {} omitted)\n{}",
 						new Object[] { partLength, remaining, omitted, hexDump });
 			}
 
@@ -252,7 +260,8 @@ public class LoggingFilter extends AbstractFilter {
 	 * @return
 	 */
 	protected String getPosIdFromSession(IoSession session) {
-		return MinaUtil.getPosIdFromSession(getServerSession(session, sessionStore));
+		return MinaUtil.getPosIdFromSession(getServerSession(session,
+				sessionStore));
 	}
 
 	/**

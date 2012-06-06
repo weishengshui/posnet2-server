@@ -69,7 +69,7 @@ public class SessionKeyMessageFilter extends IoFilterAdapter {
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) {
-		log.trace("messageReceived() started -SessionKeyMessageFilter");
+		log.debug("SessionKeyMessageFilter#messageReceived() begin!");
 		
 		boolean createSession = false;
 		boolean generateSessionKey = false;
@@ -242,7 +242,7 @@ public class SessionKeyMessageFilter extends IoFilterAdapter {
 
 		nextFilter.messageReceived(session, message);
 
-		log.trace("messageReceived() done");
+		log.debug("SessionKeyMessageFilter#messageReceived() end!");
 
 	}
 	
