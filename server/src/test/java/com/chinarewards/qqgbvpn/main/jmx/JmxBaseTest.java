@@ -72,6 +72,8 @@ public abstract class JmxBaseTest extends GuiceTest {
 
 	private void resetDb() {
 		// clear database
+		em = getInjector().getInstance(EntityManager.class);
+		log.debug("entitymanager is :{}", em);
 		em.getTransaction().begin();
 		em.createQuery("DELETE FROM Journal").executeUpdate();
 		em.getTransaction().commit();
