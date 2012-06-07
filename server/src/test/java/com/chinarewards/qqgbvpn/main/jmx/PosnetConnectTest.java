@@ -454,11 +454,12 @@ public class PosnetConnectTest extends JmxBaseTest {
 		init(s1);
 		long initSentAfter = System.currentTimeMillis();
 
-		// sleep 7s, make this session become idle.
-		Thread.sleep(7 * 1000);
+		// sleep 3s, make this session become idle.
+		Thread.sleep(3 * 1000);
 
 		mxBean.closeIdleConnections();
 
+		Thread.sleep(1 * 1000);
 		// ----------------- check
 		assertEquals(0, mxBean.getConnectionCount());
 		assertEquals(0, mxBean.getActiveConnectionCount());
@@ -553,6 +554,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		// Obviously, our connection will be killed!
 		mxBean.closeIdleConnections(1);
 
+		Thread.sleep(1 * 1000);
 		// ----------------- check
 		assertEquals(0, mxBean.getConnectionCount());
 		assertEquals(0, mxBean.getActiveConnectionCount());
