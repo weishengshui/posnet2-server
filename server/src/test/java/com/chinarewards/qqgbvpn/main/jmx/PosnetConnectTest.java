@@ -101,59 +101,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-	// @Test
-	// public void testConnect_Login() throws Exception {
-	// // Get target mx bean.
-	// IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-	// IPosnetConnectionMXBean.class);
-	//
-	// // create first connection
-	// Socket s1 = newConnection();
-	// long initSentBefore = System.currentTimeMillis();
-	// byte[] challenge = init(s1);
-	// long initSentAfter = System.currentTimeMillis();
-	//
-	// // login
-	// long loginSentBefore = System.currentTimeMillis();
-	// login(s1, challenge);
-	// long loginSentAfter = System.currentTimeMillis();
-	//
-	// // check
-	// assertEquals(1, mxBean.getConnectionCount());
-	// assertEquals(1, mxBean.getActiveConnectionCount());
-	// assertEquals(0, mxBean.getIdleConnectionCount());
-	// assertEquals(32 + 48, mxBean.getBytesReceived());
-	// assertEquals(30 + 30, mxBean.getBytesSent());
-	// assertEquals(1, mxBean.getKnownClientCount());
-	// Map<String, KnownClient> clients = mxBean.getKnownClients();
-	// Iterator<String> it = clients.keySet().iterator();
-	// while (it.hasNext()) {
-	// String s = it.next();
-	// assertEquals("REWARDS-0003", s);
-	// KnownClient client = clients.get(s);
-	// String activeIp = client.getIp();
-	// assertEquals("/127.0.0.1",
-	// activeIp.substring(0, activeIp.indexOf(":")));
-	// assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
-	// && client.getLastConnectedAt().getTime() <= initSentAfter);
-	// assertTrue(client.getLastDataReceivedAt().getTime() >= loginSentBefore
-	// && client.getLastDataReceivedAt().getTime() <= loginSentAfter);
-	// StatCountByTime idleCount = client.getIdleConnectionDropStats();
-	// assertEquals(0, idleCount.getToday());
-	// assertEquals(0, idleCount.getLast7Days());
-	// assertEquals(0, idleCount.getTotal());
-	// StatCountByTime badDataCount = client
-	// .getCorruptDataConnectionDropStats();
-	// assertEquals(0, badDataCount.getToday());
-	// assertEquals(0, badDataCount.getLast7Days());
-	// assertEquals(0, badDataCount.getTotal());
-	// }
-	//
-	// s1.getOutputStream().close();
-	// s1.close();
-	// }
-
-	// @Test
+	@Test
 	public void testConnect_AppearIdle() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -203,7 +151,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-	// @Test
+	@Test
 	public void testConnect_AppearIdleThenActiveAgain() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -289,7 +237,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-	// @Test
+	@Test
 	public void testKnownClient_IdleDropped() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
@@ -506,8 +454,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 		init(s1);
 		long initSentAfter = System.currentTimeMillis();
 
-		// sleep 4s, make this session become idle.
-		Thread.sleep(4 * 1000);
+		// sleep 5s, make this session become idle.
+		Thread.sleep(5 * 1000);
 
 		mxBean.closeIdleConnections();
 
@@ -547,7 +495,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 		s1.close();
 	}
 
-	// @Test
+	@Test
 	public void testCloseIdleConnections_SettingIdleTime() throws Exception {
 		// Get target mx bean.
 		IPosnetConnectionMXBean mxBean = getInjector().getInstance(

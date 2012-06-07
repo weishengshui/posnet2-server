@@ -1,4 +1,4 @@
-package com.chinarewards.qqgbvpn.main.protocol.filter;
+package com.chinarewards.qqgbvpn.main.mxBean.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,10 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.domain.Pos;
-import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.IDatabaseMXBean;
 import com.google.inject.Inject;
 
-public class DatabaseManage implements DatabaseMXBean {
+public class DatabaseMXBean implements IDatabaseMXBean {
 
 	EntityManager em;
 	Configuration conf;
@@ -25,7 +25,7 @@ public class DatabaseManage implements DatabaseMXBean {
 	Logger log = LoggerFactory.getLogger(getClass());
 
 	@Inject
-	public DatabaseManage(EntityManager em, Configuration conf) {
+	public DatabaseMXBean(EntityManager em, Configuration conf) {
 		this.em = em;
 		this.conf = conf;
 	}

@@ -62,9 +62,22 @@ public interface IPosnetConnectionMXBean {
 	public Map<String, KnownClient> getKnownClients();
 
 	// operation
+	/**
+	 * Reset statistic data, eg.. the received bytes count and sent bytes count!
+	 */
 	public void resetStatistics();
 
+	/**
+	 * Close all the idle connections.
+	 */
 	public void closeIdleConnections();
 
+	/**
+	 * Close those connections who achieve idleSeconds. If idleSeconds is 0,
+	 * close all.
+	 * 
+	 * @param idleSeconds
+	 * @return
+	 */
 	public void closeIdleConnections(int idleSeconds);
 }

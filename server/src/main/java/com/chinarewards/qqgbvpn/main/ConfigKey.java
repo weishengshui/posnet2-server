@@ -67,4 +67,9 @@ public abstract class ConfigKey {
 	 */
 	public static final String JMX_RMI_SERVER_HOSTNAME = "server.jmx.rmi.hostname";
 
+	/**
+	 * Whether jmx system mxbean register, value: true/false
+	 */
+	public static final String SERVER_JMX_SYSTEM_MXBEAN_MONITOR = "server.jmx.system.mxbean.monitor";
+
 }

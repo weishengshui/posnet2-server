@@ -37,7 +37,7 @@ import com.chinarewards.qqgbvpn.main.ConfigKey;
 import com.chinarewards.qqgbvpn.main.PosServer;
 import com.chinarewards.qqgbvpn.main.PosServerException;
 import com.chinarewards.qqgbvpn.main.SessionStore;
-import com.chinarewards.qqgbvpn.main.mxBean.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.IDatabaseMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.protocol.CmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.CmdMapping;
@@ -74,10 +74,12 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 	 */
 
 	public static final long DEFAULT_SERVER_CLIENTMAXIDLETIME = 1800;
-	
+
 	public static final int DEFAULT_SERVER_CHECK_IDLE_INTERVAL = 10;
 
 	public static final String DEFAULT_JMX_RMI_SERVER_HOSTNAME = "localhost";
+
+	public static final boolean DEFAULT_JMX_SYSTEM_MXBEAN_MONITOR = true;
 
 	/**
 	 * Default monitor port
@@ -413,79 +415,81 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 			InstanceAlreadyExistsException, MBeanRegistrationException,
 			NotCompliantMBeanException, MalformedObjectNameException,
 			NullPointerException, IOException {
-		jmxMoniterPort = configuration.getInt(ConfigKey.SERVER_MONITORPORT,
-				DEFAULT_SERVER_MONITORPORT);
-		log.debug(" monitor port ={}", jmxMoniterPort);
-		// jmx----------------------code start--------------------------
-		// jmx 服务器
+		log.trace("addMonitor() start");
+		// Start jmx monitor
+
+		// Create new mbean server
 		MBeanServer mbs = MBeanServerFactory.createMBeanServer();
 
-		// 管理连接状态数目工具Filter
-		// this.monitorConnectManageFilter = new MonitorConnectManageFilter();
-		this.monitorCommandManageFilter = new MonitorCommandManageFilter();
-		// 注册需要被管理的MBean
-		mbs.registerMBean(ManagementFactory.getClassLoadingMXBean(),
-				new ObjectName("ClassLoading:name=ClassLoading"));
+		// Register something default system mxbeans.
+		boolean isMonitorSystem = configuration.getBoolean(
+				ConfigKey.SERVER_JMX_SYSTEM_MXBEAN_MONITOR,
+				DEFAULT_JMX_SYSTEM_MXBEAN_MONITOR);
+		if (isMonitorSystem) {
+			log.debug("System mxbeans will be monitored!");
+			mbs.registerMBean(ManagementFactory.getClassLoadingMXBean(),
+					new ObjectName("ClassLoading:name=ClassLoading"));
 
-		mbs.registerMBean(ManagementFactory.getCompilationMXBean(),
-				new ObjectName("Compilation:name=Compilation"));
+			mbs.registerMBean(ManagementFactory.getCompilationMXBean(),
+					new ObjectName("Compilation:name=Compilation"));
 
-		mbs.registerMBean(ManagementFactory.getMemoryMXBean(), new ObjectName(
-				"Memory:name=Memory"));
+			mbs.registerMBean(ManagementFactory.getMemoryMXBean(),
+					new ObjectName("Memory:name=Memory"));
 
-		mbs.registerMBean(ManagementFactory.getOperatingSystemMXBean(),
-				new ObjectName("OperatingSystem:name=OperatingSystem"));
+			mbs.registerMBean(ManagementFactory.getOperatingSystemMXBean(),
+					new ObjectName("OperatingSystem:name=OperatingSystem"));
 
-		mbs.registerMBean(ManagementFactory.getRuntimeMXBean(), new ObjectName(
-				"Runtime:name=Runtime"));
+			mbs.registerMBean(ManagementFactory.getRuntimeMXBean(),
+					new ObjectName("Runtime:name=Runtime"));
 
-		mbs.registerMBean(ManagementFactory.getThreadMXBean(), new ObjectName(
-				"Thread:name=Thread"));
+			mbs.registerMBean(ManagementFactory.getThreadMXBean(),
+					new ObjectName("Thread:name=Thread"));
 
-//		int unm = 1;
-//		for (GarbageCollectorMXBean garbageCollector : ManagementFactory
-//				.getGarbageCollectorMXBeans()) {
-//			mbs.registerMBean(garbageCollector, new ObjectName(
-//					"GarbageCollector:name=GarbageCollector_" + (unm++)));
-//		}
-//		unm = 1;
-//		for (MemoryManagerMXBean memoryManager : ManagementFactory
-//				.getMemoryManagerMXBeans()) {
-//			mbs.registerMBean(memoryManager, new ObjectName(
-//					"MemoryManager:name=MemoryManager_" + (unm++)));
-//		}
-//		unm = 1;
-//		for (MemoryPoolMXBean memoryPool : ManagementFactory
-//				.getMemoryPoolMXBeans()) {
-//			mbs.registerMBean(memoryPool, new ObjectName(
-//					"MemoryPool:name=MemoryPool_" + (unm++)));
-//		}
+			int unm = 1;
+			for (GarbageCollectorMXBean garbageCollector : ManagementFactory
+					.getGarbageCollectorMXBeans()) {
+				mbs.registerMBean(garbageCollector, new ObjectName(
+						"GarbageCollector:name=GarbageCollector_" + (unm++)));
+			}
+			unm = 1;
+			for (MemoryManagerMXBean memoryManager : ManagementFactory
+					.getMemoryManagerMXBeans()) {
+				mbs.registerMBean(memoryManager, new ObjectName(
+						"MemoryManager:name=MemoryManager_" + (unm++)));
+			}
+			unm = 1;
+			for (MemoryPoolMXBean memoryPool : ManagementFactory
+					.getMemoryPoolMXBeans()) {
+				mbs.registerMBean(memoryPool, new ObjectName(
+						"MemoryPool:name=MemoryPool_" + (unm++)));
+			}
+		}
 
+		// Register the specified customer mxbeans.
 		mbs.registerMBean(injector.getInstance(IPosnetConnectionMXBean.class),
 				new ObjectName("PosnetConnect:name=Connect"));
-
+		this.monitorCommandManageFilter = new MonitorCommandManageFilter();
 		mbs.registerMBean(this.monitorCommandManageFilter, new ObjectName(
 				"PosnetCommand:name=Command"));
+		mbs.registerMBean(injector.getInstance(IDatabaseMXBean.class),
+				new ObjectName("PosnetDatabase:name=Database"));
 
-		DatabaseMXBean mxBean = injector.getInstance(DatabaseMXBean.class);
-		mbs.registerMBean(mxBean,
-				new ObjectName("PosnetDBManage:name=DBManage"));
-
+		// Start rmi service
 		String hostname = configuration.getString(
 				ConfigKey.JMX_RMI_SERVER_HOSTNAME,
 				DEFAULT_JMX_RMI_SERVER_HOSTNAME);
-
-		log.debug(" Jxm rmi server hostname = {}", hostname);
-
+		jmxMoniterPort = configuration.getInt(ConfigKey.SERVER_MONITORPORT,
+				DEFAULT_SERVER_MONITORPORT);
+		log.debug(" Jxm rmi server hostname = {}, monitor port={}",
+				new Object[] { hostname, jmxMoniterPort });
 		String jmxServiceURL = "service:jmx:rmi:///jndi/rmi://" + hostname
 				+ ":" + jmxMoniterPort + "/jmxrmi";
-		// Create an RMI connector and start it
 		JMXServiceURL url = new JMXServiceURL(jmxServiceURL);
 
-		log.debug(" JMXServiceURL ={}", jmxServiceURL);
-
+		// create jmx connector server
 		cs = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
-		// jmx----------------------code end--------------------------
+
+		log.trace("addMonitor() end");
 	}
 
 	@Override
