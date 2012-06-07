@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.AttributeChangeNotification;
+import javax.management.MBeanNotificationInfo;
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 
@@ -139,6 +141,17 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 				sendNotification(event);
 			}
 		}
+	}
+
+	@Override
+	public MBeanNotificationInfo[] getNotificationInfo() {
+		String[] types = new String[] { CONNECTION_DROPPED };
+
+		String name = Notification.class.getName();
+		String description = "Connection dropped notification";
+		MBeanNotificationInfo info = new MBeanNotificationInfo(types, name,
+				description);
+		return new MBeanNotificationInfo[] { info };
 	}
 
 }
