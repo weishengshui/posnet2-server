@@ -8,14 +8,14 @@
 	</parent>
 	<groupId>com.chinarewards.posnet2</groupId>
 	<artifactId>posnet2-server-parent</artifactId>
-	<version>0.3.4-SNAPSHOT</version>
+	<version>0.3.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>POS Network Server 2 POM</name>
 	<description>POS Network Server 2 Maven project.</description>
 	<scm>
 		<url>http://git.dev.china-rewards.com/repo</url>
-		<connection>scm:git:git://git.dev.china-rewards.com/posnet2/posnet2-server.git</connection>
-		<developerConnection>scm:git:ssh://git@git.dev.china-rewards.com/posnet2/posnet2-server.git</developerConnection>
+		<connection>scm:git:git://git.dev.china-rewards.com/posnet2/posnet2-server-parent.git</connection>
+		<developerConnection>scm:git:ssh://git@git.dev.china-rewards.com/posnet2/posnet2-server-parent.git</developerConnection>
 	</scm>
 	<inceptionYear>2012</inceptionYear>
 	<organization>
