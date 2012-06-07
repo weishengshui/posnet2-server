@@ -44,7 +44,7 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 	@Override
 	public void sessionIdle(NextFilter nextFilter, IoSession session,
 			IdleStatus status) throws Exception {
-		log.debug("IdleConnectionKillerFilter#messageReceived() begin!");
+		
 		// 第一次闲置触发就设置闲置开始时间
 		if (session.getAttribute("startIdleTime") == null) {
 			session.setAttribute("startIdleTime", System.currentTimeMillis());
@@ -79,7 +79,6 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 				connectAttr.afterIdleClientClosed(sid);
 				connectionMXBean.notifyIdleConnectionDropped(sid);
 
-				log.debug("IdleConnectionKillerFilter#messageReceived() end!");
 			}
 		}
 
@@ -91,11 +90,15 @@ public class IdleConnectionKillerFilter extends AbstractFilter {
 	public void messageReceived(NextFilter nextFilter, IoSession session,
 			Object message) throws Exception {
 
+		log.debug("IdleConnectionKillerFilter#messageReceived() begin!");
+		
 		if (session.getAttribute("startIdleTime") != null) {
 			session.removeAttribute("startIdleTime");
 		}
 
 		nextFilter.messageReceived(session, message);
+		
+		log.debug("IdleConnectionKillerFilter#messageReceived() end!");
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.DroppedConnData;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.DroppedReason;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IConnectionAttr;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
@@ -133,8 +134,11 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 				} catch (Exception e) {
 					log.error("convert map to json error.", e);
 				}
+				log.debug("bad data notify message:{}", msg);
 				Notification event = new Notification(CONNECTION_DROPPED, this,
 						sessionId, System.currentTimeMillis(), msg);
+				event.setUserData(new DroppedConnData(client.getPosId(), client
+						.getIp(), DroppedReason.BADDATA));
 				sendNotification(event);
 			}
 		}

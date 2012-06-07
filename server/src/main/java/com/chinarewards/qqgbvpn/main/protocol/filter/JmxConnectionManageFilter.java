@@ -1,5 +1,7 @@
 package com.chinarewards.qqgbvpn.main.protocol.filter;
 
+import java.util.Date;
+
 import org.apache.mina.core.filterchain.IoFilterAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
@@ -7,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chinarewards.qqgbvpn.main.mxBean.vo.IConnectionAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.IKnownClientConnectAttr;
+import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
+import com.chinarewards.utils.StringUtil;
 import com.google.inject.Inject;
 
 /**
@@ -20,6 +25,9 @@ public class JmxConnectionManageFilter extends IoFilterAdapter {
 
 	@Inject
 	private IConnectionAttr connectionAttr;
+	
+	@Inject
+	private IKnownClientConnectAttr knownClientConnectAttr;
 
 	@Override
 	public void sessionIdle(NextFilter nextFilter, IoSession session,
@@ -48,6 +56,18 @@ public class JmxConnectionManageFilter extends IoFilterAdapter {
 		log.debug("JmxConnectionManageFilter#messageReceived() begin!");
 		// change connection to active
 		connectionAttr.activeConnection(session.getId());
+		
+		// Others, get posid according to session id. If not, skip it.
+		Date now = new Date();
+		String posId = knownClientConnectAttr.getPosIdFromSessionId(session
+				.getId());
+		if (!StringUtil.isEmptyString(posId)) {
+			log.debug("Found posId={}", posId);
+			OriginalKnownClient knownClient = knownClientConnectAttr
+					.getKnownPosClientByPosId(posId);
+			knownClient.setLastDataReceivedAt(now);
+		}
+		
 		nextFilter.messageReceived(session, message);
 
 		log.debug("JmxConnectionManageFilter#messageReceived() end!");

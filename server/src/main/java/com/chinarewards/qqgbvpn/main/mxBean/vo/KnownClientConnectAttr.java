@@ -6,10 +6,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.chinarewards.qqgbvpn.common.DateTool;
 import com.chinarewards.utils.StringUtil;
 
 public class KnownClientConnectAttr implements IKnownClientConnectAttr {
+
+	Logger log = LoggerFactory.getLogger(getClass());
 
 	private Map<String, OriginalKnownClient> knownClients = new HashMap<String, OriginalKnownClient>();
 
@@ -51,13 +56,16 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 	private StatCountByTime getStatCountFromDateMap(Map<String, Integer> list,
 			Date currentTime) {
 		StatCountByTime statCount = new StatCountByTime();
-		statCount.setTotal(list.size());
+		int total = 0;
 		int today = 0;
 		int last7Days = 0;
+		// today
 		String todayFmt = DateTool.getSingleStr(currentTime);
 		if (list.containsKey(todayFmt)) {
 			today = list.get(todayFmt);
 		}
+
+		// last 7 days
 		Calendar c = Calendar.getInstance();
 		c.setTime(currentTime);
 		last7Days += today;
@@ -68,8 +76,17 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 				last7Days += list.get(dayFmt);
 			}
 		}
+
+		// total
+		Iterator<String> it = list.keySet().iterator();
+		while (it.hasNext()) {
+			String day = it.next();
+			total += list.get(day);
+		}
+
 		statCount.setToday(today);
 		statCount.setLast7Days(last7Days);
+		statCount.setTotal(total);
 
 		return statCount;
 	}
@@ -101,7 +118,7 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 				String s = DateTool.getSingleStr(now);
 				if (idleCount.containsKey(s)) {
 					int i = idleCount.get(s);
-					idleCount.put(s, i++);
+					idleCount.put(s, i + 1);
 				} else {
 					idleCount.put(s, 1);
 				}
@@ -112,6 +129,7 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 	@Override
 	public void afterBadDataClientClosed(long sessionId) {
 		String posId = getPosIdFromSessionId(sessionId);
+		log.debug("afterBadDataClientClosed found posId={}", posId);
 		if (!StringUtil.isEmptyString(posId)) {
 			OriginalKnownClient knownClient = getKnownPosClientByPosId(posId);
 			if (knownClient != null) {
@@ -121,10 +139,12 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 				String s = DateTool.getSingleStr(now);
 				if (dataErrorCount.containsKey(s)) {
 					int i = dataErrorCount.get(s);
-					dataErrorCount.put(s, i++);
+					dataErrorCount.put(s, i + 1);
 				} else {
 					dataErrorCount.put(s, 1);
 				}
+			} else {
+				log.debug("strange, can not found knownclient!");
 			}
 		}
 	}

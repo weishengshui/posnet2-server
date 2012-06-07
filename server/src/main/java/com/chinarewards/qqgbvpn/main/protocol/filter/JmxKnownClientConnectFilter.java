@@ -12,7 +12,6 @@ import com.chinarewards.qqgbvpn.main.mxBean.vo.OriginalKnownClient;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.ICommand;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.InitRequestMessage;
 import com.chinarewards.qqgbvpn.main.protocol.cmd.Message;
-import com.chinarewards.utils.StringUtil;
 import com.google.inject.Inject;
 
 /**
@@ -44,7 +43,7 @@ public class JmxKnownClientConnectFilter extends IoFilterAdapter {
 			OriginalKnownClient knownClient = knownClientConnectAttr
 					.getKnownPosClientByPosId(posId);
 			Date now = new Date();
-			String ip = session.getRemoteAddress().toString();
+			String ip = session.getRemoteAddress().toString().substring(1);
 			if (knownClient != null) {
 				knownClient.setIp(ip);
 				knownClient.setLastConnectedAt(now);
@@ -55,23 +54,25 @@ public class JmxKnownClientConnectFilter extends IoFilterAdapter {
 				knownClient.setPosId(posId);
 				knownClient.setLastConnectedAt(now);
 				knownClient.setLastDataReceivedAt(now);
-				knownClientConnectAttr.addNewRoute(session.getId(), posId);
 				knownClientConnectAttr.addNewPosClient(knownClient);
 			}
+			knownClientConnectAttr.addNewRoute(session.getId(), posId);
 		} else {
+			// Code moved to JmxConnectionManageFilter
 			// Others, get posid according to session id. If not, skip it.
-			Date now = new Date();
-			String posId = knownClientConnectAttr.getPosIdFromSessionId(session
-					.getId());
-			if (!StringUtil.isEmptyString(posId)) {
-				OriginalKnownClient knownClient = knownClientConnectAttr
-						.getKnownPosClientByPosId(posId);
-				knownClient.setLastDataReceivedAt(now);
-			}
+			// Date now = new Date();
+			// String posId =
+			// knownClientConnectAttr.getPosIdFromSessionId(session
+			// .getId());
+			// if (!StringUtil.isEmptyString(posId)) {
+			// OriginalKnownClient knownClient = knownClientConnectAttr
+			// .getKnownPosClientByPosId(posId);
+			// knownClient.setLastDataReceivedAt(now);
+			// }
 		}
 
 		nextFilter.messageReceived(session, message);
-		
+
 		log.debug("JmxKnownClientConnectFilter#messageReceived() end!");
 	}
 }

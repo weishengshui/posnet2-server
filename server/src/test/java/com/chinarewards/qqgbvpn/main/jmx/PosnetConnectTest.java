@@ -79,7 +79,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -130,7 +130,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -180,7 +180,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -216,7 +216,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -269,7 +269,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -325,7 +325,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -418,7 +418,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -474,7 +474,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -532,7 +532,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
@@ -569,7 +569,7 @@ public class PosnetConnectTest extends JmxBaseTest {
 			assertEquals("REWARDS-0003", s);
 			KnownClient client = clients.get(s);
 			String activeIp = client.getIp();
-			assertEquals("/127.0.0.1",
+			assertEquals("127.0.0.1",
 					activeIp.substring(0, activeIp.indexOf(":")));
 			assertTrue(client.getLastConnectedAt().getTime() >= initSentBefore
 					&& client.getLastConnectedAt().getTime() <= initSentAfter);
