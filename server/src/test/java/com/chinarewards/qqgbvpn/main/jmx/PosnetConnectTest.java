@@ -454,8 +454,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 		init(s1);
 		long initSentAfter = System.currentTimeMillis();
 
-		// sleep 6s, make this session become idle.
-		Thread.sleep(6 * 1000);
+		// sleep 7s, make this session become idle.
+		Thread.sleep(7 * 1000);
 
 		mxBean.closeIdleConnections();
 
