@@ -442,24 +442,24 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		mbs.registerMBean(ManagementFactory.getThreadMXBean(), new ObjectName(
 				"Thread:name=Thread"));
 
-		int unm = 1;
-		for (GarbageCollectorMXBean garbageCollector : ManagementFactory
-				.getGarbageCollectorMXBeans()) {
-			mbs.registerMBean(garbageCollector, new ObjectName(
-					"GarbageCollector:name=GarbageCollector_" + (unm++)));
-		}
-		unm = 1;
-		for (MemoryManagerMXBean memoryManager : ManagementFactory
-				.getMemoryManagerMXBeans()) {
-			mbs.registerMBean(memoryManager, new ObjectName(
-					"MemoryManager:name=MemoryManager_" + (unm++)));
-		}
-		unm = 1;
-		for (MemoryPoolMXBean memoryPool : ManagementFactory
-				.getMemoryPoolMXBeans()) {
-			mbs.registerMBean(memoryPool, new ObjectName(
-					"MemoryPool:name=MemoryPool_" + (unm++)));
-		}
+//		int unm = 1;
+//		for (GarbageCollectorMXBean garbageCollector : ManagementFactory
+//				.getGarbageCollectorMXBeans()) {
+//			mbs.registerMBean(garbageCollector, new ObjectName(
+//					"GarbageCollector:name=GarbageCollector_" + (unm++)));
+//		}
+//		unm = 1;
+//		for (MemoryManagerMXBean memoryManager : ManagementFactory
+//				.getMemoryManagerMXBeans()) {
+//			mbs.registerMBean(memoryManager, new ObjectName(
+//					"MemoryManager:name=MemoryManager_" + (unm++)));
+//		}
+//		unm = 1;
+//		for (MemoryPoolMXBean memoryPool : ManagementFactory
+//				.getMemoryPoolMXBeans()) {
+//			mbs.registerMBean(memoryPool, new ObjectName(
+//					"MemoryPool:name=MemoryPool_" + (unm++)));
+//		}
 
 		mbs.registerMBean(injector.getInstance(IPosnetConnectionMXBean.class),
 				new ObjectName("PosnetConnect:name=Connect"));
