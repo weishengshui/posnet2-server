@@ -25,7 +25,8 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 
 	protected Logger log = LoggerFactory.getLogger(getClass());
 
-	public static final String CONNECTION_DROPPED = "CONNECTION_DROPPED";
+	public static final String CONNECTION_DROPPED_IDLE = "CONNECTION_DROPPED_IDLE";
+	public static final String CONNECTION_DROPPED_BADDATA = "CONNECTION_DROPPED_BADDATA";
 
 	IConnectionAttr connectionAttr;
 	IKnownClientConnectAttr knownClientConnectAttr;
@@ -110,8 +111,8 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 					log.error("convert map to json error.", e);
 				}
 				log.debug("notify message:{}", msg);
-				Notification event = new Notification(CONNECTION_DROPPED, this,
-						sessionId, System.currentTimeMillis(), msg);
+				Notification event = new Notification(CONNECTION_DROPPED_IDLE,
+						this, sessionId, System.currentTimeMillis(), msg);
 				sendNotification(event);
 			}
 		}
@@ -135,8 +136,9 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 					log.error("convert map to json error.", e);
 				}
 				log.debug("bad data notify message:{}", msg);
-				Notification event = new Notification(CONNECTION_DROPPED, this,
-						sessionId, System.currentTimeMillis(), msg);
+				Notification event = new Notification(
+						CONNECTION_DROPPED_BADDATA, this, sessionId,
+						System.currentTimeMillis(), msg);
 				sendNotification(event);
 			}
 		}
@@ -144,7 +146,8 @@ public class PosnetConnectionMXBean extends NotificationBroadcasterSupport
 
 	@Override
 	public MBeanNotificationInfo[] getNotificationInfo() {
-		String[] types = new String[] { CONNECTION_DROPPED };
+		String[] types = new String[] { CONNECTION_DROPPED_IDLE,
+				CONNECTION_DROPPED_BADDATA };
 
 		String name = Notification.class.getName();
 		String description = "Connection dropped notification";
