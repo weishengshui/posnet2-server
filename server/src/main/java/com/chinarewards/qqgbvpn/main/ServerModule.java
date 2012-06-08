@@ -5,8 +5,6 @@ package com.chinarewards.qqgbvpn.main;
 
 import com.chinarewards.qqgbvpn.main.impl.DefaultPosServer;
 import com.chinarewards.qqgbvpn.main.impl.InMemorySessionStore;
-import com.chinarewards.qqgbvpn.main.mxBean.IDatabaseMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.impl.DatabaseMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.ConnectionAttr;
@@ -43,12 +41,13 @@ public class ServerModule extends AbstractModule {
 
 		bind(LoginFilter.class);
 		// mxbean
-		bind(IDatabaseMXBean.class).to(DatabaseMXBean.class);
+		bind(DatabaseMXBean.class).in(Singleton.class);
+		bind(PosnetConnectionMXBean.class).in(Singleton.class);
+		
 		bind(IConnectionAttr.class).to(ConnectionAttr.class)
 				.in(Singleton.class);
 		bind(IKnownClientConnectAttr.class).to(KnownClientConnectAttr.class)
 				.in(Singleton.class);
-		bind(IPosnetConnectionMXBean.class).to(PosnetConnectionMXBean.class);
 		bind(IdleConnectionKillerFilter.class).in(Singleton.class);
 
 		bind(ErrorConnectionKillerFilter.class);

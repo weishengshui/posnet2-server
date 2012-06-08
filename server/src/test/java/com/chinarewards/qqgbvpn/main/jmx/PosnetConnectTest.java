@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.chinarewards.qqgbvpn.common.Tools;
-import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.KnownClient;
 import com.chinarewards.qqgbvpn.main.mxBean.vo.StatCountByTime;
 import com.chinarewards.qqgbvpn.main.protocol.filter.IdleConnectionKillerFilter;
@@ -46,8 +46,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testConnect_Init() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -104,8 +104,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testConnect_AppearIdle() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -154,8 +154,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testConnect_AppearIdleThenActiveAgain() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -240,8 +240,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testKnownClient_IdleDropped() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 		IdleConnectionKillerFilter killerFilter = getInjector().getInstance(
 				IdleConnectionKillerFilter.class);
 		killerFilter.setIdleTime(2);
@@ -293,8 +293,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testKnowClient_BadDataDropped() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -391,8 +391,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testResetStatisgtics() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -443,8 +443,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testCloseIdleConnections() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();
@@ -499,8 +499,8 @@ public class PosnetConnectTest extends JmxBaseTest {
 	@Test
 	public void testCloseIdleConnections_SettingIdleTime() throws Exception {
 		// Get target mx bean.
-		IPosnetConnectionMXBean mxBean = getInjector().getInstance(
-				IPosnetConnectionMXBean.class);
+		PosnetConnectionMXBean mxBean = getInjector().getInstance(
+				PosnetConnectionMXBean.class);
 
 		// create first connection
 		Socket s1 = newConnection();

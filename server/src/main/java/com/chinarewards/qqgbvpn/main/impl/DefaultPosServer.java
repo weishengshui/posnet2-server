@@ -37,8 +37,8 @@ import com.chinarewards.qqgbvpn.main.ConfigKey;
 import com.chinarewards.qqgbvpn.main.PosServer;
 import com.chinarewards.qqgbvpn.main.PosServerException;
 import com.chinarewards.qqgbvpn.main.SessionStore;
-import com.chinarewards.qqgbvpn.main.mxBean.IDatabaseMXBean;
-import com.chinarewards.qqgbvpn.main.mxBean.IPosnetConnectionMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.impl.DatabaseMXBean;
+import com.chinarewards.qqgbvpn.main.mxBean.impl.PosnetConnectionMXBean;
 import com.chinarewards.qqgbvpn.main.protocol.CmdCodecFactory;
 import com.chinarewards.qqgbvpn.main.protocol.CmdMapping;
 import com.chinarewards.qqgbvpn.main.protocol.CodecMappingConfigBuilder;
@@ -466,12 +466,12 @@ public class DefaultPosServer implements PosServer, ConfigurationListener {
 		}
 
 		// Register the specified customer mxbeans.
-		mbs.registerMBean(injector.getInstance(IPosnetConnectionMXBean.class),
+		mbs.registerMBean(injector.getInstance(PosnetConnectionMXBean.class),
 				new ObjectName("PosnetConnect:name=Connect"));
 		this.monitorCommandManageFilter = new MonitorCommandManageFilter();
 		mbs.registerMBean(this.monitorCommandManageFilter, new ObjectName(
 				"PosnetCommand:name=Command"));
-		mbs.registerMBean(injector.getInstance(IDatabaseMXBean.class),
+		mbs.registerMBean(injector.getInstance(DatabaseMXBean.class),
 				new ObjectName("PosnetDatabase:name=Database"));
 
 		// Start rmi service
