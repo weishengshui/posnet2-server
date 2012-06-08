@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,10 @@ public class KnownClientConnectAttr implements IKnownClientConnectAttr {
 
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	private Map<String, OriginalKnownClient> knownClients = new HashMap<String, OriginalKnownClient>();
+	private Map<String, OriginalKnownClient> knownClients = new ConcurrentHashMap<String, OriginalKnownClient>();
 
 	// route from sessionid to posid
-	private Map<Long, String> posIdRouteMap = new HashMap<Long, String>();
+	private Map<Long, String> posIdRouteMap = new ConcurrentHashMap<Long, String>();
 
 	@Override
 	public OriginalKnownClient getKnownPosClientByPosId(String posId) {

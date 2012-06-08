@@ -3,9 +3,10 @@ package com.chinarewards.qqgbvpn.main.mxBean.vo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class ConnectionAttr implements IConnectionAttr {
 	public Logger log = LoggerFactory.getLogger(getClass());
 
 	// store all open session messages
-	private HashMap<Long, IoSessionMsg> sessionMap = new HashMap<Long, IoSessionMsg>();
+	private Map<Long, IoSessionMsg> sessionMap = new ConcurrentHashMap<Long, IoSessionMsg>();
 
 	// receive bytes count
 	private long closedConnectionReceivedBytes;
