@@ -77,5 +77,7 @@ public abstract class ProtocolLengths {
 	public static final int QQADIDAS_RESULT = 4;
 	
 	public static final int QQADIDAS_MEMBER_KEY = 15;
+	
+	public static final int HUAXIA_COUPON_EXCHANGE_RESULT = 4;
 
 }
